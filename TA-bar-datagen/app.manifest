@@ -1,0 +1,56 @@
+{
+    "dependencies": null,
+    "incompatibleApps": null,
+    "info": {
+        "author": [
+            {
+                "company": "Splunk",
+                "email": null,
+                "name": "Alexander Sötz"
+            }
+        ],
+        "classification": {
+            "categories": [
+                "IT Operations"
+            ],
+            "developmentStatus": "Beta",
+            "intendedAudience": "IT Professionals"
+        },
+        "commonInformationModels": null,
+        "description": "Demo data generators for Splunk: Buttercup Rocks bar (ITSI), CoolaShaker virtual coffee cup producer, Network Intelligence (Meraki/Catalyst/ThousandEyes/SC4SNMP). Start/stop from the Inputs page; sends via HEC or directly.",
+        "id": {
+            "group": null,
+            "name": "TA-bar-datagen",
+            "version": "1.9.0"
+        },
+        "license": {
+            "name": "LICENSE.txt",
+            "text": "./LICENSES/LICENSE.txt",
+            "uri": null
+        },
+        "privacyPolicy": {
+            "name": null,
+            "text": null,
+            "uri": null
+        },
+        "releaseDate": null,
+        "releaseNotes": {
+            "name": "README",
+            "text": "README.txt",
+            "uri": ""
+        },
+        "title": "Demo Datagen (Buttercup Bar, CoolaShaker, Network Intelligence)"
+    },
+    "inputGroups": null,
+    "platformRequirements": null,
+    "schemaVersion": "2.0.0",
+    "supportedDeployments": [
+        "_standalone",
+        "_distributed",
+        "_search_head_clustering"
+    ],
+    "targetWorkloads": [
+        "_search_heads"
+    ],
+    "tasks": null
+}

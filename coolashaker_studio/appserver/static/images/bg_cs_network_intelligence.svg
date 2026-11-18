@@ -1,0 +1,243 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="2520" viewBox="0 0 1920 2520">
+  <defs>
+    <radialGradient id="glowA" cx="0.12" cy="0.02" r="0.7">
+      <stop offset="0" stop-color="#60a5fa" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#60a5fa" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0.95" cy="0.85" r="0.75">
+      <stop offset="0" stop-color="#22d3ee" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="base" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#071022"/>
+      <stop offset="1" stop-color="#040812"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#101d3a" stop-opacity="0.82"/>
+      <stop offset="1" stop-color="#0a1328" stop-opacity="0.74"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#60a5fa" stop-opacity="0.45"/>
+      <stop offset="0.5" stop-color="#9fb1c9" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0.35"/>
+    </linearGradient>
+    <linearGradient id="titleFill" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#60a5fa"/>
+    </linearGradient>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#9fb1c9" fill-opacity="0.10"/>
+    </pattern>
+    <style>
+      .pt { font: 700 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 1.6px; fill: #cfe0f7; }
+      .ph { font: 500 12px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #8ea3bf; }
+      .sec { font: 800 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 3px; fill: #60a5fa; }
+    </style>
+  </defs>
+  <rect width="1920" height="2520" fill="url(#base)"/>
+  <rect width="1920" height="2520" fill="url(#dots)"/>
+  <rect width="1920" height="2520" fill="url(#glowA)"/>
+  <rect width="1920" height="2520" fill="url(#glowB)"/>
+  <g>
+    <line x1="1468.7" y1="109.1" x2="1599.6" y2="28.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1468.7" y1="109.1" x2="1468.6" y2="134.7" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1468.7" y1="109.1" x2="1428.8" y2="39.7" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1468.7" y1="109.1" x2="1349.5" y2="15" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1468.7" y1="109.1" x2="1494.5" y2="165.3" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1468.7" y1="109.1" x2="1611.2" y2="140" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1468.7" y1="109.1" x2="1491.9" y2="47.2" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1468.7" y1="109.1" x2="1383.4" y2="150.5" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1468.7" y1="109.1" x2="1469.4" y2="20.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1468.7" y1="109.1" x2="1477.9" y2="73.7" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1468.7" y1="109.1" x2="1585.1" y2="134.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1468.7" y1="109.1" x2="1535.4" y2="29.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1599.6" y1="28.3" x2="1468.6" y2="134.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1599.6" y1="28.3" x2="1728.2" y2="122.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1599.6" y1="28.3" x2="1646.2" y2="168.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1599.6" y1="28.3" x2="1611.2" y2="140" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1599.6" y1="28.3" x2="1491.9" y2="47.2" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1599.6" y1="28.3" x2="1469.4" y2="20.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1599.6" y1="28.3" x2="1655.2" y2="92.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1599.6" y1="28.3" x2="1477.9" y2="73.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1599.6" y1="28.3" x2="1585.1" y2="134.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1599.6" y1="28.3" x2="1535.4" y2="29.4" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1267.5" y1="96.6" x2="1277.9" y2="99" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1267.5" y1="96.6" x2="1138.4" y2="115.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1267.5" y1="96.6" x2="1349.5" y2="15" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1267.5" y1="96.6" x2="1194.1" y2="83.1" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1267.5" y1="96.6" x2="1383.4" y2="150.5" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1267.5" y1="96.6" x2="1216.7" y2="28.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1277.9" y1="99" x2="1428.8" y2="39.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1277.9" y1="99" x2="1138.4" y2="115.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1277.9" y1="99" x2="1349.5" y2="15" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1277.9" y1="99" x2="1194.1" y2="83.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1277.9" y1="99" x2="1383.4" y2="150.5" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1277.9" y1="99" x2="1216.7" y2="28.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1468.6" y1="134.7" x2="1428.8" y2="39.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1468.6" y1="134.7" x2="1349.5" y2="15" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1468.6" y1="134.7" x2="1494.5" y2="165.3" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1468.6" y1="134.7" x2="1611.2" y2="140" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1468.6" y1="134.7" x2="1491.9" y2="47.2" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1468.6" y1="134.7" x2="1383.4" y2="150.5" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1468.6" y1="134.7" x2="1469.4" y2="20.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1468.6" y1="134.7" x2="1477.9" y2="73.7" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1468.6" y1="134.7" x2="1585.1" y2="134.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1468.6" y1="134.7" x2="1535.4" y2="29.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1428.8" y1="39.7" x2="1349.5" y2="15" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1428.8" y1="39.7" x2="1494.5" y2="165.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1428.8" y1="39.7" x2="1491.9" y2="47.2" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1428.8" y1="39.7" x2="1383.4" y2="150.5" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1428.8" y1="39.7" x2="1469.4" y2="20.4" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1428.8" y1="39.7" x2="1477.9" y2="73.7" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1428.8" y1="39.7" x2="1535.4" y2="29.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1138.4" y1="115.6" x2="1194.1" y2="83.1" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1138.4" y1="115.6" x2="1216.7" y2="28.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1349.5" y1="15" x2="1194.1" y2="83.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1349.5" y1="15" x2="1491.9" y2="47.2" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1349.5" y1="15" x2="1383.4" y2="150.5" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1349.5" y1="15" x2="1469.4" y2="20.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1349.5" y1="15" x2="1477.9" y2="73.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1349.5" y1="15" x2="1216.7" y2="28.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1768.6" y1="101.4" x2="1728.2" y2="122.6" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1768.6" y1="101.4" x2="1646.2" y2="168.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1768.6" y1="101.4" x2="1611.2" y2="140" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1768.6" y1="101.4" x2="1655.2" y2="92.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1728.2" y1="122.6" x2="1646.2" y2="168.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1728.2" y1="122.6" x2="1611.2" y2="140" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1728.2" y1="122.6" x2="1655.2" y2="92.6" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1728.2" y1="122.6" x2="1585.1" y2="134.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1494.5" y1="165.3" x2="1646.2" y2="168.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1494.5" y1="165.3" x2="1611.2" y2="140" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1494.5" y1="165.3" x2="1491.9" y2="47.2" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1494.5" y1="165.3" x2="1383.4" y2="150.5" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1494.5" y1="165.3" x2="1469.4" y2="20.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1494.5" y1="165.3" x2="1477.9" y2="73.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1494.5" y1="165.3" x2="1585.1" y2="134.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1494.5" y1="165.3" x2="1535.4" y2="29.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1646.2" y1="168.1" x2="1611.2" y2="140" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1646.2" y1="168.1" x2="1655.2" y2="92.6" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1646.2" y1="168.1" x2="1585.1" y2="134.3" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1194.1" y1="83.1" x2="1216.7" y2="28.4" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1611.2" y1="140" x2="1491.9" y2="47.2" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1611.2" y1="140" x2="1655.2" y2="92.6" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1611.2" y1="140" x2="1477.9" y2="73.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1611.2" y1="140" x2="1585.1" y2="134.3" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1611.2" y1="140" x2="1535.4" y2="29.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1491.9" y1="47.2" x2="1383.4" y2="150.5" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1491.9" y1="47.2" x2="1469.4" y2="20.4" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1491.9" y1="47.2" x2="1655.2" y2="92.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1491.9" y1="47.2" x2="1477.9" y2="73.7" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1491.9" y1="47.2" x2="1585.1" y2="134.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1491.9" y1="47.2" x2="1535.4" y2="29.4" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1383.4" y1="150.5" x2="1469.4" y2="20.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1383.4" y1="150.5" x2="1477.9" y2="73.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1469.4" y1="20.4" x2="1477.9" y2="73.7" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1469.4" y1="20.4" x2="1585.1" y2="134.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1469.4" y1="20.4" x2="1535.4" y2="29.4" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1655.2" y1="92.6" x2="1585.1" y2="134.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1655.2" y1="92.6" x2="1535.4" y2="29.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1477.9" y1="73.7" x2="1585.1" y2="134.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1477.9" y1="73.7" x2="1535.4" y2="29.4" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1585.1" y1="134.3" x2="1535.4" y2="29.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <circle cx="1468.7" cy="109.1" r="2.2" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1599.6" cy="28.3" r="3.5" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1267.5" cy="96.6" r="2.1" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1277.9" cy="99" r="2.1" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1468.6" cy="134.7" r="3.4" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1428.8" cy="39.7" r="4.1" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1138.4" cy="115.6" r="2.9" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1349.5" cy="15" r="3.7" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1768.6" cy="101.4" r="3.2" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1728.2" cy="122.6" r="3.6" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1494.5" cy="165.3" r="4.1" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1646.2" cy="168.1" r="2.8" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1194.1" cy="83.1" r="2.2" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1611.2" cy="140" r="2.6" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1491.9" cy="47.2" r="3.9" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1383.4" cy="150.5" r="1.8" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1469.4" cy="20.4" r="2.6" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1655.2" cy="92.6" r="4" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1477.9" cy="73.7" r="2.2" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1216.7" cy="28.4" r="2.2" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1585.1" cy="134.3" r="2.8" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1535.4" cy="29.4" r="2.2" fill="#60a5fa" fill-opacity="0.6"/>
+  </g>
+  <rect x="0" y="198" width="1920" height="1" fill="#60a5fa" fill-opacity="0.18"/>
+  <text x="40" y="44" style="font: 800 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 4px; fill: #60a5fa;">COOLASHAKER STUDIO · NETWORK</text>
+  <text x="38" y="94" style="font: 800 44px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: -0.5px; fill: url(#titleFill);">Network Intelligence</text>
+  <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">Catalyst Center and Meraki in one view – campus health, security advisories, wireless and alerts</text>
+  <g>
+    <text x="40" y="284" class="sec">NETWORK KPIS</text>
+    <line x1="170.8" y1="279" x2="1880" y2="279" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <text x="40" y="484" class="sec">SITE MESH</text>
+    <line x1="142.60000000000002" y1="479" x2="1880" y2="479" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <text x="40" y="1034" class="sec">CATALYST CENTER</text>
+    <line x1="199" y1="1029" x2="1880" y2="1029" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <text x="40" y="1764" class="sec">MERAKI</text>
+    <line x1="114.4" y1="1759" x2="1880" y2="1759" stroke="#60a5fa" stroke-opacity="0.18"/>
+  </g>
+  <g>
+    <rect x="40" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="329" class="pt">MANAGED CATALYST DEVICES</text>
+    <rect x="350" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="368" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="370" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="382" y="329" class="pt">AVG DEVICE HEALTH</text>
+    <rect x="660" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="678" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="680" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="692" y="329" class="pt">CRITICAL / HIGH ADVISORIES</text>
+    <rect x="970" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="988" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="990" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="1002" y="329" class="pt">MERAKI CRITICAL ALERTS</text>
+    <rect x="1280" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1298" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="1300" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="1312" y="329" class="pt">DEVICES WENT OFFLINE</text>
+    <rect x="1590" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1608" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="1610" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="1622" y="329" class="pt">AVG WIRELESS LOSS</text>
+    <rect x="40" y="500" width="1220" height="500" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="500" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="516" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="529" class="pt">EVERY SITE TO EVERY SITE</text>
+    <text x="1240" y="529" class="ph" text-anchor="end">live · ThousandEyes agent-to-agent · click a site for Catalyst Center</text>
+    <rect x="1280" y="500" width="600" height="500" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1298" y="500" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="1300" y="516" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="1312" y="529" class="pt">CATALYST HEALTH BY SITE</text>
+    <rect x="40" y="1050" width="600" height="320" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1050" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="1066" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="1079" class="pt">HEALTH SCORE BY DEVICE FAMILY</text>
+    <rect x="660" y="1050" width="600" height="320" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="678" y="1050" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="680" y="1066" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="692" y="1079" class="pt">CPU AND MEMORY BY DEVICE FAMILY</text>
+    <rect x="1280" y="1050" width="600" height="320" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1298" y="1050" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="1300" y="1066" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="1312" y="1079" class="pt">SECURITY ADVISORIES BY SEVERITY</text>
+    <rect x="40" y="1390" width="1840" height="340" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1390" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="1406" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="1419" class="pt">SECURITY ADVISORIES BY CVSS</text>
+    <rect x="40" y="1780" width="600" height="340" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1780" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="1796" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="1809" class="pt">WIRELESS LOSS BY NETWORK (%)</text>
+    <text x="620" y="1809" class="ph" text-anchor="end">click for Meraki</text>
+    <rect x="660" y="1780" width="1220" height="340" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="678" y="1780" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="680" y="1796" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="692" y="1809" class="pt">TOP ALERT TYPES BY SITE</text>
+    <rect x="40" y="2140" width="1840" height="340" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="2140" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="2156" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="2169" class="pt">NETWORKS WITH ALERTS OR OFFLINE DEVICES</text>
+  </g>
+</svg>

@@ -1,0 +1,301 @@
+<form version="1.1" theme="dark">
+  <label>Network Assurance &amp; Service Health</label>
+  <description>From reactive troubleshooting to proactive assurance: every row pairs a network leading indicator (Cisco Catalyst Center, Meraki, ThousandEyes) with the business impact it predicts (AI Support Bot and hotline, collaboration, B2B transactions).</description>
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="time_token" searchWhenChanged="true">
+      <label>Time Range</label>
+      <default>
+        <earliest>-60m@m</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>AI Support Bot – path to DC Frankfurt</title>
+      <single>
+        <title>Leading: packet loss to DC Frankfurt</title>
+        <search>
+          <query>index=demo_thousendeyes thousandeyes.test.type=agent-to-agent thousandeyes.target.agent.location=frankfurt
+| stats avg(metric_name:network.loss) as loss
+| eval loss=round(loss, 1)</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="rangeColors">["0x53a051","0xf8be34","0xdc4e41"]</option>
+        <option name="rangeValues">[1,3]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">ThousandEyes agent-to-agent, all plants</option>
+      </single>
+      <single>
+        <title>Impact: calls waiting in the Support Hotline</title>
+        <search>
+          <query>index=demo_msteams event_type=call_queue_stats queue_name="Support Hotline"
+| stats latest(calls_waiting) as waiting</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="rangeColors">["0x53a051","0xf8be34","0xdc4e41"]</option>
+        <option name="rangeValues">[5,12]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Teams call queue (bot hands over)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Branch WAN – Berlin SD-WAN</title>
+      <single>
+        <title>Leading: packet loss on DC paths</title>
+        <search>
+          <query>index=demo_thousendeyes thousandeyes.test.type=agent-to-agent "thousandeyes.test.name"="*Berlin*" NOT "thousandeyes.test.name"="* to Frankfurt"
+| stats avg(metric_name:network.loss) as loss
+| eval loss=round(loss, 2)</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="numberPrecision">0.00</option>
+        <option name="rangeColors">["0x53a051","0xf8be34","0xdc4e41"]</option>
+        <option name="rangeValues">[0.5,2]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">ThousandEyes DC mesh from/to Berlin</option>
+      </single>
+      <single>
+        <title>Impact: Berlin backend timeouts</title>
+        <search>
+          <query>index=demo_tomcat_logs host=berweb* 504
+| rex field=_raw "\" (?&lt;http_status&gt;\d{3}) "
+| stats count(eval(http_status="504")) as timeouts</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="rangeColors">["0x53a051","0xf8be34","0xdc4e41"]</option>
+        <option name="rangeValues">[0,20]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">HTTP 504 on berweb01/02 (last 5 min)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Internet &amp; cloud path – Atlanta</title>
+      <single>
+        <title>Leading: BGP reachability</title>
+        <search>
+          <query>index=demo_thousendeyes thousandeyes.test.type=bgp thousandeyes.agent.location=atlanta
+| stats latest(metric_name:bgp.reachability) as reach</query>
+          <earliest>-10m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="rangeColors">["0xdc4e41","0xf8be34","0x53a051"]</option>
+        <option name="rangeValues">[90,99]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">prefix 52.112.0.0/14 seen from Atlanta</option>
+      </single>
+      <single>
+        <title>Impact: B2B order transaction</title>
+        <search>
+          <query>index=demo_thousendeyes thousandeyes.test.type=web-transaction thousandeyes.agent.location=atlanta
+| stats avg(metric_name:web.transaction.completion) as completion
+| eval completion=round(completion, 0)</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="rangeColors">["0xdc4e41","0xf8be34","0x53a051"]</option>
+        <option name="rangeValues">[80,98]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">completion from Atlanta (ThousandEyes)</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Service health by site and domain (last 5 minutes)</title>
+      <table>
+        <search>
+          <query>index=demo_cisco_catalyst sourcetype="cisco:dnac:devicehealth" earliest=-5m
+| eval site=lower(mvindex(split(Location, "/"), -1))
+| stats avg(HealthScore) as campus by site
+| append [search index=demo_cisco_meraki sourcetype="meraki:assurancealerts" categoryType=connectivity earliest=-15m
+    | eval site=lower(mvindex(split('network.name', "-"), 0))
+    | stats count as wan_alerts by site]
+| append [search index=demo_thousendeyes thousandeyes.test.type=agent-to-agent earliest=-5m
+    | eval site=mvappend('thousandeyes.agent.location', 'thousandeyes.target.agent.location')
+    | stats avg(metric_name:network.loss) as dc_loss by site]
+| append [search index=demo_thousendeyes thousandeyes.test.type=bgp earliest=-10m
+    | eval site='thousandeyes.agent.location'
+    | stats latest(metric_name:bgp.reachability) as bgp by site]
+| append [search index=demo_thousendeyes thousandeyes.test.type=http-server earliest=-5m
+    | eval site='thousandeyes.agent.location'
+    | stats avg(metric_name:http.server.request.availability) as saas by site]
+| append [search index=demo_msteams event_type=call_ended earliest=-10m
+    | eval site=location
+    | stats avg(packet_loss_pct) as teams_loss by site]
+| append [search index=demo_mes production_rate_per_hour=* ai_inspection_mode=* earliest=-5m
+    | eval site=location
+    | stats avg(eval(if(ai_inspection_mode="inline", 100, 0))) as ai by site]
+| stats first(*) as * by site
+| fillnull value=0 wan_alerts
+| eval campus=round(campus, 1), dc_loss=round(dc_loss, 2), saas=round(saas, 1), teams_loss=round(teams_loss, 2), ai=round(ai, 0)
+| eval site=upper(substr(site, 1, 1)) . substr(site, 2)
+| table site campus wan_alerts dc_loss bgp saas teams_loss ai
+| rename site as Site, campus as "Campus health (Catalyst)", wan_alerts as "WAN alerts 15m (Meraki)",
+    dc_loss as "DC path loss % (TE)", bgp as "BGP reachability % (TE)", saas as "SaaS availability % (TE)",
+    teams_loss as "Teams media loss %", ai as "AI inspection inline %"</query>
+          <earliest>-15m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="drilldown">none</option>
+        <format type="color" field="Campus health (Catalyst)">
+          <colorPalette type="list">[#DC4E41,#F8BE34,#53A051]</colorPalette>
+          <scale type="threshold">5,8</scale>
+        </format>
+        <format type="color" field="WAN alerts 15m (Meraki)">
+          <colorPalette type="list">[#53A051,#F8BE34,#DC4E41]</colorPalette>
+          <scale type="threshold">8,20</scale>
+        </format>
+        <format type="color" field="DC path loss % (TE)">
+          <colorPalette type="list">[#53A051,#F8BE34,#DC4E41]</colorPalette>
+          <scale type="threshold">0.5,2</scale>
+        </format>
+        <format type="color" field="BGP reachability % (TE)">
+          <colorPalette type="list">[#DC4E41,#F8BE34,#53A051]</colorPalette>
+          <scale type="threshold">90,99</scale>
+        </format>
+        <format type="color" field="SaaS availability % (TE)">
+          <colorPalette type="list">[#DC4E41,#F8BE34,#53A051]</colorPalette>
+          <scale type="threshold">95,99</scale>
+        </format>
+        <format type="color" field="Teams media loss %">
+          <colorPalette type="list">[#53A051,#F8BE34,#DC4E41]</colorPalette>
+          <scale type="threshold">2,5</scale>
+        </format>
+        <format type="color" field="AI inspection inline %">
+          <colorPalette type="list">[#DC4E41,#F8BE34,#53A051]</colorPalette>
+          <scale type="threshold">70,95</scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>DC Frankfurt: leading indicator vs. impact</title>
+      <chart>
+        <search>
+          <query>(index=demo_thousendeyes thousandeyes.test.type=agent-to-agent thousandeyes.target.agent.location=frankfurt) OR (index=demo_msteams event_type=call_queue_stats queue_name="Support Hotline")
+| timechart span=1m avg(metric_name:network.loss) as "Loss % to DC Frankfurt (leading)" max(calls_waiting) as "Hotline calls waiting (impact)"</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisY2.enabled">1</option>
+        <option name="charting.axisY2.minimumNumber">0</option>
+        <option name="charting.chart.overlayFields">"Hotline calls waiting (impact)"</option>
+        <option name="charting.legend.placement">bottom</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Berlin WAN: leading indicator vs. impact</title>
+      <chart>
+        <search>
+          <query>(index=demo_thousendeyes thousandeyes.test.type=agent-to-agent "thousandeyes.test.name"="*Berlin*" NOT "thousandeyes.test.name"="* to Frankfurt") OR (index=demo_tomcat_logs host=berweb* 504)
+| rex field=_raw "\" (?&lt;http_status&gt;\d{3}) "
+| eval timeout=if(index="demo_tomcat_logs" AND http_status="504", 1, null())
+| timechart span=1m avg(metric_name:network.loss) as "DC path loss % (leading)" count(timeout) as "HTTP 504 Berlin (impact)"</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisY2.enabled">1</option>
+        <option name="charting.chart.overlayFields">"HTTP 504 Berlin (impact)"</option>
+        <option name="charting.legend.placement">bottom</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Atlanta internet path: leading indicator vs. impact</title>
+      <chart>
+        <search>
+          <query>index=demo_thousendeyes thousandeyes.agent.location=atlanta thousandeyes.test.type IN ("bgp", "web-transaction")
+| timechart span=1m min(metric_name:bgp.reachability) as "BGP reachability % (leading)" avg(metric_name:web.transaction.completion) as "B2B order completion % (impact)"</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisY.maximumNumber">100</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.legend.placement">bottom</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>ThousandEyes DC paths (agent-to-agent)</title>
+      <table>
+        <search>
+          <query>index=demo_thousendeyes thousandeyes.test.type=agent-to-agent
+| stats avg(metric_name:network.loss) as loss avg(metric_name:network.latency) as latency avg(metric_name:network.jitter) as jitter by thousandeyes.test.name
+| eval loss=round(loss, 2), latency=round(latency * 1000, 0), jitter=round(jitter, 1)
+| rename thousandeyes.test.name as Path, loss as "Loss %", latency as "Latency ms", jitter as "Jitter ms"</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="drilldown">none</option>
+        <format type="color" field="Loss %">
+          <colorPalette type="list">[#53A051,#F8BE34,#DC4E41]</colorPalette>
+          <scale type="threshold">0.5,2</scale>
+        </format>
+        <format type="color" field="Jitter ms">
+          <colorPalette type="list">[#53A051,#F8BE34,#DC4E41]</colorPalette>
+          <scale type="threshold">10,25</scale>
+        </format>
+      </table>
+    </panel>
+    <panel>
+      <title>ThousandEyes BGP – AS path per vantage point</title>
+      <table>
+        <search>
+          <query>index=demo_thousendeyes thousandeyes.test.type=bgp
+| stats latest(bgp.prefix) as Prefix latest(bgp.as_path) as "AS path" latest(metric_name:bgp.reachability) as "Reachability %"
+        sum(metric_name:bgp.path_changes.count) as "Path changes" sum(metric_name:bgp.updates.count) as Updates by thousandeyes.agent.location
+| rename thousandeyes.agent.location as "Vantage point"</query>
+          <earliest>-10m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="drilldown">none</option>
+        <format type="color" field="Reachability %">
+          <colorPalette type="list">[#DC4E41,#F8BE34,#53A051]</colorPalette>
+          <scale type="threshold">90,99</scale>
+        </format>
+        <format type="color" field="Path changes">
+          <colorPalette type="list">[#53A051,#F8BE34,#DC4E41]</colorPalette>
+          <scale type="threshold">20,60</scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+        <p><b>Deep dives:</b>
+          <a href="ai_workload_infrastructure">AI Workload Infrastructure</a> ·
+          <a href="dashboard_catalyst">Catalyst Center</a> ·
+          <a href="dashboard_meraki">Meraki</a> ·
+          <a href="cs_thousendeyes">ThousandEyes</a> ·
+          <a href="dashboard_manufacturing">Manufacturing</a> ·
+          <a href="dashboard_network_collaboration">Network &amp; Collaboration</a> ·
+          <a href="dashboard_tomcat">Tomcat</a>
+        </p>
+      </html>
+    </panel>
+  </row>
+</form>

@@ -1,0 +1,700 @@
+<dashboard version="2" theme="dark">
+    <label>Coolashaker - ThousandEyes Network Intelligence</label>
+    <description>Network monitoring dashboard — index: demo_thousendeyes | Agents: Vienna, Berlin, Atlanta | Tests: DNS, HTTP, Agent-to-Agent, Agent-to-Server, BGP</description>
+    <definition><![CDATA[{
+    "dataSources": {
+        "ds_kpi_dns_avail": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_thousendeyes \"thousandeyes.test.type\"=dns-server | stats avg(\"metric_name:dns.lookup.availability\") as dns_availability | eval dns_availability=round(dns_availability,2)",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            },
+            "name": "dns_availability"
+        },
+        "ds_kpi_dns_duration": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_thousendeyes \"thousandeyes.test.type\"=dns-server | stats avg(\"metric_name:dns.lookup.duration\") as avg_duration | eval avg_ms=round(avg_duration*1000,1)",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            },
+            "name": "DNS_Duration"
+        },
+        "ds_kpi_http_avail": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_thousendeyes \"thousandeyes.test.type\"=http-server | stats avg(\"metric_name:http.server.request.availability\") as http_availability | eval http_availability=round(http_availability,2)",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_kpi_http_response": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_thousendeyes \"thousandeyes.test.type\"=http-server | stats avg(\"metric_name:http.client.request.duration\") as avg_resp | eval avg_ms=round(avg_resp*1000,0)",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_kpi_jitter": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_thousendeyes \"thousandeyes.test.type\"=agent-to-server | stats avg(\"metric_name:network.jitter\") as avg_jitter | eval avg_jitter=round(avg_jitter,1)",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_kpi_packet_loss": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_thousendeyes (\"thousandeyes.test.type\"=agent-to-agent OR \"thousandeyes.test.type\"=agent-to-server) | stats avg(\"metric_name:network.loss\") as avg_loss | eval avg_loss=round(avg_loss,2)",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_latency_timechart": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_thousendeyes \"thousandeyes.test.type\"=agent-to-agent | timechart span=15m avg(\"metric_name:network.latency\") as avg_latency by \"thousandeyes.test.name\"",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_agent_distribution": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_thousendeyes | stats count by \"thousandeyes.agent.location\"",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_testtype_distribution": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_thousendeyes | stats count by \"thousandeyes.test.type\"",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_http_table": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_thousendeyes \"thousandeyes.test.type\"=http-server | stats avg(\"metric_name:http.server.request.availability\") as \"Availability %\" avg(\"metric_name:http.client.request.duration\") as avg_resp_s avg(\"metric_name:http.server.throughput\") as \"Throughput (B/s)\" by \"thousandeyes.test.name\" \"thousandeyes.agent.location\" | eval \"Response Time (ms)\"=round(avg_resp_s*1000,0) | eval \"Availability %\"=round('Availability %',2) | eval \"Throughput (MB/s)\"=round('Throughput (B/s)'/1024/1024,2) | rename \"thousandeyes.test.name\" as Test \"thousandeyes.agent.location\" as Agent | table Test Agent \"Availability %\" \"Response Time (ms)\" \"Throughput (MB/s)\" | sort Agent",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_a2a_table": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_thousendeyes \"thousandeyes.test.type\"=agent-to-agent | stats avg(\"metric_name:network.latency\") as avg_latency_s avg(\"metric_name:network.loss\") as \"Loss %\" avg(\"metric_name:network.jitter\") as \"Jitter (ms)\" by \"thousandeyes.test.name\" | eval \"Latency (ms)\"=round(avg_latency_s*1000,1) | eval \"Loss %\"=round('Loss %',2) | eval \"Jitter (ms)\"=round('Jitter (ms)',1) | rename \"thousandeyes.test.name\" as \"DC Path\" | table \"DC Path\" \"Latency (ms)\" \"Loss %\" \"Jitter (ms)\"",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_teams_quality": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_thousendeyes \"thousandeyes.test.type\"=agent-to-server \"thousandeyes.test.name\"=\"Teams Media Quality\" | stats avg(\"metric_name:network.latency\") as avg_latency_s avg(\"metric_name:network.loss\") as \"Loss %\" avg(\"metric_name:network.jitter\") as \"Jitter (ms)\" by \"thousandeyes.agent.location\" | eval \"Latency (ms)\"=round(avg_latency_s*1000,1) | eval \"Loss %\"=round('Loss %',2) | eval \"Jitter (ms)\"=round('Jitter (ms)',1) | rename \"thousandeyes.agent.location\" as Agent | table Agent \"Latency (ms)\" \"Loss %\" \"Jitter (ms)\"",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_dns_by_agent": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_thousendeyes \"thousandeyes.test.type\"=dns-server | stats avg(\"metric_name:dns.lookup.duration\") as avg_duration by \"thousandeyes.agent.location\" | eval \"Avg Duration (ms)\"=round(avg_duration*1000,1) | rename \"thousandeyes.agent.location\" as Agent | table Agent \"Avg Duration (ms)\"",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_http_throughput_chart": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_thousendeyes \"thousandeyes.test.type\"=http-server | eval test_agent='thousandeyes.test.name'+\" / \"+'thousandeyes.agent.location' | stats avg(\"metric_name:http.server.throughput\") as throughput_bytes by test_agent | eval \"Throughput (MB/s)\"=round(throughput_bytes/1024/1024,2) | table test_agent \"Throughput (MB/s)\"",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_event_volume": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_thousendeyes | timechart span=30m count by \"thousandeyes.test.type\"",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_bgp": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_thousendeyes \"thousandeyes.test.type\"=bgp\n| stats latest(\"metric_name:bgp.reachability\") as \"Reachability %\" min(\"metric_name:bgp.reachability\") as \"Min Reachability %\"\n    latest(\"bgp.as_path\") as \"AS Path\" latest(\"bgp.prefix\") as Prefix\n    sum(\"metric_name:bgp.path_changes.count\") as \"Path Changes\" sum(\"metric_name:bgp.updates.count\") as Updates\n    by \"thousandeyes.agent.location\"\n| rename \"thousandeyes.agent.location\" as \"Vantage Point\"\n| table \"Vantage Point\" Prefix \"AS Path\" \"Reachability %\" \"Min Reachability %\" \"Path Changes\" Updates",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_web_transaction": {
+            "type": "ds.search",
+            "name": "B2B web transaction",
+            "options": {
+                "query": "index=demo_thousendeyes \"thousandeyes.test.type\"=web-transaction\n| stats avg(\"metric_name:web.transaction.completion\") as \"Completion %\" sum(\"metric_name:web.transaction.errors.count\") as Errors avg(\"metric_name:web.transaction.duration\") as \"Duration (s)\" by \"thousandeyes.agent.location\"\n| eval \"Completion %\"=round('Completion %',1), \"Duration (s)\"=round('Duration (s)',2)\n| rename \"thousandeyes.agent.location\" as Agent",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        }
+    },
+    "visualizations": {
+        "viz_kpi_dns_avail": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_kpi_dns_avail"
+            },
+            "options": {
+                "majorField": "dns_availability",
+                "unit": "%",
+                "majorColor": "> majorValue | rangeValue(majorColorEditorConfig)",
+                "majorColorEditorConfig": [
+                    {
+                        "value": 99,
+                        "display": "#22d3a5"
+                    },
+                    {
+                        "value": 95,
+                        "display": "#f59e0b"
+                    },
+                    {
+                        "display": "#ef4444"
+                    }
+                ],
+                "trendIndicator": "off",
+                "backgroundColor": "transparent"
+            },
+            "title": "DNS Availability"
+        },
+        "viz_kpi_dns_duration": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_kpi_dns_duration"
+            },
+            "options": {
+                "majorField": "avg_ms",
+                "unit": "ms",
+                "majorColor": "> majorValue | rangeValue(majorColorEditorConfig)",
+                "majorColorEditorConfig": [
+                    {
+                        "value": 0,
+                        "display": "#22d3a5"
+                    },
+                    {
+                        "value": 100,
+                        "display": "#f59e0b"
+                    },
+                    {
+                        "display": "#ef4444"
+                    }
+                ],
+                "backgroundColor": "transparent",
+                "numberPrecision": 3
+            },
+            "title": "DNS Duration (avg)"
+        },
+        "viz_kpi_http_avail": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_kpi_http_avail"
+            },
+            "options": {
+                "majorField": "http_availability",
+                "unit": "%",
+                "majorColor": "> majorValue | rangeValue(majorColorEditorConfig)",
+                "majorColorEditorConfig": [
+                    {
+                        "value": 99,
+                        "display": "#22d3a5"
+                    },
+                    {
+                        "value": 95,
+                        "display": "#f59e0b"
+                    },
+                    {
+                        "display": "#ef4444"
+                    }
+                ],
+                "backgroundColor": "transparent"
+            },
+            "title": "HTTP Availability"
+        },
+        "viz_kpi_http_response": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_kpi_http_response"
+            },
+            "options": {
+                "majorField": "avg_ms",
+                "unit": "ms",
+                "majorColor": "> majorValue | rangeValue(majorColorEditorConfig)",
+                "majorColorEditorConfig": [
+                    {
+                        "value": 0,
+                        "display": "#22d3a5"
+                    },
+                    {
+                        "value": 300,
+                        "display": "#f59e0b"
+                    },
+                    {
+                        "display": "#ef4444"
+                    }
+                ],
+                "backgroundColor": "transparent"
+            },
+            "title": "HTTP Response Time (avg)"
+        },
+        "viz_kpi_jitter": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_kpi_jitter"
+            },
+            "options": {
+                "majorField": "avg_jitter",
+                "unit": "ms",
+                "majorColor": "> majorValue | rangeValue(majorColorEditorConfig)",
+                "majorColorEditorConfig": [
+                    {
+                        "value": 0,
+                        "display": "#22d3a5"
+                    },
+                    {
+                        "value": 10,
+                        "display": "#f59e0b"
+                    },
+                    {
+                        "display": "#ef4444"
+                    }
+                ],
+                "backgroundColor": "transparent"
+            },
+            "title": "Teams Media Jitter (avg)"
+        },
+        "viz_kpi_packet_loss": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_kpi_packet_loss"
+            },
+            "options": {
+                "majorField": "avg_loss",
+                "unit": "%",
+                "majorColor": "> majorValue | rangeValue(majorColorEditorConfig)",
+                "majorColorEditorConfig": [
+                    {
+                        "value": 0,
+                        "display": "#22d3a5"
+                    },
+                    {
+                        "value": 1,
+                        "display": "#f59e0b"
+                    },
+                    {
+                        "display": "#ef4444"
+                    }
+                ],
+                "backgroundColor": "transparent"
+            },
+            "title": "Packet Loss (avg)"
+        },
+        "viz_latency_timechart": {
+            "type": "splunk.line",
+            "dataSources": {
+                "primary": "ds_latency_timechart"
+            },
+            "options": {
+                "xAxisTitleText": "Time",
+                "yAxisTitleText": "Latency (ms)",
+                "legendDisplay": "bottom",
+                "seriesColors": [
+                    "#22d3a5",
+                    "#00b4d8",
+                    "#f59e0b"
+                ]
+            },
+            "title": "Network Latency over Time (Agent-to-Agent)"
+        },
+        "viz_agent_distribution": {
+            "type": "splunk.pie",
+            "dataSources": {
+                "primary": "ds_agent_distribution"
+            },
+            "options": {
+                "labelField": "thousandeyes.agent.location",
+                "valueField": "count",
+                "seriesColors": [
+                    "#00b4d8",
+                    "#22d3a5",
+                    "#f59e0b"
+                ],
+                "legendDisplay": "bottom"
+            },
+            "title": "Events by Agent Location"
+        },
+        "viz_testtype_distribution": {
+            "type": "splunk.bar",
+            "dataSources": {
+                "primary": "ds_testtype_distribution"
+            },
+            "options": {
+                "xAxisTitleText": "Test Type",
+                "yAxisTitleText": "Event Count",
+                "seriesColors": [
+                    "#00b4d8"
+                ],
+                "legendDisplay": "off"
+            },
+            "title": "Events by Test Type"
+        },
+        "viz_http_table": {
+            "type": "splunk.table",
+            "dataSources": {
+                "primary": "ds_http_table"
+            },
+            "options": {
+                "columnFormats": {
+                    "Availability %": {
+                        "data": "number",
+                        "numberPrecision": 2
+                    },
+                    "Response Time (ms)": {
+                        "data": "number",
+                        "numberPrecision": 0
+                    }
+                }
+            },
+            "title": "HTTP Test Results per Agent"
+        },
+        "viz_a2a_table": {
+            "type": "splunk.table",
+            "dataSources": {
+                "primary": "ds_a2a_table"
+            },
+            "options": {},
+            "title": "DC Connectivity (Agent-to-Agent)"
+        },
+        "viz_teams_quality": {
+            "type": "splunk.table",
+            "dataSources": {
+                "primary": "ds_teams_quality"
+            },
+            "options": {},
+            "title": "Teams Media Quality per Agent"
+        },
+        "viz_dns_by_agent": {
+            "type": "splunk.bar",
+            "dataSources": {
+                "primary": "ds_dns_by_agent"
+            },
+            "options": {
+                "xAxisTitleText": "Agent",
+                "yAxisTitleText": "Avg Duration (ms)",
+                "seriesColors": [
+                    "#00b4d8",
+                    "#22d3a5",
+                    "#f59e0b"
+                ],
+                "legendDisplay": "off"
+            },
+            "title": "DNS Lookup Duration by Agent"
+        },
+        "viz_http_throughput": {
+            "type": "splunk.bar",
+            "dataSources": {
+                "primary": "ds_http_throughput_chart"
+            },
+            "options": {
+                "xAxisTitleText": "Test / Agent",
+                "yAxisTitleText": "Throughput (MB/s)",
+                "seriesColors": [
+                    "#00f5d4"
+                ],
+                "legendDisplay": "off"
+            },
+            "title": "HTTP Throughput (MB/s)"
+        },
+        "viz_event_volume": {
+            "type": "splunk.area",
+            "dataSources": {
+                "primary": "ds_event_volume"
+            },
+            "options": {
+                "xAxisTitleText": "Time",
+                "yAxisTitleText": "Events",
+                "legendDisplay": "bottom",
+                "seriesColors": [
+                    "#00b4d8",
+                    "#22d3a5",
+                    "#f59e0b",
+                    "#ff6b35",
+                    "#a78bfa"
+                ],
+                "stackMode": "stacked"
+            },
+            "title": "Event Volume over Time (all Test Types)"
+        },
+        "viz_bgp": {
+            "type": "splunk.table",
+            "dataSources": {
+                "primary": "ds_bgp"
+            },
+            "options": {},
+            "title": "BGP Route Monitoring (52.112.0.0/14, Microsoft Teams/M365)",
+            "description": "A changed AS path, falling reachability and many path changes indicate a route leak"
+        },
+        "viz_web_transaction": {
+            "type": "splunk.table",
+            "title": "B2B Order Transaction per Agent",
+            "description": "Scripted order transaction on b2b.coolashaker.com",
+            "dataSources": {
+                "primary": "ds_web_transaction"
+            },
+            "options": {}
+        }
+    },
+    "defaults": {
+        "dataSources": {
+            "ds.search": {
+                "options": {
+                    "queryParameters": {
+                        "earliest": "$global_time.earliest$",
+                        "latest": "$global_time.latest$"
+                    }
+                }
+            }
+        }
+    },
+    "inputs": {
+        "input_timerange": {
+            "type": "input.timerange",
+            "options": {
+                "defaultValue": "-4h,now",
+                "token": "global_time"
+            },
+            "title": "Time Range"
+        }
+    },
+    "title": "ThousandEyes Network Intelligence",
+    "description": "Network monitoring dashboard — index: demo_thousendeyes | Agents: Vienna, Berlin, Atlanta | Tests: DNS, HTTP, Agent-to-Agent, Agent-to-Server, BGP",
+    "layout": {
+        "tabs": {
+            "items": [
+                {
+                    "layoutId": "layout_1",
+                    "label": "New tab"
+                }
+            ]
+        },
+        "layoutDefinitions": {
+            "layout_1": {
+                "type": "grid",
+                "options": {
+                    "backgroundColor": "#080c14"
+                },
+                "structure": [
+                    {
+                        "item": "viz_kpi_dns_avail",
+                        "position": {
+                            "x": 0,
+                            "y": 0,
+                            "w": 200,
+                            "h": 100
+                        }
+                    },
+                    {
+                        "item": "viz_kpi_dns_duration",
+                        "position": {
+                            "x": 200,
+                            "y": 0,
+                            "w": 200,
+                            "h": 100
+                        }
+                    },
+                    {
+                        "item": "viz_kpi_http_avail",
+                        "position": {
+                            "x": 400,
+                            "y": 0,
+                            "w": 200,
+                            "h": 100
+                        }
+                    },
+                    {
+                        "item": "viz_kpi_http_response",
+                        "position": {
+                            "x": 600,
+                            "y": 0,
+                            "w": 200,
+                            "h": 100
+                        }
+                    },
+                    {
+                        "item": "viz_kpi_jitter",
+                        "position": {
+                            "x": 800,
+                            "y": 0,
+                            "w": 200,
+                            "h": 100
+                        }
+                    },
+                    {
+                        "item": "viz_kpi_packet_loss",
+                        "position": {
+                            "x": 1000,
+                            "y": 0,
+                            "w": 200,
+                            "h": 100
+                        }
+                    },
+                    {
+                        "item": "viz_latency_timechart",
+                        "position": {
+                            "x": 0,
+                            "y": 100,
+                            "w": 600,
+                            "h": 250
+                        }
+                    },
+                    {
+                        "item": "viz_agent_distribution",
+                        "position": {
+                            "x": 600,
+                            "y": 100,
+                            "w": 300,
+                            "h": 250
+                        }
+                    },
+                    {
+                        "item": "viz_testtype_distribution",
+                        "position": {
+                            "x": 900,
+                            "y": 100,
+                            "w": 300,
+                            "h": 250
+                        }
+                    },
+                    {
+                        "item": "viz_http_table",
+                        "position": {
+                            "x": 0,
+                            "y": 350,
+                            "w": 450,
+                            "h": 280
+                        }
+                    },
+                    {
+                        "item": "viz_a2a_table",
+                        "position": {
+                            "x": 450,
+                            "y": 350,
+                            "w": 300,
+                            "h": 130
+                        }
+                    },
+                    {
+                        "item": "viz_teams_quality",
+                        "position": {
+                            "x": 450,
+                            "y": 480,
+                            "w": 300,
+                            "h": 150
+                        }
+                    },
+                    {
+                        "item": "viz_dns_by_agent",
+                        "position": {
+                            "x": 750,
+                            "y": 350,
+                            "w": 225,
+                            "h": 130
+                        }
+                    },
+                    {
+                        "item": "viz_http_throughput",
+                        "position": {
+                            "x": 750,
+                            "y": 480,
+                            "w": 225,
+                            "h": 150
+                        }
+                    },
+                    {
+                        "item": "viz_bgp",
+                        "position": {
+                            "x": 0,
+                            "y": 630,
+                            "w": 1200,
+                            "h": 200
+                        }
+                    },
+                    {
+                        "item": "viz_event_volume",
+                        "position": {
+                            "x": 0,
+                            "y": 830,
+                            "w": 1200,
+                            "h": 200
+                        }
+                    },
+                    {
+                        "item": "viz_web_transaction",
+                        "type": "block",
+                        "position": {
+                            "x": 975,
+                            "y": 350,
+                            "w": 225,
+                            "h": 280
+                        }
+                    }
+                ]
+            }
+        },
+        "globalInputs": [
+            "input_timerange"
+        ],
+        "options": {
+            "submitButton": false,
+            "showTitleAndDescription": true
+        }
+    }
+}]]></definition>
+</dashboard>

@@ -1,0 +1,457 @@
+<form version="1.1" theme="dark">
+  <label>CoolaShaker - SAP ERP &amp; MII</label>
+  <description>SAP ERP PRD (Vienna DC) and SAP MII in every plant: system KPIs, production order IDocs ERP → MII and their impact on the MES lines</description>
+  <search id="base_erp">
+    <query>index=demo_sap sourcetype="sap:erp:performance"
+| fields _time host dialog_response_time_ms db_request_time_ms active_users dialog_wp_utilization_pct update_errors short_dumps failed_background_jobs hana_memory_used_pct hana_cpu_pct</query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+  <search id="base_idoc">
+    <query>index=demo_sap sourcetype="sap:idoc:status" target_location=$plant_tok$
+| fields _time target_location partner rfc_destination idocs_created idocs_delivered idoc_outbound_backlog idoc_error_count idoc_e2e_latency_s trfc_queue_entries</query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+  <search id="base_mii">
+    <query>index=demo_sap sourcetype="sap:mii:performance" location=$plant_tok$
+| fields _time host location orders_received mii_order_buffer orders_dispatched_to_mes confirmations_sent mii_message_queue_depth mii_response_time_ms</query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="time_token" searchWhenChanged="true">
+      <label>Time Range</label>
+      <default>
+        <earliest>-60m@m</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="plant_tok" searchWhenChanged="true">
+      <label>Plant</label>
+      <choice value="*">All plants</choice>
+      <choice value="atlanta">Atlanta</choice>
+      <choice value="berlin">Berlin</choice>
+      <choice value="vienna">Vienna</choice>
+      <default>*</default>
+      <initialValue>*</initialValue>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <html>
+        <style>
+          .sap-flow { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; padding: 14px 10px; }
+          .sap-box { background: #1e2a3a; border: 2px solid #4e9dd4; border-radius: 10px; padding: 10px 16px; text-align: center; min-width: 170px; }
+          .sap-box b { color: #4e9dd4; font-size: 15px; }
+          .sap-box span { display: block; color: #b8c4d0; font-size: 12px; margin-top: 4px; }
+          .sap-box.mes { border-color: #53a051; }
+          .sap-box.mes b { color: #53a051; }
+          .sap-arrow { color: #8a96a3; font-size: 13px; text-align: center; }
+          .sap-note { text-align: center; color: #999; font-size: 13px; margin-top: 4px; }
+        </style>
+        <div class="sap-flow">
+          <div class="sap-box"><b>SAP ERP PRD</b><span>S/4HANA · vieerp01/02 · HANA viehdb01<br/>DC Vienna</span></div>
+          <div class="sap-arrow">production orders<br/>IDoc LOIPRO05 via tRFC<br/>→</div>
+          <div class="sap-box"><b>SAP MII</b><span>atlmii01 · bermii01 · viemii01<br/>one per plant, order buffer</span></div>
+          <div class="sap-arrow">orders<br/>→<br/>← confirmations</div>
+          <div class="sap-box mes"><b>MES lines</b><span>Atlanta · Berlin · Vienna<br/>LINE-01 … LINE-03</span></div>
+        </div>
+        <p class="sap-note">Without production orders from SAP the MII order buffer drains and the MES lines stop – check the order interface before the plant.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Dialog Response Time</title>
+      <single>
+        <search base="base_erp">
+          <query>| stats avg(dialog_response_time_ms) as v | eval v=round(v, 0)</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[1000,2000]</option>
+        <option name="unit">ms</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">ERP PRD (ST03)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>DB Request Time</title>
+      <single>
+        <search base="base_erp">
+          <query>| stats avg(db_request_time_ms) as v | eval v=round(v, 0)</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[400,800]</option>
+        <option name="unit">ms</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">per dialog step</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Active Users</title>
+      <single>
+        <search base="base_erp">
+          <query>| bin _time span=1m | stats sum(active_users) as users by _time | stats latest(users) as v</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="underLabel">logged on to ERP PRD</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Dialog Work Processes</title>
+      <single>
+        <search base="base_erp">
+          <query>| stats avg(dialog_wp_utilization_pct) as v | eval v=round(v, 1)</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[70,85]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">utilization (SM50)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>HANA Memory</title>
+      <single>
+        <search base="base_erp">
+          <query>| stats latest(hana_memory_used_pct) as v</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[80,90]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">used, viehdb01</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>HANA CPU</title>
+      <single>
+        <search base="base_erp">
+          <query>| stats avg(hana_cpu_pct) as v | eval v=round(v, 1)</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[70,85]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">viehdb01</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Update Errors</title>
+      <single>
+        <search base="base_erp">
+          <query>| stats sum(update_errors) as v</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[2,10]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">in time range (SM13)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Short Dumps</title>
+      <single>
+        <search base="base_erp">
+          <query>| stats sum(short_dumps) as v</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[3,10]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">in time range (ST22)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Failed Background Jobs</title>
+      <single>
+        <search base="base_erp">
+          <query>| stats sum(failed_background_jobs) as v</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[1,5]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">in time range (SM37)</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>IDoc Backlog ERP → MII</title>
+      <single>
+        <search base="base_idoc">
+          <query>| stats latest(idoc_outbound_backlog) as b by partner | stats sum(b) as v</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[5,20]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">IDocs not delivered (now)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>IDoc Errors</title>
+      <single>
+        <search base="base_idoc">
+          <query>| stats sum(idoc_error_count) as v</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[1,20]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">status 02 incl. retries</option>
+      </single>
+    </panel>
+    <panel>
+      <title>IDoc Latency ERP → MII</title>
+      <single>
+        <search base="base_idoc">
+          <query>| stats avg(idoc_e2e_latency_s) as v | eval v=round(v, 1)</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[15,60]</option>
+        <option name="unit">s</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">delivered IDocs</option>
+      </single>
+    </panel>
+    <panel>
+      <title>tRFC Queue</title>
+      <single>
+        <search base="base_idoc">
+          <query>| stats latest(trfc_queue_entries) as q by partner | stats sum(q) as v</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[5,20]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">entries to MII (SM58)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Orders Received by MII</title>
+      <single>
+        <search base="base_mii">
+          <query>| timechart span=5m sum(orders_received) as v</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="showSparkline">1</option>
+        <option name="underLabel">per 5 minutes</option>
+      </single>
+    </panel>
+    <panel>
+      <title>MII Order Buffer</title>
+      <single>
+        <search base="base_mii">
+          <query>| stats latest(mii_order_buffer) as b by location | stats min(b) as v</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["0xdc4e41","0xf58f39","0x53a051"]</option>
+        <option name="rangeValues">[5,15]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">orders ready for MES (lowest plant)</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Order Flow by Plant – SAP to the Production Line</title>
+      <table>
+        <search>
+          <query>| union
+    [| search index=demo_sap sourcetype="sap:idoc:status"
+     | stats sum(idocs_created) as created sum(idocs_delivered) as delivered sum(idoc_error_count) as errors latest(idoc_outbound_backlog) as backlog avg(idoc_e2e_latency_s) as latency by target_location
+     | rename target_location as location]
+    [| search index=demo_sap sourcetype="sap:mii:performance"
+     | stats latest(mii_order_buffer) as buffer sum(orders_dispatched_to_mes) as to_mes latest(host) as mii by location]
+    [| search index=demo_mes production_rate_per_hour=* earliest=-5m
+     | stats avg(production_rate_per_hour) as rate count(eval(machine_status="waiting_for_orders")) as waiting count as samples by location]
+| search location=$plant_tok$
+| stats first(mii) as "MII server" first(created) as "IDocs created" first(delivered) as "Delivered" first(errors) as "IDoc errors" first(backlog) as "Backlog" first(latency) as "Latency s" first(buffer) as "MII buffer" first(to_mes) as "Orders to MES" first(rate) as "MES rate/h" first(waiting) as waiting first(samples) as samples by location
+| eval "Latency s"=round('Latency s', 1), "MES rate/h"=round('MES rate/h', 0)
+| eval "Production"=case(waiting &gt; 0 AND waiting = samples, "Stopped – no orders", waiting &gt; 0, "Stopping", 'MES rate/h' = 0, "Idle (no shift)", true(), "Running")
+| fields - waiting samples
+| rename location as Plant</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">5</option>
+        <format type="color" field="Production">
+          <colorPalette type="map">{"Running":"#53a051","Idle (no shift)":"#708794","Stopping":"#f58f39","Stopped – no orders":"#dc4e41"}</colorPalette>
+        </format>
+        <format type="color" field="IDoc errors">
+          <colorPalette type="list">[#53a051,#f58f39,#dc4e41]</colorPalette>
+          <scale type="threshold">1,20</scale>
+        </format>
+        <format type="color" field="Backlog">
+          <colorPalette type="list">[#53a051,#f58f39,#dc4e41]</colorPalette>
+          <scale type="threshold">5,20</scale>
+        </format>
+        <format type="color" field="MII buffer">
+          <colorPalette type="list">[#dc4e41,#f58f39,#53a051]</colorPalette>
+          <scale type="threshold">5,15</scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Production Order IDocs ERP → MII by Status</title>
+      <chart>
+        <search>
+          <query>index=demo_sap sourcetype="sap:idoc" direction=outbound target_location=$plant_tok$
+| eval Status=case(status="03", "03 passed to port", status="02", "02 error passing to port", true(), status)
+| timechart span=1m count by Status</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.fieldColors">{"03 passed to port":"#53a051","02 error passing to port":"#dc4e41"}</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">IDocs</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>IDoc Backlog by Plant</title>
+      <chart>
+        <search base="base_idoc">
+          <query>| timechart span=1m max(idoc_outbound_backlog) by target_location</query>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">IDocs waiting</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>MII Order Buffer by Plant</title>
+      <chart>
+        <search base="base_mii">
+          <query>| timechart span=1m min(mii_order_buffer) by location</query>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">orders ready</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>MES Production Rate by Plant</title>
+      <chart>
+        <search>
+          <query>index=demo_mes production_rate_per_hour=* location=$plant_tok$
+| timechart span=1m avg(production_rate_per_hour) by location</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">units / hour</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>ERP PRD Response Times</title>
+      <chart>
+        <search base="base_erp">
+          <query>| timechart span=5m avg(dialog_response_time_ms) as "Dialog response ms" avg(db_request_time_ms) as "DB request ms"</query>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">ms</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>ERP PRD Errors (Update, Dumps, Jobs)</title>
+      <chart>
+        <search base="base_erp">
+          <query>| timechart span=5m sum(update_errors) as "Update errors" sum(short_dumps) as "Short dumps" sum(failed_background_jobs) as "Failed jobs"</query>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">count</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Latest IDoc Errors</title>
+      <table>
+        <search>
+          <query>index=demo_sap sourcetype="sap:idoc" status="02" target_location=$plant_tok$
+| eval Time=strftime(_time, "%H:%M:%S")
+| table Time target_location rfc_destination docnum order_number status status_text message
+| rename target_location as Plant, rfc_destination as "RFC destination", docnum as "IDoc", order_number as "Production order", status as Status, status_text as "Status text", message as Message
+| head 20</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>SAP Servers</title>
+      <table>
+        <search>
+          <query>| mstats avg(_value) as v WHERE index=demo_windows_metrics metric_name IN ("windows.cpu.usage.pct", "windows.memory.usage.pct", "windows.disk.usage.pct") server IN ("vieerp01", "vieerp02", "viehdb01", "atlmii01", "bermii01", "viemii01") BY server location metric_name
+| eval metric=case(metric_name="windows.cpu.usage.pct", "CPU %", metric_name="windows.memory.usage.pct", "Memory %", true(), "Disk %")
+| eval v=round(v, 1)
+| xyseries server metric v
+| eval Role=case(server="viehdb01", "ERP PRD HANA database", match(server, "erp"), "ERP PRD application server", true(), "SAP MII")
+| rename server as Server
+| table Server Role "CPU %" "Memory %" "Disk %"</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">6</option>
+        <format type="color" field="CPU %">
+          <colorPalette type="list">[#53a051,#f58f39,#dc4e41]</colorPalette>
+          <scale type="threshold">70,85</scale>
+        </format>
+        <format type="color" field="Memory %">
+          <colorPalette type="list">[#53a051,#f58f39,#dc4e41]</colorPalette>
+          <scale type="threshold">80,90</scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+</form>

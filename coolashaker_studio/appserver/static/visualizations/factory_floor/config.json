@@ -1,0 +1,98 @@
+{
+  "showTitleAndDescription": true,
+  "includeInToolbar": true,
+  "includeInVizSwitcher": true,
+  "showDrilldown": true,
+  "canSetTokens": [
+    "dynamic"
+  ],
+  "hasEventHandlers": true,
+  "config": {
+    "name": "Factory Floor",
+    "description": "Watch production lines per plant with throughput, OEE and line status at a glance",
+    "category": "CoolaShaker",
+    "icon": null,
+    "dataContract": {
+      "requiredDataSources": [
+        "primary"
+      ],
+      "optionalDataSources": []
+    },
+    "size": {
+      "initialWidth": 900,
+      "initialHeight": 420
+    },
+    "optionsSchema": {
+      "oeeWarn": {
+        "type": "number",
+        "default": 85
+      },
+      "oeeCrit": {
+        "type": "number",
+        "default": 70
+      },
+      "maxRate": {
+        "type": "number",
+        "default": 0
+      },
+      "animate": {
+        "type": "boolean",
+        "default": true
+      },
+      "drilldownToken": {
+        "type": "string",
+        "default": "line"
+      }
+    },
+    "editorConfig": [
+      {
+        "label": "OEE thresholds (%)",
+        "layout": [
+          [
+            {
+              "editor": "editor.number",
+              "label": "Degraded at or below",
+              "option": "oeeWarn"
+            },
+            {
+              "editor": "editor.number",
+              "label": "Critical at or below",
+              "option": "oeeCrit"
+            }
+          ]
+        ]
+      },
+      {
+        "label": "Belts",
+        "layout": [
+          [
+            {
+              "editor": "editor.number",
+              "label": "Full belt speed at units/h (0 = highest line)",
+              "option": "maxRate"
+            }
+          ],
+          [
+            {
+              "editor": "editor.checkbox",
+              "label": "Animate belts",
+              "option": "animate"
+            }
+          ]
+        ]
+      },
+      {
+        "label": "Interaction",
+        "layout": [
+          [
+            {
+              "editor": "editor.text",
+              "label": "Drilldown field name",
+              "option": "drilldownToken"
+            }
+          ]
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,115 @@
+
+# Application-level permissions
+
+[]
+access = read : [ * ], write : [ admin, sc_admin, power ]
+
+### EVENT TYPES
+
+[eventtypes]
+export = system
+
+
+### PROPS
+
+[props]
+export = system
+
+[props/windows%3Aevents%3Ajson/FIELDALIAS-windows%3Aevents%3Ajson]
+access = read : [ * ], write : [ admin, sc_admin ]
+export = system
+
+
+### TRANSFORMS
+
+[transforms]
+export = system
+
+
+### LOOKUPS
+
+[lookups]
+export = system
+
+
+### VIEWSTATES: even normal users should be able to create shared viewstates
+
+[viewstates]
+access = read : [ * ], write : [ * ]
+export = system
+
+
+### NAVIGATION
+
+[nav/default]
+access = read : [ * ], write : [ admin, sc_admin, power ]
+export = none
+
+
+### VIEWS
+
+[views/dashboard_home]
+export = none
+
+[views/dashboard_executive_overview]
+access = read : [ * ], write : [ * ]
+export = none
+
+[views/dashboard_manufacturing]
+access = read : [ * ], write : [ * ]
+export = none
+
+[views/dashboard_infrastructure]
+access = read : [ * ], write : [ * ]
+export = none
+
+[views/dashboard_server_infrastructure]
+access = read : [ * ], write : [ * ]
+export = none
+
+[views/dashboard_database]
+access = read : [ * ], write : [ * ]
+export = none
+
+[views/dashboard_network_collaboration]
+access = read : [ * ], write : [ * ]
+export = none
+
+[views/dashboard_catalyst]
+access = read : [ * ], write : [ admin, sc_admin ]
+export = none
+
+[views/dashboard_meraki]
+access = read : [ * ], write : [ admin, sc_admin ]
+export = none
+
+[views/cs_thousendeyes]
+access = read : [ * ], write : [ admin, sc_admin ]
+export = none
+
+[views/NetworkObservability]
+access = read : [ * ], write : [ admin, sc_admin ]
+export = none
+
+[views/dashboard_tomcat]
+access = read : [ * ], write : [ admin, sc_admin ]
+export = none
+
+[views/lab_network_assurance]
+access = read : [ * ], write : [ admin, sc_admin ]
+export = none
+
+[views/ai_workload_infrastructure]
+access = read : [ * ], write : [ admin, sc_admin ]
+export = none
+
+
+[views/switch_syslog_telemetry]
+access = read : [ * ], write : [ admin, sc_admin ]
+export = none
+
+### SAVED SEARCHES (lab alerts)
+
+[savedsearches]
+access = read : [ * ], write : [ admin, sc_admin, power ]
+export = none

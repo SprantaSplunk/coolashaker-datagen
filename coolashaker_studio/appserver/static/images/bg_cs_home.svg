@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="2286" viewBox="0 0 1920 2286">
+  <defs>
+    <radialGradient id="glowA" cx="0.12" cy="0.02" r="0.7">
+      <stop offset="0" stop-color="#22d3ee" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0.95" cy="0.85" r="0.75">
+      <stop offset="0" stop-color="#a78bfa" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#a78bfa" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="base" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#071022"/>
+      <stop offset="1" stop-color="#040812"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#101d3a" stop-opacity="0.82"/>
+      <stop offset="1" stop-color="#0a1328" stop-opacity="0.74"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#22d3ee" stop-opacity="0.45"/>
+      <stop offset="0.5" stop-color="#9fb1c9" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#a78bfa" stop-opacity="0.35"/>
+    </linearGradient>
+    <linearGradient id="titleFill" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#9fb1c9" fill-opacity="0.10"/>
+    </pattern>
+    <style>
+      .pt { font: 700 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 1.6px; fill: #cfe0f7; }
+      .ph { font: 500 12px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #8ea3bf; }
+      .sec { font: 800 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 3px; fill: #22d3ee; }
+    </style>
+  </defs>
+  <rect width="1920" height="2286" fill="url(#base)"/>
+  <rect width="1920" height="2286" fill="url(#dots)"/>
+  <rect width="1920" height="2286" fill="url(#glowA)"/>
+  <rect width="1920" height="2286" fill="url(#glowB)"/>
+  <g>
+    <ellipse cx="1620" cy="70" rx="180" ry="60" fill="none" stroke="#22d3ee" stroke-opacity="0.16" stroke-width="1.2" transform="rotate(-12 1620 70)"/>
+    <ellipse cx="1620" cy="70" rx="250" ry="86" fill="none" stroke="#22d3ee" stroke-opacity="0.14" stroke-width="1.2" transform="rotate(-12 1620 70)"/>
+    <ellipse cx="1620" cy="70" rx="320" ry="112" fill="none" stroke="#22d3ee" stroke-opacity="0.12" stroke-width="1.2" transform="rotate(-12 1620 70)"/>
+    <ellipse cx="1620" cy="70" rx="390" ry="138" fill="none" stroke="#22d3ee" stroke-opacity="0.1" stroke-width="1.2" transform="rotate(-12 1620 70)"/>
+    <ellipse cx="1620" cy="70" rx="460" ry="164" fill="none" stroke="#22d3ee" stroke-opacity="0.08" stroke-width="1.2" transform="rotate(-12 1620 70)"/>
+    <ellipse cx="1620" cy="70" rx="530" ry="190" fill="none" stroke="#22d3ee" stroke-opacity="0.06" stroke-width="1.2" transform="rotate(-12 1620 70)"/>
+    <circle cx="1814.2" cy="13.3" r="2.4" fill="#22d3ee" fill-opacity="0.6"/>
+    <circle cx="1416.5" cy="218.5" r="2.6" fill="#22d3ee" fill-opacity="0.7"/>
+    <circle cx="1818.7" cy="15.4" r="3.4" fill="#22d3ee" fill-opacity="0.5"/>
+    <circle cx="2101.5" cy="149.7" r="2.5" fill="#22d3ee" fill-opacity="0.5"/>
+    <circle cx="1300.8" cy="78.4" r="3.4" fill="#22d3ee" fill-opacity="0.3"/>
+    <circle cx="1880.2" cy="174.6" r="3.3" fill="#22d3ee" fill-opacity="0.7"/>
+    <circle cx="1105.1" cy="24.8" r="1.9" fill="#22d3ee" fill-opacity="0.5"/>
+    <circle cx="1450.5" cy="136.2" r="3.1" fill="#22d3ee" fill-opacity="0.6"/>
+    <circle cx="1745.2" cy="23.4" r="2.2" fill="#22d3ee" fill-opacity="0.4"/>
+    <circle cx="1793.4" cy="52.6" r="3.1" fill="#22d3ee" fill-opacity="0.5"/>
+    <circle cx="2021.6" cy="-10.8" r="2.1" fill="#22d3ee" fill-opacity="0.6"/>
+    <circle cx="2067.7" cy="172.1" r="2.5" fill="#22d3ee" fill-opacity="0.7"/>
+    <circle cx="1890.7" cy="8.6" r="1.3" fill="#22d3ee" fill-opacity="0.4"/>
+    <circle cx="1672.9" cy="131.9" r="3.2" fill="#22d3ee" fill-opacity="0.7"/>
+    <circle cx="1395.8" cy="-44.9" r="1.2" fill="#22d3ee" fill-opacity="0.5"/>
+    <circle cx="1664.7" cy="-44.1" r="2.7" fill="#22d3ee" fill-opacity="0.4"/>
+    <circle cx="1856.2" cy="-41.7" r="2.4" fill="#22d3ee" fill-opacity="0.7"/>
+    <circle cx="1395.9" cy="-102.9" r="1.5" fill="#22d3ee" fill-opacity="0.5"/>
+    <circle cx="2007.6" cy="85.4" r="1.6" fill="#22d3ee" fill-opacity="0.4"/>
+    <circle cx="1967.4" cy="214.1" r="2.7" fill="#22d3ee" fill-opacity="0.3"/>
+    <circle cx="1821.2" cy="16.6" r="2.9" fill="#22d3ee" fill-opacity="0.7"/>
+    <circle cx="1823.9" cy="189.7" r="1.8" fill="#22d3ee" fill-opacity="0.6"/>
+    <circle cx="1372" cy="58.6" r="2.2" fill="#22d3ee" fill-opacity="0.3"/>
+    <circle cx="1338.3" cy="-60.9" r="2.5" fill="#22d3ee" fill-opacity="0.5"/>
+    <circle cx="1624.6" cy="-45.2" r="2.4" fill="#22d3ee" fill-opacity="0.3"/>
+    <circle cx="2052.1" cy="13.2" r="2.3" fill="#22d3ee" fill-opacity="0.6"/>
+  </g>
+  <rect x="0" y="198" width="1920" height="1" fill="#22d3ee" fill-opacity="0.18"/>
+  <text x="40" y="44" style="font: 800 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 4px; fill: #22d3ee;">COOLASHAKER STUDIO · COMMAND CENTER</text>
+  <text x="38" y="94" style="font: 800 44px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: -0.5px; fill: url(#titleFill);">Command Center</text>
+  <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">Live state of every CoolaShaker site, the AI support chain and all operations domains</text>
+  <g>
+    <text x="40" y="310" class="sec">GLOBAL PULSE</text>
+    <line x1="170.8" y1="305" x2="1880" y2="305" stroke="#22d3ee" stroke-opacity="0.18"/>
+    <text x="40" y="1190" class="sec">DOMAINS</text>
+    <line x1="123.8" y1="1185" x2="1880" y2="1185" stroke="#22d3ee" stroke-opacity="0.18"/>
+    <text x="40" y="1470" class="sec">ISSUES</text>
+    <line x1="114.4" y1="1465" x2="1880" y2="1465" stroke="#22d3ee" stroke-opacity="0.18"/>
+    <text x="40" y="1900" class="sec">DATA PULSE</text>
+    <line x1="152" y1="1895" x2="1880" y2="1895" stroke="#22d3ee" stroke-opacity="0.18"/>
+  </g>
+  <g>
+    <rect x="40" y="212" width="1840" height="64" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="212" width="120" height="2" rx="1" fill="#22d3ee" fill-opacity="0.85"/>
+    
+    <rect x="40" y="326" width="1220" height="560" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="326" width="120" height="2" rx="1" fill="#22d3ee" fill-opacity="0.85"/>
+    <rect x="60" y="342" width="4" height="16" rx="2" fill="#22d3ee"/>
+    <text x="72" y="355" class="pt">SITES &amp; DC PATHS</text>
+    <text x="1240" y="355" class="ph" text-anchor="end">live · last 5 min · click a site for its executive view</text>
+    <rect x="1280" y="326" width="600" height="560" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1298" y="326" width="120" height="2" rx="1" fill="#22d3ee" fill-opacity="0.85"/>
+    <rect x="1300" y="342" width="4" height="16" rx="2" fill="#22d3ee"/>
+    <text x="1312" y="355" class="pt">AI SUPPORT SERVICE CHAIN</text>
+    <text x="1860" y="355" class="ph" text-anchor="end">live · click for AI workload</text>
+    <rect x="40" y="906" width="1840" height="250" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="906" width="120" height="2" rx="1" fill="#22d3ee" fill-opacity="0.85"/>
+    <rect x="60" y="922" width="4" height="16" rx="2" fill="#22d3ee"/>
+    <text x="72" y="935" class="pt">SAP PRODUCTION ORDER CHAIN</text>
+    <text x="1860" y="935" class="ph" text-anchor="end">live · ERP PRD → IDoc → SAP MII → MES lines · click for SAP</text>
+    <rect x="40" y="1206" width="187" height="230" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1206" width="120" height="2" rx="1" fill="#22d3ee" fill-opacity="0.85"/>
+    <rect x="60" y="1222" width="4" height="16" rx="2" fill="#22d3ee"/>
+    <text x="72" y="1235" class="pt">MANUFACTURING</text>
+    <rect x="247" y="1206" width="187" height="230" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="265" y="1206" width="120" height="2" rx="1" fill="#22d3ee" fill-opacity="0.85"/>
+    <rect x="267" y="1222" width="4" height="16" rx="2" fill="#22d3ee"/>
+    <text x="279" y="1235" class="pt">SAP ORDERS</text>
+    <rect x="454" y="1206" width="187" height="230" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="472" y="1206" width="120" height="2" rx="1" fill="#22d3ee" fill-opacity="0.85"/>
+    <rect x="474" y="1222" width="4" height="16" rx="2" fill="#22d3ee"/>
+    <text x="486" y="1235" class="pt">DATACENTER</text>
+    <rect x="661" y="1206" width="187" height="230" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="679" y="1206" width="120" height="2" rx="1" fill="#22d3ee" fill-opacity="0.85"/>
+    <rect x="681" y="1222" width="4" height="16" rx="2" fill="#22d3ee"/>
+    <text x="693" y="1235" class="pt">SERVERS</text>
+    <rect x="868" y="1206" width="187" height="230" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="886" y="1206" width="120" height="2" rx="1" fill="#22d3ee" fill-opacity="0.85"/>
+    <rect x="888" y="1222" width="4" height="16" rx="2" fill="#22d3ee"/>
+    <text x="900" y="1235" class="pt">DATABASE</text>
+    <rect x="1075" y="1206" width="187" height="230" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1093" y="1206" width="120" height="2" rx="1" fill="#22d3ee" fill-opacity="0.85"/>
+    <rect x="1095" y="1222" width="4" height="16" rx="2" fill="#22d3ee"/>
+    <text x="1107" y="1235" class="pt">AI WORKLOAD</text>
+    <rect x="1282" y="1206" width="187" height="230" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1300" y="1206" width="120" height="2" rx="1" fill="#22d3ee" fill-opacity="0.85"/>
+    <rect x="1302" y="1222" width="4" height="16" rx="2" fill="#22d3ee"/>
+    <text x="1314" y="1235" class="pt">NETWORK</text>
+    <rect x="1489" y="1206" width="187" height="230" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1507" y="1206" width="120" height="2" rx="1" fill="#22d3ee" fill-opacity="0.85"/>
+    <rect x="1509" y="1222" width="4" height="16" rx="2" fill="#22d3ee"/>
+    <text x="1521" y="1235" class="pt">COLLABORATION</text>
+    <rect x="1696" y="1206" width="187" height="230" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1714" y="1206" width="120" height="2" rx="1" fill="#22d3ee" fill-opacity="0.85"/>
+    <rect x="1716" y="1222" width="4" height="16" rx="2" fill="#22d3ee"/>
+    <text x="1728" y="1235" class="pt">WEB</text>
+    <rect x="40" y="1486" width="1220" height="380" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1486" width="120" height="2" rx="1" fill="#22d3ee" fill-opacity="0.85"/>
+    <rect x="60" y="1502" width="4" height="16" rx="2" fill="#22d3ee"/>
+    <text x="72" y="1515" class="pt">ISSUE HEAT BY SOURCE</text>
+    <text x="1240" y="1515" class="ph" text-anchor="end">click a row to filter the list</text>
+    <rect x="1280" y="1486" width="600" height="380" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1298" y="1486" width="120" height="2" rx="1" fill="#22d3ee" fill-opacity="0.85"/>
+    <rect x="1300" y="1502" width="4" height="16" rx="2" fill="#22d3ee"/>
+    <text x="1312" y="1515" class="pt">ISSUE LIST</text>
+    <rect x="40" y="1916" width="600" height="330" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1916" width="120" height="2" rx="1" fill="#22d3ee" fill-opacity="0.85"/>
+    <rect x="60" y="1932" width="4" height="16" rx="2" fill="#22d3ee"/>
+    <text x="72" y="1945" class="pt">EVENTS PER SOURCE</text>
+    <rect x="660" y="1916" width="1220" height="330" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="678" y="1916" width="120" height="2" rx="1" fill="#22d3ee" fill-opacity="0.85"/>
+    <rect x="680" y="1932" width="4" height="16" rx="2" fill="#22d3ee"/>
+    <text x="692" y="1945" class="pt">INGEST OVER TIME</text>
+  </g>
+</svg>

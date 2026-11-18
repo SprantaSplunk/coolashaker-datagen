@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1920" viewBox="0 0 1920 1920">
+  <defs>
+    <radialGradient id="glowA" cx="0.12" cy="0.02" r="0.7">
+      <stop offset="0" stop-color="#2dd4bf" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#2dd4bf" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0.95" cy="0.85" r="0.75">
+      <stop offset="0" stop-color="#3b82f6" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#3b82f6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="base" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#071022"/>
+      <stop offset="1" stop-color="#040812"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#101d3a" stop-opacity="0.82"/>
+      <stop offset="1" stop-color="#0a1328" stop-opacity="0.74"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2dd4bf" stop-opacity="0.45"/>
+      <stop offset="0.5" stop-color="#9fb1c9" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#3b82f6" stop-opacity="0.35"/>
+    </linearGradient>
+    <linearGradient id="titleFill" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#9fb1c9" fill-opacity="0.10"/>
+    </pattern>
+    <style>
+      .pt { font: 700 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 1.6px; fill: #cfe0f7; }
+      .ph { font: 500 12px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #8ea3bf; }
+      .sec { font: 800 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 3px; fill: #2dd4bf; }
+    </style>
+  </defs>
+  <rect width="1920" height="1920" fill="url(#base)"/>
+  <rect width="1920" height="1920" fill="url(#dots)"/>
+  <rect width="1920" height="1920" fill="url(#glowA)"/>
+  <rect width="1920" height="1920" fill="url(#glowB)"/>
+  <g>
+    <path d="M1223.9 8.8 L1161.1 8.8 L1161.1 4 L1095.6 4" fill="none" stroke="#2dd4bf" stroke-opacity="0.3" stroke-width="1.4"/>
+    <circle cx="1095.6" cy="4" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1211.3 127.1 L1054.8 127.1 L1054.8 80 L875 80" fill="none" stroke="#2dd4bf" stroke-opacity="0.3" stroke-width="1.4"/>
+    <circle cx="875" cy="80" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1441.2 134.7 L1298.2 134.7 L1298.2 88.4 L1156 88.4" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1156" cy="88.4" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1805.6 36.9 L1744.1 36.9 L1744.1 90.9 L1659.3 90.9" fill="none" stroke="#2dd4bf" stroke-opacity="0.3" stroke-width="1.4"/>
+    <circle cx="1659.3" cy="90.9" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1867.8 29.6 L1712.9 29.6 L1712.9 77.9 L1613.7 77.9" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1613.7" cy="77.9" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1483 119 L1307.3 119 L1307.3 72.9 L1155.6 72.9" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1155.6" cy="72.9" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1630.7 116.8 L1525 116.8 L1525 161.8 L1456 161.8" fill="none" stroke="#2dd4bf" stroke-opacity="0.1" stroke-width="1.4"/>
+    <circle cx="1456" cy="161.8" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1675.1 119.3 L1510.9 119.3 L1510.9 66.6 L1372.2 66.6" fill="none" stroke="#2dd4bf" stroke-opacity="0.3" stroke-width="1.4"/>
+    <circle cx="1372.2" cy="66.6" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1524.2 145.7 L1398.8 145.7 L1398.8 170.4 L1251.1 170.4" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1251.1" cy="170.4" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1615.9 74.5 L1436.1 74.5 L1436.1 113.3 L1289.6 113.3" fill="none" stroke="#2dd4bf" stroke-opacity="0.3" stroke-width="1.4"/>
+    <circle cx="1289.6" cy="113.3" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1477.3 163.3 L1366.5 163.3 L1366.5 190 L1254.5 190" fill="none" stroke="#2dd4bf" stroke-opacity="0.3" stroke-width="1.4"/>
+    <circle cx="1254.5" cy="190" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1438.9 22.3 L1293.6 22.3 L1293.6 56.4 L1193 56.4" fill="none" stroke="#2dd4bf" stroke-opacity="0.3" stroke-width="1.4"/>
+    <circle cx="1193" cy="56.4" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1525.4 65 L1446.3 65 L1446.3 25.4 L1334.2 25.4" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1334.2" cy="25.4" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1354.4 10.4 L1284.1 10.4 L1284.1 32.8 L1200.8 32.8" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1200.8" cy="32.8" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1288.6 132 L1171.7 132 L1171.7 105.3 L1080.8 105.3" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1080.8" cy="105.3" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1801.1 8.1 L1659 8.1 L1659 4 L1609.5 4" fill="none" stroke="#2dd4bf" stroke-opacity="0.1" stroke-width="1.4"/>
+    <circle cx="1609.5" cy="4" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1861.4 50.1 L1788.1 50.1 L1788.1 14.5 L1650.7 14.5" fill="none" stroke="#2dd4bf" stroke-opacity="0.3" stroke-width="1.4"/>
+    <circle cx="1650.7" cy="14.5" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1513.9 37.3 L1356 37.3 L1356 4.6 L1307.3 4.6" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1307.3" cy="4.6" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+  </g>
+  <rect x="0" y="198" width="1920" height="1" fill="#2dd4bf" fill-opacity="0.18"/>
+  <text x="40" y="44" style="font: 800 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 4px; fill: #2dd4bf;">COOLASHAKER STUDIO · DATACENTER</text>
+  <text x="38" y="94" style="font: 800 44px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: -0.5px; fill: url(#titleFill);">AI Workload Infrastructure</text>
+  <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">From the plant network to the GPU cluster in DC Frankfurt – every hop of the AI support assistant</text>
+  <g>
+    <text x="40" y="284" class="sec">SERVICE CHAIN</text>
+    <line x1="180.2" y1="279" x2="1880" y2="279" stroke="#2dd4bf" stroke-opacity="0.18"/>
+    <text x="40" y="834" class="sec">HOP BY HOP</text>
+    <line x1="152" y1="829" x2="1880" y2="829" stroke="#2dd4bf" stroke-opacity="0.18"/>
+  </g>
+  <g>
+    <rect x="40" y="300" width="1840" height="330" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="300" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="60" y="316" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="72" y="329" class="pt">AI SUPPORT ASSISTANT END TO END</text>
+    <text x="1860" y="329" class="ph" text-anchor="end">live · last 5 min · the first critical hop blocks everything behind it</text>
+    <rect x="40" y="650" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="650" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="60" y="666" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="72" y="679" class="pt">LOSS TO DC</text>
+    <rect x="350" y="650" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="368" y="650" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="370" y="666" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="382" y="679" class="pt">BOT RESPONSE</text>
+    <rect x="660" y="650" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="678" y="650" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="680" y="666" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="692" y="679" class="pt">PROMPTS WITHOUT ANSWER</text>
+    <rect x="970" y="650" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="988" y="650" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="990" y="666" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="1002" y="679" class="pt">GPU UTILIZATION</text>
+    <rect x="1280" y="650" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1298" y="650" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="1300" y="666" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="1312" y="679" class="pt">ABORTED LLM REQUESTS</text>
+    <rect x="1590" y="650" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1608" y="650" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="1610" y="666" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="1622" y="679" class="pt">HOTLINE CALLS WAITING</text>
+    <rect x="40" y="850" width="910" height="330" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="850" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="60" y="866" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="72" y="879" class="pt">1 · NETWORK: LOSS TO DC FRANKFURT BY PLANT (%)</text>
+    <rect x="970" y="850" width="910" height="330" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="988" y="850" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="990" y="866" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="1002" y="879" class="pt">2 · AI SUPPORT BOT RESPONSE TIME BY PLANT (S)</text>
+    <rect x="40" y="1200" width="910" height="330" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1200" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="60" y="1216" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="72" y="1229" class="pt">3 · CISCO AI DEFENSE: PROMPTS VS. RESPONSES</text>
+    <rect x="970" y="1200" width="910" height="330" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="988" y="1200" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="990" y="1216" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="1002" y="1229" class="pt">4 · GPU CLUSTER FRANKFURT: BUSY VS. ABORTED</text>
+    <rect x="40" y="1550" width="910" height="330" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1550" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="60" y="1566" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="72" y="1579" class="pt">5 · SUPPORT HOTLINE QUEUE</text>
+    <rect x="970" y="1550" width="445" height="330" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="988" y="1550" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="990" y="1566" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="1002" y="1579" class="pt">TIME TO FIRST TOKEN (MS)</text>
+    <rect x="1435" y="1550" width="445" height="330" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1453" y="1550" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="1455" y="1566" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="1467" y="1579" class="pt">GUARDRAIL HITS</text>
+  </g>
+</svg>

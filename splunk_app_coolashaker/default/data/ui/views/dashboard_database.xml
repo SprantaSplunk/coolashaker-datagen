@@ -1,0 +1,415 @@
+<form version="1.1" theme="dark">
+  <label>CoolaShaker - Database Performance</label>
+  <description>SQL Server monitoring and performance analysis</description>
+  <!-- BASE SEARCH 1: Performance Metrics -->
+  <search id="base_performance">
+    <query>
+index=demo_mssql location=$location_token$ event_type=performance
+| eval db_host=mvindex(host, 0)
+| fields _time location db_host database cpu_pct memory_mb active_connections transactions_per_sec batch_requests_per_sec buffer_cache_hit_ratio page_life_expectancy disk_queue_length lock_waits_per_sec deadlocks_per_sec
+    </query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+  <!-- BASE SEARCH 2: Query Performance -->
+  <search id="base_queries">
+    <query>
+index=demo_mssql location=$location_token$ event_type=query_performance
+| eval db_host=mvindex(host, 0)
+| fields _time location db_host database query duration_ms cpu_time_ms logical_reads physical_reads row_count
+    </query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+  <!-- BASE SEARCH 3: Log Status -->
+  <search id="base_logs">
+    <query>
+index=demo_mssql location=$location_token$ event_type=log_status
+| eval db_host=mvindex(host, 0)
+| fields _time location db_host database log_file_size_mb log_space_used_pct log_growth_rate_mb_per_min
+    </query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+  <!-- BASE SEARCH 4: Backups -->
+  <search id="base_backups">
+    <query>
+index=demo_mssql location=$location_token$ event_type=backup
+| eval db_host=mvindex(host, 0)
+| fields _time location db_host database backup_type status duration_sec size_mb error_message
+    </query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="time_token" searchWhenChanged="true">
+      <label>Time Range</label>
+      <default>
+        <earliest>-60m@m</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="location_token" searchWhenChanged="true">
+      <label>Location</label>
+      <choice value="*">All Locations</choice>
+      <choice value="vienna">Vienna</choice>
+      <choice value="berlin">Berlin</choice>
+      <choice value="atlanta">Atlanta</choice>
+      <default>*</default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>CPU Usage</title>
+      <single>
+        <search base="base_performance">
+          <query>
+| stats avg(cpu_pct) as avg_cpu
+| eval avg_cpu=round(avg_cpu, 1)
+| eval range=case(
+    avg_cpu &lt;= 70, "low",
+    avg_cpu &lt;= 90, "elevated",
+    1=1, "severe")
+| rangemap field=avg_cpu low=0-70 elevated=70-90 severe=90-100
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[70,90]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Average CPU</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Buffer Cache Hit Ratio</title>
+      <single>
+        <search base="base_performance">
+          <query>
+| stats avg(buffer_cache_hit_ratio) as avg_cache
+| eval avg_cache=round(avg_cache, 1)
+| eval range=case(
+    avg_cache &gt;= 95, "low",
+    avg_cache &gt;= 90, "elevated",
+    1=1, "severe")
+| rangemap field=avg_cache low=95-100 elevated=90-95 severe=0-90
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0xdc4e41","0xf58f39","0x53a051"]</option>
+        <option name="rangeValues">[90,95]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Cache Efficiency</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Transactions per Second</title>
+      <single>
+        <search base="base_performance">
+          <query>
+| stats avg(transactions_per_sec) as avg_tps
+| eval avg_tps=round(avg_tps, 0)
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0</option>
+        <option name="unit">TPS</option>
+        <option name="underLabel">Average Throughput</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Deadlocks</title>
+      <single>
+        <search base="base_performance">
+          <query>
+| stats sum(deadlocks_per_sec) as total_deadlocks
+| eval range=case(
+    total_deadlocks = 0, "low",
+    total_deadlocks &lt;= 5, "elevated",
+    1=1, "severe")
+| rangemap field=total_deadlocks low=0-0 elevated=1-5 severe=6-999
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[0,5]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Total Deadlocks</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>CPU Usage by Database Server</title>
+      <chart>
+        <search base="base_performance">
+          <query>
+| timechart span=5m avg(cpu_pct) by db_host
+          </query>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">CPU %</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Memory Usage by Database Server</title>
+      <chart>
+        <search base="base_performance">
+          <query>
+| timechart span=5m avg(memory_mb) by db_host
+          </query>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Memory (MB)</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Transaction Throughput</title>
+      <chart>
+        <search base="base_performance">
+          <query>
+| timechart span=5m 
+    avg(transactions_per_sec) as "Transactions/sec",
+    avg(batch_requests_per_sec) as "Batch Requests/sec"
+    by db_host
+          </query>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Operations per Second</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Disk and Lock Performance</title>
+      <chart>
+        <search base="base_performance">
+          <query>
+| timechart span=5m 
+    avg(disk_queue_length) as "Disk Queue",
+    avg(lock_waits_per_sec) as "Lock Waits/sec",
+    avg(deadlocks_per_sec) as "Deadlocks/sec"
+    by db_host
+          </query>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Count</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Transaction Log Growth</title>
+      <chart>
+        <search base="base_logs">
+          <query>
+| timechart span=10m 
+    avg(log_file_size_mb) as "Log Size (MB)",
+    avg(log_space_used_pct) as "Space Used %"
+    by db_host
+          </query>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Value</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Query Duration Distribution</title>
+      <chart>
+        <search base="base_queries">
+          <query>
+| stats avg(duration_ms) as avg_duration, max(duration_ms) as max_duration, count by db_host
+| eval avg_duration=round(avg_duration, 0), max_duration=round(max_duration, 0)
+          </query>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.axisTitleX.text">Database Server</option>
+        <option name="charting.axisTitleY.text">Duration (ms)</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Database Server Performance Overview</title>
+      <table>
+        <search base="base_performance">
+          <query>
+| stats 
+    latest(cpu_pct) as "CPU %",
+    latest(memory_mb) as "Memory (MB)",
+    latest(active_connections) as "Connections",
+    avg(transactions_per_sec) as "Avg TPS",
+    latest(buffer_cache_hit_ratio) as "Cache Hit %",
+    latest(page_life_expectancy) as "PLE",
+    sum(deadlocks_per_sec) as "Deadlocks"
+    by location db_host
+| eval 
+    "CPU %"=round('CPU %', 1),
+    "Memory (MB)"=round('Memory (MB)', 0),
+    "Avg TPS"=round('Avg TPS', 0),
+    "Cache Hit %"=round('Cache Hit %', 1),
+    "PLE"=round('PLE', 0)
+| sort location db_host
+| rename 
+    location as Location,
+    db_host as "Database Server"
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">10</option>
+        <format type="color" field="CPU %">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" minColor="#53a051" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="0" midValue="70" maxValue="100"></scale>
+        </format>
+        <format type="color" field="Cache Hit %">
+          <colorPalette type="minMidMax" maxColor="#53a051" minColor="#dc4e41" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="70" midValue="90" maxValue="100"></scale>
+        </format>
+        <format type="color" field="Deadlocks">
+          <colorPalette type="map">{"0":"#53a051"}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Slow Query Analysis (Top 10)</title>
+      <table>
+        <search base="base_queries">
+          <query>|head 10
+| eval query_time=strftime(_time, "%H:%M:%S")| stats values(*) as * by query, location,query_time
+| sort -duration_ms
+| table query_time location db_host query duration_ms cpu_time_ms logical_reads physical_reads
+| rename 
+    query_time as "Time",
+    location as "Location",
+    db_host as "Server",
+    query as "Query",
+    duration_ms as "Duration (ms)",
+    cpu_time_ms as "CPU Time (ms)",
+    logical_reads as "Logical Reads",
+    physical_reads as "Physical Reads"</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="Duration (ms)">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" midColor="#f58f39" minColor="#53a051"></colorPalette>
+          <scale type="minMidMax" maxValue="5000" midValue="1000" minValue="0"></scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Transaction Log Status</title>
+      <table>
+        <search base="base_logs">
+          <query>
+| stats 
+    latest(log_file_size_mb) as "Log Size (MB)",
+    latest(log_space_used_pct) as "Space Used %",
+    avg(log_growth_rate_mb_per_min) as "Growth Rate (MB/min)"
+    by location db_host
+| eval 
+    "Log Size (MB)"=round('Log Size (MB)', 0),
+    "Space Used %"=round('Space Used %', 1),
+    "Growth Rate (MB/min)"=round('Growth Rate (MB/min)', 1)
+| sort location db_host
+| rename 
+    location as Location,
+    db_host as "Database Server"
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">10</option>
+        <format type="color" field="Space Used %">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" minColor="#53a051" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="0" midValue="70" maxValue="100"></scale>
+        </format>
+      </table>
+    </panel>
+    <panel>
+      <title>Backup Status</title>
+      <table>
+        <search base="base_backups">
+          <query>
+| stats 
+    latest(backup_type) as "Type",
+    latest(status) as "Status",
+    latest(duration_sec) as "Duration (sec)",
+    latest(size_mb) as "Size (MB)",
+    latest(error_message) as "Error"
+    by location db_host
+| eval 
+    "Duration (sec)"=round('Duration (sec)', 0),
+    "Size (MB)"=round('Size (MB)', 0)
+| sort -_time
+| rename 
+    location as Location,
+    db_host as "Database Server"
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">10</option>
+        <format type="color" field="Status">
+          <colorPalette type="map">{"success":"#53a051","failed":"#dc4e41"}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Wait Statistics</title>
+      <table>
+        <search>
+          <query>index=demo_mssql location=$location_token$ event_type=wait_stats
+| eval db_host=mvindex(host, 0)
+| stats 
+    sum(wait_time_ms) as "Total Wait Time (ms)",
+    avg(wait_time_ms) as "Avg Wait Time (ms)",
+    sum(waiting_tasks_count) as "Total Waiting Tasks"
+    by location db_host wait_type
+| eval 
+    "Total Wait Time (ms)"=round('Total Wait Time (ms)', 0),
+    "Avg Wait Time (ms)"=round('Avg Wait Time (ms)', 1)
+| sort -"Total Wait Time (ms)"
+| head 15
+| rename 
+    location as Location,
+    db_host as "Server",
+    wait_type as "Wait Type"</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="count">15</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</form>

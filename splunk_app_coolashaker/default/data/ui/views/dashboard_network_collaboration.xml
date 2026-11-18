@@ -1,0 +1,462 @@
+<form version="1.1" theme="dark">
+  <label>CoolaShaker - Network and Collaboration</label>
+  <description>ThousandEyes network monitoring and Microsoft Teams collaboration analytics</description>
+
+  <!-- BASE SEARCH 1: Network Tests (agent-to-server: Teams Media Quality)
+       Feldänderungen nach Datagen-Script-Update:
+         ALT: test_name, source_location, target, latency_ms, packet_loss_pct, jitter_ms
+         NEU: thousandeyes.test.name, thousandeyes.agent.location, server.address,
+              metric_name:network.latency (Sekunden!), metric_name:network.loss, metric_name:network.jitter
+       Alle Kindsuchen bleiben unverändert dank rename im Base Search. -->
+  <search id="base_network">
+    <query>
+index=demo_thousendeyes sourcetype="thousendeyes:json"
+"thousandeyes.test.type"="agent-to-server"
+"thousandeyes.test.name"="Teams Media Quality"
+"thousandeyes.agent.location"=$location_token$
+| rename "thousandeyes.test.name"     as test_name
+| rename "thousandeyes.test.type"     as test_type
+| rename "thousandeyes.agent.location" as source_location
+| rename "server.address"             as target
+| eval latency_ms      = round('metric_name:network.latency' * 1000, 2)
+| eval packet_loss_pct = 'metric_name:network.loss'
+| eval jitter_ms       = 'metric_name:network.jitter'
+| fields _time test_name test_type source_location target latency_ms packet_loss_pct jitter_ms
+    </query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+
+  <!-- BASE SEARCH 2: HTTP Tests (Teams Backend + M365 Portal)
+       Ersetzt den weggefallenen MOS Score und liefert Availability + Throughput.
+       metric_name:http.client.request.duration ist in Sekunden → *1000 = ms
+       metric_name:http.server.throughput ist in Bytes/s → /1000000 = Mbps -->
+  <search id="base_http">
+    <query>
+index=demo_thousendeyes sourcetype="thousendeyes:json"
+"thousandeyes.test.type"="http-server"
+"thousandeyes.agent.location"=$location_token$
+| rename "thousandeyes.test.name"       as test_name
+| rename "thousandeyes.agent.location"  as source_location
+| eval availability_pct  = 'metric_name:http.server.request.availability'
+| eval response_time_ms  = round('metric_name:http.client.request.duration' * 1000, 0)
+| eval throughput_mbps   = round('metric_name:http.server.throughput' / 1000000, 1)
+| fields _time test_name source_location availability_pct response_time_ms throughput_mbps
+    </query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+
+  <!-- BASE SEARCH 3: Teams Events (unverändert) -->
+  <search id="base_teams">
+    <query>
+index=demo_msteams location=$location_token$
+| fields _time event_type location user_email user_name call_quality severity
+    </query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="time_token" searchWhenChanged="true">
+      <label>Time Range</label>
+      <default>
+        <earliest>-60m@m</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="location_token" searchWhenChanged="true">
+      <label>Location</label>
+      <choice value="*">All Locations</choice>
+      <choice value="vienna">Vienna</choice>
+      <choice value="berlin">Berlin</choice>
+      <choice value="atlanta">Atlanta</choice>
+      <default>*</default>
+    </input>
+  </fieldset>
+
+  <!-- ROW 1: KPI Singles -->
+  <row>
+    <panel>
+      <title>Average Network Latency</title>
+      <single>
+        <search base="base_network">
+          <query>
+| stats avg(latency_ms) as avg_latency
+| eval avg_latency=round(avg_latency, 1)
+| rangemap field=avg_latency low=0-50 elevated=50-100 severe=100-1000
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[50,100]</option>
+        <option name="unit">ms</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Teams Media Relay Latency</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Packet Loss</title>
+      <single>
+        <search base="base_network">
+          <query>
+| stats avg(packet_loss_pct) as avg_loss
+| eval avg_loss=round(avg_loss, 2)
+| rangemap field=avg_loss low=0-0.5 elevated=0.5-2 severe=2-100
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.00</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[0.5,2]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Average Packet Loss</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Active Teams Users</title>
+      <single>
+        <search base="base_teams">
+          <query>
+| stats dc(user_email) as active_users
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="underLabel">Unique Users</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Teams Issues</title>
+      <single>
+        <search base="base_teams">
+          <query>
+| search event_type=call_failed OR event_type=meeting_join_failed
+| stats count as issue_count
+| rangemap field=issue_count low=0-0 elevated=1-5 severe=6-999
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[0,5]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Call/Meeting Failures</option>
+      </single>
+    </panel>
+  </row>
+
+  <!-- ROW 2: Latency Trend + HTTP Availability (ersetzt MOS Score) -->
+  <row>
+    <panel>
+      <title>Network Latency Trend</title>
+      <chart>
+        <search base="base_network">
+          <query>| timechart span=5m avg(latency_ms) by source_location</query>
+        </search>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Latency (ms)</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Teams HTTP Availability</title>
+      <chart>
+        <search base="base_http">
+          <query>| timechart span=5m avg(availability_pct) by test_name</query>
+        </search>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Availability (%)</option>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.axisY.minimumNumber">98</option>
+        <option name="charting.axisY.maximumNumber">100</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+
+  <!-- ROW 3: Packet Loss + Jitter (Kindsuchen unverändert) -->
+  <row>
+    <panel>
+      <title>Packet Loss by Location</title>
+      <chart>
+        <search base="base_network">
+          <query>| timechart span=5m avg(packet_loss_pct) by source_location</query>
+        </search>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Packet Loss %</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">zero</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Network Jitter</title>
+      <chart>
+        <search base="base_network">
+          <query>| timechart span=5m avg(jitter_ms) by source_location</query>
+        </search>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Jitter (ms)</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+
+  <!-- ROW 4: Network Path Performance Summary (throughput_mbps aus base_http) -->
+  <row>
+    <panel>
+      <title>Network Path Performance Summary (Teams Media Quality)</title>
+      <table>
+        <search base="base_network">
+          <query>
+| stats
+    avg(latency_ms)      as "Avg Latency (ms)",
+    max(latency_ms)      as "Max Latency (ms)",
+    avg(packet_loss_pct) as "Avg Packet Loss %",
+    avg(jitter_ms)       as "Avg Jitter (ms)"
+    by source_location target test_name
+| eval
+    "Avg Latency (ms)"   = round('Avg Latency (ms)', 1),
+    "Max Latency (ms)"   = round('Max Latency (ms)', 1),
+    "Avg Packet Loss %"  = round('Avg Packet Loss %', 3),
+    "Avg Jitter (ms)"    = round('Avg Jitter (ms)', 1)
+| sort source_location test_name
+| rename
+    source_location as "Agent Location",
+    target          as "Target",
+    test_name       as "Test Name"
+          </query>
+        </search>
+        <option name="count">15</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="Avg Latency (ms)">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" midColor="#f58f39" minColor="#53a051"></colorPalette>
+          <scale type="minMidMax" maxValue="200" midValue="100" minValue="0"></scale>
+        </format>
+        <format type="color" field="Avg Packet Loss %">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" midColor="#f58f39" minColor="#53a051"></colorPalette>
+          <scale type="minMidMax" maxValue="2" midValue="0.5" minValue="0"></scale>
+        </format>
+        <format type="color" field="Avg Jitter (ms)">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" midColor="#f58f39" minColor="#53a051"></colorPalette>
+          <scale type="minMidMax" maxValue="20" midValue="10" minValue="0"></scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+
+  <!-- ROW 4b: HTTP Throughput + Response Time Summary (neu, aus base_http) -->
+  <row>
+    <panel>
+      <title>Teams HTTP Performance Summary</title>
+      <table>
+        <search base="base_http">
+          <query>
+| stats
+    avg(availability_pct)  as "Avg Availability %",
+    avg(response_time_ms)  as "Avg Response Time (ms)",
+    avg(throughput_mbps)   as "Avg Throughput (Mbps)"
+    by test_name source_location
+| eval
+    "Avg Availability %"      = round('Avg Availability %', 2),
+    "Avg Response Time (ms)"  = round('Avg Response Time (ms)', 0),
+    "Avg Throughput (Mbps)"   = round('Avg Throughput (Mbps)', 1)
+| sort test_name source_location
+| rename
+    test_name       as "Test",
+    source_location as "Agent Location"
+          </query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="Avg Availability %">
+          <colorPalette type="minMidMax" maxColor="#53a051" midColor="#f58f39" minColor="#dc4e41"></colorPalette>
+          <scale type="minMidMax" minValue="98" midValue="99" maxValue="100"></scale>
+        </format>
+        <format type="color" field="Avg Response Time (ms)">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" midColor="#f58f39" minColor="#53a051"></colorPalette>
+          <scale type="minMidMax" minValue="0" midValue="300" maxValue="500"></scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+
+  <!-- ROW 5: Teams Activity (Kindsuchen unverändert) -->
+  <row>
+    <panel>
+      <title>Teams Activity by Event Type</title>
+      <chart>
+        <search base="base_teams">
+          <query>
+| timechart span=10m count by event_type
+          </query>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Event Count</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Teams Call Quality Distribution</title>
+      <chart>
+        <search>
+          <query>
+index=demo_msteams location=$location_token$ event_type=call_ended call_quality=*
+| stats count by call_quality
+| sort -count
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+
+  <!-- ROW 6: Teams User Activity (Kindsuche unverändert) -->
+  <row>
+    <panel>
+      <title>Teams User Activity</title>
+      <table>
+        <search base="base_teams">
+          <query>
+| stats
+    count                   as "Total Events",
+    dc(event_type)          as "Event Types",
+    earliest(_time)         as first_seen,
+    latest(_time)           as last_seen
+    by user_name location
+| eval
+    first_seen = strftime(first_seen, "%H:%M:%S"),
+    last_seen  = strftime(last_seen,  "%H:%M:%S")
+| sort -"Total Events"
+| head 20
+| rename
+    user_name as "User",
+    location  as "Location",
+    first_seen as "First Seen",
+    last_seen  as "Last Seen"
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">15</option>
+      </table>
+    </panel>
+  </row>
+
+  <!-- ROW 7: Teams Issues (unverändert) -->
+  <row>
+    <panel>
+      <title>Teams Issues and Failures</title>
+      <table>
+        <search>
+          <query>
+index=demo_msteams location=$location_token$ severity=high OR event_type=call_failed OR event_type=meeting_join_failed
+| eval event_time=strftime(_time, "%H:%M:%S"), error_message=coalesce(error_message, error)
+| sort -_time
+| head 20
+| table event_time location event_type user_name error_message error_code severity
+| rename
+    event_time    as "Time",
+    location      as "Location",
+    event_type    as "Event Type",
+    user_name     as "User",
+    error_message as "Error Message",
+    error_code    as "Error Code",
+    severity      as "Severity"
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="count">15</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="Severity">
+          <colorPalette type="map">{"high":"#dc4e41","medium":"#f58f39","low":"#53a051"}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+
+  <!-- ROW 8: File Sharing + Meeting Stats (unverändert) -->
+  <row>
+    <panel>
+      <title>File Sharing Activity</title>
+      <table>
+        <search>
+          <query>
+index=demo_msteams location=$location_token$ event_type=file_shared
+| stats
+    count              as "Files Shared",
+    sum(file_size_mb)  as "Total Size (MB)",
+    values(file_type)  as "File Types"
+    by location user_name
+| eval "Total Size (MB)"=round('Total Size (MB)', 1)
+| sort -"Files Shared"
+| head 15
+| rename
+    location  as "Location",
+    user_name as "User"
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Meeting/Call Statistics</title>
+      <table>
+        <search>
+          <query>
+index=demo_msteams location=$location_token$ event_type=call_ended OR event_type=meeting_ended
+| stats
+    count                                                          as "Total Calls",
+    avg(duration_minutes)                                          as "Avg Duration (min)",
+    avg(participant_count)                                         as "Avg Participants",
+    count(eval(call_quality="excellent" OR call_quality="good"))   as "Good Quality",
+    count(eval(call_quality="fair"      OR call_quality="poor"))   as "Poor Quality"
+    by location
+| eval
+    "Avg Duration (min)"  = round('Avg Duration (min)', 1),
+    "Avg Participants"    = round('Avg Participants', 1),
+    "Quality %"           = round(100 * 'Good Quality' / ('Good Quality' + 'Poor Quality'), 1)
+| rename location as "Location"
+| sort Location
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">10</option>
+        <format type="color" field="Quality %">
+          <colorPalette type="minMidMax" maxColor="#53a051" minColor="#dc4e41" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="0" midValue="80" maxValue="100"></scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+
+</form>

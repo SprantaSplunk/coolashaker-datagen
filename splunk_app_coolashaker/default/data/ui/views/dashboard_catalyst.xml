@@ -1,0 +1,467 @@
+<form version="1.1" theme="dark">
+  <label>CoolaShaker - Cisco Catalyst Center</label>
+  <description>Cisco DNA Center / Catalyst Center · Device Health · Site Topology · Resource Utilization</description>
+  <!-- =====================================================================
+       BASE SEARCHES
+       - base_health  : cisco:dnac:devicehealth  (spath, alle Metriken)
+       - base_topology: cisco:dnac:site:topology (dedup = neuester Snapshot)
+
+       Felder devicehealth:
+         DeviceName, DeviceFamily, DeviceRole, Location, IpAddress,
+         HealthScore (1-10), MemoryUtilization (%), CpuUtilization (%),
+         Reachability ("Reachable"), OverallHealth, site_name
+
+       Felder site:topology:
+         nameHierarchy, id, type, address, country, latitude, longitude
+
+       Locations:
+         "Global/Europe/Austria/Vienna"
+         "Global/Europe/Germany/Berlin"
+         "Global/North America/USA/Atlanta"
+       ===================================================================== -->
+  <search id="base_health">
+    <query>
+index=demo_cisco_catalyst sourcetype="cisco:dnac:devicehealth"
+| eval site = case(
+    match(Location,"Vienna"),  "Vienna",
+    match(Location,"Berlin"),  "Berlin",
+    match(Location,"Atlanta"), "Atlanta",
+    1=1, "Other")
+| search site="$site_token$" OR "$site_token$"="*"
+| search DeviceFamily="$family_token$" OR "$family_token$"="*"
+| fields _time DeviceName DeviceFamily DeviceRole Location site IpAddress HealthScore MemoryUtilization CpuUtilization Reachability OverallHealth
+    </query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+  <search id="base_topology">
+    <query>
+index=demo_cisco_catalyst sourcetype="cisco:dnac:site:topology"
+| dedup nameHierarchy sortby -_time
+| eval site = case(
+    match(nameHierarchy,"Vienna"),  "Vienna",
+    match(nameHierarchy,"Berlin"),  "Berlin",
+    match(nameHierarchy,"Atlanta"), "Atlanta",
+    1=1, "Other")
+| fields nameHierarchy id type address country latitude longitude site
+    </query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+  <!-- =====================================================================  INPUTS  -->
+  <!-- =====================================================================  ROW 1: KPI Singles  -->
+  <!-- =====================================================================  ROW 2: Health Trend + Device Family Breakdown  -->
+  <!-- =====================================================================  ROW 3: CPU Trend + Memory Trend  -->
+  <!-- =====================================================================  ROW 4: Health by Device Family + Health Distribution  -->
+  <!-- =====================================================================  ROW 5: Device Health Detail Table  -->
+  <!-- =====================================================================  ROW 6: Site Summary + Site Topology  -->
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="time_token" searchWhenChanged="true">
+      <label>Time Range</label>
+      <default>
+        <earliest>-60m@m</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="site_token" searchWhenChanged="true">
+      <label>Site</label>
+      <choice value="*">All Sites</choice>
+      <choice value="Vienna">Vienna</choice>
+      <choice value="Berlin">Berlin</choice>
+      <choice value="Atlanta">Atlanta</choice>
+      <default>*</default>
+    </input>
+    <input type="dropdown" token="family_token" searchWhenChanged="true">
+      <label>Device Family</label>
+      <choice value="*">All Families</choice>
+      <choice value="Routers">Routers</choice>
+      <choice value="Switches and Hubs">Switches &amp; Hubs</choice>
+      <choice value="Unified AP">Unified AP</choice>
+      <choice value="Wireless Controller">Wireless Controller</choice>
+      <default>*</default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Total Devices</title>
+      <single>
+        <search base="base_health">
+          <query>| dedup DeviceName | stats count as cnt</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="underLabel">Managed Devices</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Reachable Devices</title>
+      <single>
+        <search base="base_health">
+          <query>
+| dedup DeviceName sortby -_time
+| stats count(eval(Reachability="Reachable")) as cnt
+| rangemap field=cnt low=30-9999 elevated=20-29 severe=0-19
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[29,20]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Currently Reachable</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Avg. Health Score</title>
+      <single>
+        <search base="base_health">
+          <query>
+| stats avg(HealthScore) as avg_health
+| eval avg_health = round(avg_health, 1)
+| rangemap field=avg_health low=8-10 elevated=5-7.9 severe=0-4.9
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[7.9,5]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Health Score (1–10)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Avg. CPU Utilization</title>
+      <single>
+        <search base="base_health">
+          <query>
+| stats avg(CpuUtilization) as avg_cpu
+| eval avg_cpu = round(avg_cpu, 1)
+| rangemap field=avg_cpu low=0-50 elevated=50-75 severe=75-100
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[50,75]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Average CPU</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Avg. Memory Utilization</title>
+      <single>
+        <search base="base_health">
+          <query>
+| stats avg(MemoryUtilization) as avg_mem
+| eval avg_mem = round(avg_mem, 1)
+| rangemap field=avg_mem low=0-60 elevated=60-80 severe=80-100
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[60,80]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Average Memory</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Avg. Health Score Trend by Site</title>
+      <chart>
+        <search base="base_health">
+          <query>| timechart span=15m avg(HealthScore) by site useother=false</query>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Health Score (1–10)</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.axisY.maximumNumber">10</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Devices by Family</title>
+      <chart>
+        <search base="base_health">
+          <query>
+| dedup DeviceName sortby -_time
+| stats count by DeviceFamily
+| sort -count
+          </query>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Avg. CPU Utilization Trend by Site</title>
+      <chart>
+        <search base="base_health">
+          <query>| timechart span=15m avg(CpuUtilization) by site useother=false</query>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">CPU (%)</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.axisY.maximumNumber">100</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Avg. Memory Utilization Trend by Site</title>
+      <chart>
+        <search base="base_health">
+          <query>| timechart span=15m avg(MemoryUtilization) by site useother=false</query>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Memory (%)</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.axisY.maximumNumber">100</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Avg. Health Score by Device Family</title>
+      <chart>
+        <search base="base_health">
+          <query>
+| stats avg(HealthScore) as avg_health by DeviceFamily
+| eval avg_health = round(avg_health, 1)
+| sort -avg_health
+          </query>
+        </search>
+        <option name="charting.chart">bar</option>
+        <option name="charting.axisTitleX.text">Health Score</option>
+        <option name="charting.axisTitleY.text">Device Family</option>
+        <option name="charting.axisX.minimumNumber">0</option>
+        <option name="charting.axisX.maximumNumber">10</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Health Score Distribution (alle Devices)</title>
+      <chart>
+        <search base="base_health">
+          <query>
+| dedup DeviceName sortby -_time
+| eval health_band = case(
+    HealthScore &gt;= 8, "Good (8–10)",
+    HealthScore &gt;= 5, "Fair (5–7)",
+    1=1,              "Poor (1–4)")
+| stats count by health_band
+| sort health_band
+          </query>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.fieldColors">{"Good (8-10)": 0x53a051, "Fair (5-7)": 0xf58f39, "Poor (1-4)": 0xdc4e41}</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Device Health Detail (neuester Snapshot pro Gerät)</title>
+      <table>
+        <search base="base_health">
+          <query>
+| dedup DeviceName sortby -_time
+| eval health_color = case(
+    HealthScore &gt;= 8, "good",
+    HealthScore &gt;= 5, "fair",
+    1=1,              "poor")
+| table site DeviceName DeviceFamily DeviceRole IpAddress HealthScore CpuUtilization MemoryUtilization Reachability
+| eval
+    CpuUtilization    = round(CpuUtilization, 1),
+    MemoryUtilization = round(MemoryUtilization, 1)
+| sort site DeviceRole DeviceName
+| rename
+    site              as "Site",
+    DeviceName        as "Device",
+    DeviceFamily      as "Family",
+    DeviceRole        as "Role",
+    IpAddress         as "IP Address",
+    HealthScore       as "Health",
+    CpuUtilization    as "CPU %",
+    MemoryUtilization as "Mem %",
+    Reachability      as "Reachability"
+          </query>
+        </search>
+        <option name="count">20</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="Health">
+          <colorPalette type="minMidMax" maxColor="#53a051" midColor="#f58f39" minColor="#dc4e41"></colorPalette>
+          <scale type="minMidMax" minValue="1" midValue="6" maxValue="10"></scale>
+        </format>
+        <format type="color" field="CPU %">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" midColor="#f58f39" minColor="#53a051"></colorPalette>
+          <scale type="minMidMax" minValue="0" midValue="50" maxValue="80"></scale>
+        </format>
+        <format type="color" field="Mem %">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" midColor="#f58f39" minColor="#53a051"></colorPalette>
+          <scale type="minMidMax" minValue="0" midValue="60" maxValue="85"></scale>
+        </format>
+        <format type="color" field="Reachability">
+          <colorPalette type="map">{"Reachable":"#53a051","Unreachable":"#dc4e41"}</colorPalette>
+        </format>
+        <format type="color" field="Site">
+          <colorPalette type="map">{"Vienna":"#7c55c7","Berlin":"#1182f3","Atlanta":"#53a051"}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Site Health Summary</title>
+      <table>
+        <search base="base_health">
+          <query>
+| dedup DeviceName sortby -_time
+| stats
+    dc(DeviceName)             as "Devices",
+    avg(HealthScore)           as "Avg Health",
+    avg(CpuUtilization)        as "Avg CPU %",
+    avg(MemoryUtilization)     as "Avg Mem %",
+    count(eval(Reachability="Reachable"))   as "Reachable",
+    count(eval(Reachability!="Reachable"))  as "Unreachable"
+    by site
+| eval
+    "Avg Health"   = round('Avg Health', 1),
+    "Avg CPU %"    = round('Avg CPU %', 1),
+    "Avg Mem %"    = round('Avg Mem %', 1)
+| sort site
+| rename site as "Site"
+          </query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="Avg Health">
+          <colorPalette type="minMidMax" maxColor="#53a051" midColor="#f58f39" minColor="#dc4e41"></colorPalette>
+          <scale type="minMidMax" minValue="1" midValue="6" maxValue="10"></scale>
+        </format>
+        <format type="color" field="Avg CPU %">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" midColor="#f58f39" minColor="#53a051"></colorPalette>
+          <scale type="minMidMax" minValue="0" midValue="50" maxValue="80"></scale>
+        </format>
+        <format type="color" field="Avg Mem %">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" midColor="#f58f39" minColor="#53a051"></colorPalette>
+          <scale type="minMidMax" minValue="0" midValue="60" maxValue="85"></scale>
+        </format>
+        <format type="color" field="Unreachable">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" midColor="#f58f39" minColor="#53a051"></colorPalette>
+          <scale type="minMidMax" minValue="0" midValue="1" maxValue="3"></scale>
+        </format>
+      </table>
+    </panel>
+    <panel>
+      <title>Site Topology Inventory</title>
+      <table>
+        <search base="base_topology">
+          <query>| rename
+    site          as "Site",
+    nameHierarchy as "Location Hierarchy",
+    address       as "Address",
+    country       as "Country",
+    latitude      as "Latitude",
+    longitude     as "Longitude"
+| sort "Site"| stats values(*) as * by Site
+| table Site "Location Hierarchy" Address Country Latitude Longitude</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="Site">
+          <colorPalette type="map">{"Vienna":"#7c55c7","Berlin":"#1182f3","Atlanta":"#53a051"}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>AI Fabric (Vienna DC) – lossless RoCEv2 fabric for the GPU cluster</title>
+      <html>
+        <p>Device health alone does not show congestion: watch PFC pause frames, ECN marks and output drops on the AI spine/leaf switches. They rise minutes before the HealthScore turns yellow.</p>
+      </html>
+      <table>
+        <search>
+          <query>index=demo_cisco_catalyst sourcetype="cisco:dnac:devicehealth" Fabric="ai-fabric"
+| stats latest(DeviceRole) as Role latest(HealthScore) as HealthScore latest(InterfaceUtilization) as "Interface Util %"
+        latest(BufferUtilization) as "Buffer Util %" latest(PfcPauseFrames) as "PFC Pause Frames"
+        latest(EcnMarkedPackets) as "ECN Marked" latest(OutputDrops) as "Output Drops" by DeviceName
+| rename DeviceName as Device</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="drilldown">none</option>
+        <format type="color" field="HealthScore">
+          <colorPalette type="list">[#DC4E41,#F8BE34,#53A051]</colorPalette>
+          <scale type="threshold">5,8</scale>
+        </format>
+        <format type="color" field="PFC Pause Frames">
+          <colorPalette type="list">[#53A051,#F8BE34,#DC4E41]</colorPalette>
+          <scale type="threshold">1000,50000</scale>
+        </format>
+        <format type="color" field="Buffer Util %">
+          <colorPalette type="list">[#53A051,#F8BE34,#DC4E41]</colorPalette>
+          <scale type="threshold">50,80</scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>AI Fabric – congestion signals (log scale)</title>
+      <chart>
+        <search>
+          <query>index=demo_cisco_catalyst sourcetype="cisco:dnac:devicehealth" Fabric="ai-fabric"
+| timechart span=1m sum(PfcPauseFrames) as "PFC Pause Frames" sum(EcnMarkedPackets) as "ECN Marked Packets" sum(OutputDrops) as "Output Drops"</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisY.scale">log</option>
+        <option name="charting.legend.placement">bottom</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>AI Fabric – utilization vs. device health</title>
+      <chart>
+        <search>
+          <query>index=demo_cisco_catalyst sourcetype="cisco:dnac:devicehealth" Fabric="ai-fabric"
+| timechart span=1m max(InterfaceUtilization) as "Max Interface Util %" max(BufferUtilization) as "Max Buffer Util %" min(HealthScore) as "Min HealthScore"</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisY2.enabled">1</option>
+        <option name="charting.chart.overlayFields">"Min HealthScore"</option>
+        <option name="charting.axisY2.maximumNumber">10</option>
+        <option name="charting.axisY2.minimumNumber">0</option>
+        <option name="charting.legend.placement">bottom</option>
+      </chart>
+    </panel>
+  </row>
+</form>

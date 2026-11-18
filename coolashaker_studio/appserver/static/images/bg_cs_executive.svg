@@ -1,0 +1,161 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="2302" viewBox="0 0 1920 2302">
+  <defs>
+    <radialGradient id="glowA" cx="0.12" cy="0.02" r="0.7">
+      <stop offset="0" stop-color="#a78bfa" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#a78bfa" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0.95" cy="0.85" r="0.75">
+      <stop offset="0" stop-color="#22d3ee" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="base" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#071022"/>
+      <stop offset="1" stop-color="#040812"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#101d3a" stop-opacity="0.82"/>
+      <stop offset="1" stop-color="#0a1328" stop-opacity="0.74"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a78bfa" stop-opacity="0.45"/>
+      <stop offset="0.5" stop-color="#9fb1c9" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0.35"/>
+    </linearGradient>
+    <linearGradient id="titleFill" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#9fb1c9" fill-opacity="0.10"/>
+    </pattern>
+    <style>
+      .pt { font: 700 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 1.6px; fill: #cfe0f7; }
+      .ph { font: 500 12px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #8ea3bf; }
+      .sec { font: 800 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 3px; fill: #a78bfa; }
+    </style>
+  </defs>
+  <rect width="1920" height="2302" fill="url(#base)"/>
+  <rect width="1920" height="2302" fill="url(#dots)"/>
+  <rect width="1920" height="2302" fill="url(#glowA)"/>
+  <rect width="1920" height="2302" fill="url(#glowB)"/>
+  <g>
+    <polygon points="1760,0 1806,0 1600,210 1554,210" fill="#a78bfa" fill-opacity="0.1"/>
+    <polygon points="1670,0 1716,0 1510,210 1464,210" fill="#a78bfa" fill-opacity="0"/>
+    <polygon points="1580,0 1626,0 1420,210 1374,210" fill="#a78bfa" fill-opacity="0.1"/>
+    <polygon points="1490,0 1536,0 1330,210 1284,210" fill="#a78bfa" fill-opacity="0"/>
+    <polygon points="1400,0 1446,0 1240,210 1194,210" fill="#a78bfa" fill-opacity="0"/>
+    <polygon points="1310,0 1356,0 1150,210 1104,210" fill="#a78bfa" fill-opacity="0"/>
+    <polygon points="1220,0 1266,0 1060,210 1014,210" fill="#a78bfa" fill-opacity="0.1"/>
+    <polygon points="1130,0 1176,0 970,210 924,210" fill="#a78bfa" fill-opacity="0.1"/>
+    <polygon points="1040,0 1086,0 880,210 834,210" fill="#a78bfa" fill-opacity="0.1"/>
+  </g>
+  <rect x="0" y="198" width="1920" height="1" fill="#a78bfa" fill-opacity="0.18"/>
+  <text x="40" y="44" style="font: 800 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 4px; fill: #a78bfa;">COOLASHAKER STUDIO · EXECUTIVE</text>
+  <text x="38" y="94" style="font: 800 44px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: -0.5px; fill: url(#titleFill);">Executive Overview</text>
+  <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">Business KPIs, site scorecard and the critical events behind them</text>
+  <g>
+    <text x="40" y="226" class="sec">BUSINESS KPIS</text>
+    <line x1="180.2" y1="221" x2="1880" y2="221" stroke="#a78bfa" stroke-opacity="0.18"/>
+    <text x="40" y="596" class="sec">SAP PRODUCTION ORDERS</text>
+    <line x1="255.4" y1="591" x2="1880" y2="591" stroke="#a78bfa" stroke-opacity="0.18"/>
+    <text x="40" y="796" class="sec">SITE SCORECARD</text>
+    <line x1="189.6" y1="791" x2="1880" y2="791" stroke="#a78bfa" stroke-opacity="0.18"/>
+    <text x="40" y="1096" class="sec">TRENDS</text>
+    <line x1="114.4" y1="1091" x2="1880" y2="1091" stroke="#a78bfa" stroke-opacity="0.18"/>
+    <text x="40" y="1826" class="sec">CRITICAL EVENTS</text>
+    <line x1="199" y1="1821" x2="1880" y2="1821" stroke="#a78bfa" stroke-opacity="0.18"/>
+  </g>
+  <g>
+    <rect x="40" y="242" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="242" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="60" y="258" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="72" y="271" class="pt">OEE</text>
+    <rect x="350" y="242" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="368" y="242" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="370" y="258" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="382" y="271" class="pt">PRODUCTION RATE</text>
+    <rect x="660" y="242" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="678" y="242" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="680" y="258" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="692" y="271" class="pt">DEFECT RATE</text>
+    <rect x="970" y="242" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="988" y="242" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="990" y="258" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="1002" y="271" class="pt">RACK TEMPERATURE</text>
+    <rect x="1280" y="242" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1298" y="242" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="1300" y="258" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="1312" y="271" class="pt">FACILITY POWER</text>
+    <rect x="1590" y="242" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1608" y="242" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="1610" y="258" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="1622" y="271" class="pt">WEB ERROR RATE</text>
+    <rect x="40" y="412" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="412" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="60" y="428" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="72" y="441" class="pt">CAMPUS HEALTH</text>
+    <rect x="350" y="412" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="368" y="412" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="370" y="428" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="382" y="441" class="pt">WEB AVAILABILITY</text>
+    <rect x="660" y="412" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="678" y="412" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="680" y="428" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="692" y="441" class="pt">TEAMS CALL SUCCESS</text>
+    <rect x="970" y="412" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="988" y="412" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="990" y="428" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="1002" y="441" class="pt">HOTLINE CALLS WAITING</text>
+    <rect x="1280" y="412" width="600" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1298" y="412" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="1300" y="428" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="1312" y="441" class="pt">SITE SCORE</text>
+    <text x="1860" y="441" class="ph" text-anchor="end">weighted: campus · DC paths · OEE · web</text>
+    <rect x="40" y="612" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="612" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="60" y="628" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="72" y="641" class="pt">ORDERS DELIVERED TO MII</text>
+    <rect x="350" y="612" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="368" y="612" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="370" y="628" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="382" y="641" class="pt">IDOC ERRORS</text>
+    <rect x="660" y="612" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="678" y="612" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="680" y="628" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="692" y="641" class="pt">MII ORDER BUFFER</text>
+    <rect x="970" y="612" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="988" y="612" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="990" y="628" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="1002" y="641" class="pt">ERP DIALOG RESPONSE</text>
+    <rect x="1280" y="612" width="600" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1298" y="612" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="1300" y="628" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="1312" y="641" class="pt">ORDERS DELIVERED PER PLANT</text>
+    <rect x="40" y="812" width="1840" height="250" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="812" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="60" y="828" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="72" y="841" class="pt">SCORECARD PER SITE</text>
+    <text x="1860" y="841" class="ph" text-anchor="end">averages over the selected time range</text>
+    <rect x="40" y="1112" width="910" height="330" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1112" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="60" y="1128" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="72" y="1141" class="pt">CAMPUS HEALTH BY SITE</text>
+    <rect x="970" y="1112" width="910" height="330" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="988" y="1112" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="990" y="1128" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="1002" y="1141" class="pt">PRODUCTION RATE BY SITE</text>
+    <rect x="40" y="1462" width="910" height="330" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1462" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="60" y="1478" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="72" y="1491" class="pt">WEB AVAILABILITY BY SITE</text>
+    <rect x="970" y="1462" width="910" height="330" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="988" y="1462" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="990" y="1478" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="1002" y="1491" class="pt">WEB ERROR RATE BY SITE</text>
+    <rect x="40" y="1842" width="1840" height="420" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1842" width="120" height="2" rx="1" fill="#a78bfa" fill-opacity="0.85"/>
+    <rect x="60" y="1858" width="4" height="16" rx="2" fill="#a78bfa"/>
+    <text x="72" y="1871" class="pt">LATEST CRITICAL EVENTS</text>
+    <text x="1860" y="1871" class="ph" text-anchor="end">newest first · one row per asset and message</text>
+  </g>
+</svg>

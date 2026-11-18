@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="2430" viewBox="0 0 1920 2430">
+  <defs>
+    <radialGradient id="glowA" cx="0.12" cy="0.02" r="0.7">
+      <stop offset="0" stop-color="#2dd4bf" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#2dd4bf" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0.95" cy="0.85" r="0.75">
+      <stop offset="0" stop-color="#3b82f6" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#3b82f6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="base" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#071022"/>
+      <stop offset="1" stop-color="#040812"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#101d3a" stop-opacity="0.82"/>
+      <stop offset="1" stop-color="#0a1328" stop-opacity="0.74"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2dd4bf" stop-opacity="0.45"/>
+      <stop offset="0.5" stop-color="#9fb1c9" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#3b82f6" stop-opacity="0.35"/>
+    </linearGradient>
+    <linearGradient id="titleFill" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#9fb1c9" fill-opacity="0.10"/>
+    </pattern>
+    <style>
+      .pt { font: 700 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 1.6px; fill: #cfe0f7; }
+      .ph { font: 500 12px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #8ea3bf; }
+      .sec { font: 800 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 3px; fill: #2dd4bf; }
+    </style>
+  </defs>
+  <rect width="1920" height="2430" fill="url(#base)"/>
+  <rect width="1920" height="2430" fill="url(#dots)"/>
+  <rect width="1920" height="2430" fill="url(#glowA)"/>
+  <rect width="1920" height="2430" fill="url(#glowB)"/>
+  <g>
+    <path d="M1833.4 177.3 L1690.7 177.3 L1690.7 190 L1608.4 190" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1608.4" cy="190" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1514.4 49.8 L1471.6 49.8 L1471.6 18.5 L1412.5 18.5" fill="none" stroke="#2dd4bf" stroke-opacity="0.3" stroke-width="1.4"/>
+    <circle cx="1412.5" cy="18.5" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1444.9 120.5 L1392.4 120.5 L1392.4 150.1 L1246.3 150.1" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1246.3" cy="150.1" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1784.8 40.3 L1728.4 40.3 L1728.4 4 L1589.4 4" fill="none" stroke="#2dd4bf" stroke-opacity="0.3" stroke-width="1.4"/>
+    <circle cx="1589.4" cy="4" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1821.4 111.4 L1660.5 111.4 L1660.5 161.2 L1503.8 161.2" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1503.8" cy="161.2" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1826 155.1 L1741.5 155.1 L1741.5 105 L1658.4 105" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1658.4" cy="105" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1457.9 11.9 L1382.6 11.9 L1382.6 37.5 L1336.2 37.5" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1336.2" cy="37.5" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1790.9 48.8 L1633.4 48.8 L1633.4 79.8 L1587.8 79.8" fill="none" stroke="#2dd4bf" stroke-opacity="0.3" stroke-width="1.4"/>
+    <circle cx="1587.8" cy="79.8" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1461.2 142.8 L1359.4 142.8 L1359.4 178.1 L1269.6 178.1" fill="none" stroke="#2dd4bf" stroke-opacity="0.3" stroke-width="1.4"/>
+    <circle cx="1269.6" cy="178.1" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1351.1 160.8 L1309.4 160.8 L1309.4 190 L1160 190" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1160" cy="190" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1632.6 146.7 L1573.4 146.7 L1573.4 190 L1462.4 190" fill="none" stroke="#2dd4bf" stroke-opacity="0.1" stroke-width="1.4"/>
+    <circle cx="1462.4" cy="190" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1727.2 30.2 L1644.6 30.2 L1644.6 9.3 L1546.3 9.3" fill="none" stroke="#2dd4bf" stroke-opacity="0.3" stroke-width="1.4"/>
+    <circle cx="1546.3" cy="9.3" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1612.2 37 L1432.6 37 L1432.6 68.1 L1368.5 68.1" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1368.5" cy="68.1" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1335.2 62.9 L1171.9 62.9 L1171.9 104.3 L1013.9 104.3" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1013.9" cy="104.3" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1378.9 48.7 L1210.7 48.7 L1210.7 92.7 L1146.9 92.7" fill="none" stroke="#2dd4bf" stroke-opacity="0.1" stroke-width="1.4"/>
+    <circle cx="1146.9" cy="92.7" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1804.1 141.6 L1692.5 141.6 L1692.5 116.4 L1593.1 116.4" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1593.1" cy="116.4" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1722.2 156.4 L1591.4 156.4 L1591.4 98.7 L1495.2 98.7" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1495.2" cy="98.7" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1639.8 159.9 L1481.7 159.9 L1481.7 137 L1440 137" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1440" cy="137" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+  </g>
+  <rect x="0" y="198" width="1920" height="1" fill="#2dd4bf" fill-opacity="0.18"/>
+  <text x="40" y="44" style="font: 800 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 4px; fill: #2dd4bf;">COOLASHAKER STUDIO · DATACENTER</text>
+  <text x="38" y="94" style="font: 800 44px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: -0.5px; fill: url(#titleFill);">Database Performance</text>
+  <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">SQL Server load, cache efficiency, slow queries, waits, logs and backups</text>
+  <g>
+    <text x="40" y="284" class="sec">SQL SERVER KPIS</text>
+    <line x1="199" y1="279" x2="1880" y2="279" stroke="#2dd4bf" stroke-opacity="0.18"/>
+    <text x="40" y="484" class="sec">SERVERS</text>
+    <line x1="123.8" y1="479" x2="1880" y2="479" stroke="#2dd4bf" stroke-opacity="0.18"/>
+    <text x="40" y="1574" class="sec">QUERIES AND WAITS</text>
+    <line x1="217.8" y1="1569" x2="1880" y2="1569" stroke="#2dd4bf" stroke-opacity="0.18"/>
+  </g>
+  <g>
+    <rect x="40" y="300" width="445" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="300" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="60" y="316" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="72" y="329" class="pt">CPU</text>
+    <rect x="505" y="300" width="445" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="523" y="300" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="525" y="316" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="537" y="329" class="pt">BUFFER CACHE HIT RATIO</text>
+    <rect x="970" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="988" y="300" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="990" y="316" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="1002" y="329" class="pt">TRANSACTIONS PER SECOND</text>
+    <rect x="1280" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1298" y="300" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="1300" y="316" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="1312" y="329" class="pt">CONNECTIONS</text>
+    <rect x="1590" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1608" y="300" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="1610" y="316" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="1622" y="329" class="pt">DEADLOCKS</text>
+    <rect x="40" y="500" width="755" height="380" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="500" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="60" y="516" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="72" y="529" class="pt">CACHE HIT PER SERVER</text>
+    <text x="775" y="529" class="ph" text-anchor="end">click to focus a server</text>
+    <rect x="815" y="500" width="1065" height="380" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="833" y="500" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="835" y="516" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="847" y="529" class="pt">CPU HEAT PER SERVER</text>
+    <text x="1860" y="529" class="ph" text-anchor="end">click to focus a server</text>
+    <rect x="40" y="900" width="910" height="320" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="900" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="60" y="916" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="72" y="929" class="pt">THROUGHPUT</text>
+    <text x="930" y="929" class="ph" text-anchor="end">selected server or all</text>
+    <rect x="970" y="900" width="910" height="320" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="988" y="900" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="990" y="916" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="1002" y="929" class="pt">DISK QUEUE, LOCK WAITS AND DEADLOCKS</text>
+    <text x="1860" y="929" class="ph" text-anchor="end">selected server or all</text>
+    <rect x="40" y="1240" width="1840" height="300" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1240" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="60" y="1256" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="72" y="1269" class="pt">SERVER OVERVIEW</text>
+    <rect x="40" y="1590" width="1220" height="400" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1590" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="60" y="1606" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="72" y="1619" class="pt">SLOWEST QUERIES</text>
+    <text x="1240" y="1619" class="ph" text-anchor="end">selected server or all</text>
+    <rect x="1280" y="1590" width="600" height="400" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1298" y="1590" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="1300" y="1606" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="1312" y="1619" class="pt">SLOWEST QUERY PER SERVER (MS)</text>
+    <rect x="40" y="2010" width="755" height="380" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="2010" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="60" y="2026" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="72" y="2039" class="pt">TOP WAITS</text>
+    <rect x="815" y="2010" width="1065" height="380" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="833" y="2010" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="835" y="2026" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="847" y="2039" class="pt">TRANSACTION LOGS AND BACKUPS</text>
+  </g>
+</svg>

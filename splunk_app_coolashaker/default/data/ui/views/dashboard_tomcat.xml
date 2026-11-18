@@ -1,0 +1,522 @@
+<form version="1.1" theme="dark">
+  <label>CoolaShaker - Tomcat Web Server Monitor</label>
+  <!-- ================================================================
+       FILTER-LEISTE
+       ================================================================ -->
+  <!-- ================================================================
+       ZEILE 1 | KPI SINGLE VALUES
+       ================================================================ -->
+  <!-- ================================================================
+       ZEILE 2 | TRAFFIC TIMELINE + STATUS VERTEILUNG
+       ================================================================ -->
+  <!-- ================================================================
+       ZEILE 3 | PER-SERVER STATISTIKEN
+       ================================================================ -->
+  <!-- ================================================================
+       ZEILE 4 | DOS ERKENNUNG BERLIN
+       ================================================================ -->
+  <!-- ================================================================
+       ZEILE 5 | ANGREIFER-IPS + TOP PFADE
+       ================================================================ -->
+  <!-- ================================================================
+       ZEILE 6 | HTTP METHODEN + USER AGENTS
+       ================================================================ -->
+  <!-- ================================================================
+       ZEILE 7 | FEHLER-TIMELINE + TOP FEHLER-PFADE
+       ================================================================ -->
+  <!-- ================================================================
+       ZEILE 8 | ROHDATEN TABELLE
+       ================================================================ -->
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="time_tok" searchWhenChanged="true">
+      <label>Zeitraum</label>
+      <default>
+        <earliest>-24h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="loc_filter" searchWhenChanged="true">
+      <label>Standort</label>
+      <choice value="">Alle Standorte</choice>
+      <choice value="(host=atlweb01 OR host=atlweb02)">Atlanta</choice>
+      <choice value="(host=berweb01 OR host=berweb02)">Berlin</choice>
+      <choice value="(host=vieweb01 OR host=vieweb02)">Vienna</choice>
+      <default></default>
+      <initialValue></initialValue>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <single>
+        <title>Gesamte Requests</title>
+        <search>
+          <query>
+            <![CDATA[index="demo_tomcat_logs" $loc_filter$ | stats count]]>
+          </query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="useColors">0</option>
+        <option name="numberPrecision">0</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Fehler (4xx + 5xx)</title>
+        <search>
+          <query>
+            <![CDATA[index="demo_tomcat_logs" $loc_filter$
+| rex field=_raw "HTTP/1\.\d\" (?P<status>\d{3}) "
+| where status >= 400
+| stats count]]>
+          </query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="useColors">1</option>
+        <option name="colorBy">value</option>
+        <option name="rangeColors">["0x65a637","0xf8be34","0xd93f3c"]</option>
+        <option name="rangeValues">[0,50,200]</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Fehlerrate %</title>
+        <search>
+          <query>
+            <![CDATA[index="demo_tomcat_logs" $loc_filter$
+| rex field=_raw "HTTP/1\.\d\" (?P<status>\d{3}) "
+| stats count as total, count(eval(status>=400)) as errors
+| eval rate=round(errors/total*100,1)
+| fields rate]]>
+          </query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="unit">%</option>
+        <option name="drilldown">none</option>
+        <option name="useColors">1</option>
+        <option name="colorBy">value</option>
+        <option name="rangeColors">["0x65a637","0xf8be34","0xd93f3c"]</option>
+        <option name="rangeValues">[0,10,20]</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Uebertragenes Volumen</title>
+        <search>
+          <query>
+            <![CDATA[index="demo_tomcat_logs" $loc_filter$
+| rex field=_raw "HTTP/1\.\d\" \d{3} (?P<bytes>\d+) "
+| stats sum(bytes) as total_bytes
+| eval total_gb=round(total_bytes/1073741824,3)
+| fields total_gb]]>
+          </query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="unit">GB</option>
+        <option name="drilldown">none</option>
+        <option name="useColors">0</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>[DOS] DOS Requests (Angreifer-IPs Berlin)</title>
+        <search>
+          <query>
+            <![CDATA[index="demo_tomcat_logs" $loc_filter$
+("185.220.101.47" OR "45.142.212.100" OR "91.240.118.222")
+| stats count]]>
+          </query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="useColors">1</option>
+        <option name="colorBy">value</option>
+        <option name="rangeColors">["0x65a637","0xf8be34","0xd93f3c"]</option>
+        <option name="rangeValues">[0,1,100]</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Request-Volumen ueber Zeit nach Standort (5-Min-Intervalle)</title>
+        <search>
+          <query>
+            <![CDATA[index="demo_tomcat_logs" $loc_filter$
+| eval location=case(
+    host="atlweb01" OR host="atlweb02", "Atlanta",
+    host="berweb01" OR host="berweb02", "Berlin",
+    host="vieweb01" OR host="vieweb02", "Vienna",
+    true(), "Unknown")
+| timechart span=5m count by location]]>
+          </query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.axisTitleX.text">Zeit</option>
+        <option name="charting.axisTitleY.text">Requests / 5 Min</option>
+        <option name="charting.seriesColors">["0x65a637","0xd93f3c","0x6db7c6"]</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>HTTP Status Code Verteilung</title>
+        <search>
+          <query>
+            <![CDATA[index="demo_tomcat_logs" $loc_filter$
+| rex field=_raw "HTTP/1\.\d\" (?P<status>\d{3}) "
+| eval status_class=case(
+    status>=500, "5xx Server Error",
+    status>=400, "4xx Client Error",
+    status>=300, "3xx Redirect",
+    status>=200, "2xx Success",
+    true(), "Other")
+| stats count by status_class
+| sort -count]]>
+          </query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.seriesColors">["0x65a637","0xf8be34","0x6db7c6","0xd93f3c","0xd41f1f"]</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Requests pro Server</title>
+        <search>
+          <query>
+            <![CDATA[index="demo_tomcat_logs" $loc_filter$
+| eval location=case(
+    host="atlweb01" OR host="atlweb02", "ATL",
+    host="berweb01" OR host="berweb02", "BER",
+    host="vieweb01" OR host="vieweb02", "VIE",
+    true(), "?")
+| eval server_label=location." / ".host
+| stats count as requests by server_label
+| sort -requests]]>
+          </query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="charting.chart">bar</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="charting.axisTitleX.text">Server</option>
+        <option name="charting.axisTitleY.text">Requests</option>
+        <option name="charting.seriesColors">["0x4e9ac2"]</option>
+      </chart>
+    </panel>
+    <panel>
+      <table>
+        <title>Server-Uebersicht: Requests | Fehler | Fehlerrate | Unique IPs</title>
+        <search>
+          <query>
+            <![CDATA[index="demo_tomcat_logs" $loc_filter$
+| rex field=_raw "^(?P<clientip>\S+)\s+\S+\s+\S+\s+\[[^\]]+\]\s+\"\w+\s+\S+\s+HTTP/[^\"]+\"\s+(?P<status>\d{3})\s+(?P<bytes>\d+)\s+\S+"
+| eval location=case(
+    host="atlweb01" OR host="atlweb02", "Atlanta",
+    host="berweb01" OR host="berweb02", "Berlin",
+    host="vieweb01" OR host="vieweb02", "Vienna",
+    true(), "Unknown")
+| stats
+    count                    as "Requests",
+    count(eval(status>=400)) as "Fehler",
+    dc(clientip)             as "Unique IPs",
+    sum(bytes)               as bytes_sum
+  by location, host
+| eval "Fehlerrate (%)"=round('Fehler'/'Requests'*100,1)
+| eval "Volumen (MB)"=round(bytes_sum/1048576,1)
+| fields location, host, "Requests", "Fehler", "Fehlerrate (%)", "Unique IPs", "Volumen (MB)"
+| sort location, host
+| rename location as "Standort", host as "Server"]]>
+          </query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="wrap">true</option>
+        <option name="rowNumbers">true</option>
+        <format type="color" field="Fehlerrate (%)">
+          <colorPalette type="minMidMax" minColor="#65a637" midColor="#f8be34" maxColor="#d93f3c"></colorPalette>
+          <scale type="minMidMax" minValue="0" midValue="10" maxValue="25"></scale>
+        </format>
+        <format type="color" field="Fehler">
+          <colorPalette type="minMidMax" minColor="#65a637" midColor="#f8be34" maxColor="#d93f3c"></colorPalette>
+          <scale type="minMidMax" minValue="0" midValue="30" maxValue="100"></scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>[DOS] Berlin Request-Burst - DOS-Fenster vs. Normalbetrieb (5-Min)</title>
+        <search>
+          <query>
+            <![CDATA[index="demo_tomcat_logs" $loc_filter$ (host="berweb01" OR host="berweb02")
+| eval minute=tonumber(strftime(_time,"%M"))
+| eval traffic_type=if(
+    (minute>=0 AND minute<15) OR (minute>=30 AND minute<45),
+    "DOS-Fenster (0-14 / 30-44 Min)",
+    "Normalbetrieb")
+| timechart span=5m count by traffic_type]]>
+          </query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.axisTitleX.text">Zeit</option>
+        <option name="charting.axisTitleY.text">Requests / 5 Min</option>
+        <option name="charting.seriesColors">["0xd93f3c","0x65a637"]</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Berlin HTTP Status Codes: DOS-Fenster vs. Normalbetrieb</title>
+        <search>
+          <query>
+            <![CDATA[index="demo_tomcat_logs" $loc_filter$ (host="berweb01" OR host="berweb02")
+| rex field=_raw "HTTP/1\.\d\" (?P<status>\d{3}) "
+| eval minute=tonumber(strftime(_time,"%M"))
+| eval traffic_type=if(
+    (minute>=0 AND minute<15) OR (minute>=30 AND minute<45),
+    "DOS-Fenster", "Normalbetrieb")
+| stats count by traffic_type, status
+| sort traffic_type, status]]>
+          </query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="charting.chart">bar</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.axisTitleX.text">Status Code</option>
+        <option name="charting.axisTitleY.text">Requests</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Bekannte Angreifer-IPs (DOS) - Detailuebersicht</title>
+        <search>
+          <query>
+            <![CDATA[index="demo_tomcat_logs" $loc_filter$
+("185.220.101.47" OR "45.142.212.100" OR "91.240.118.222")
+| rex field=_raw "^(?P<clientip>\S+)\s+\S+\s+\S+\s+\[[^\]]+\]\s+\"(?P<http_method>\w+)\s+(?P<uri_path>\S+)\s+HTTP/[^\"]+\"\s+(?P<status>\d{3})"
+| eval location=case(
+    host="atlweb01" OR host="atlweb02", "Atlanta",
+    host="berweb01" OR host="berweb02", "Berlin",
+    host="vieweb01" OR host="vieweb02", "Vienna",
+    true(), "Unknown")
+| stats
+    count          as "Requests",
+    dc(uri_path)   as "Angegriffene Pfade",
+    values(status) as "Status Codes",
+    min(_time)     as first_seen,
+    max(_time)     as last_seen
+  by clientip, location, host
+| eval "Erster Angriff"=strftime(first_seen,"%Y-%m-%d %H:%M:%S")
+| eval "Letzter Angriff"=strftime(last_seen,"%Y-%m-%d %H:%M:%S")
+| fields clientip, location, host, "Requests", "Angegriffene Pfade", "Status Codes", "Erster Angriff", "Letzter Angriff"
+| sort -Requests
+| rename clientip as "Angreifer-IP", location as "Ziel-Standort", host as "Ziel-Server"]]>
+          </query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="wrap">true</option>
+        <format type="color" field="Requests">
+          <colorPalette type="minMidMax" minColor="#f8be34" midColor="#d93f3c" maxColor="#d41f1f"></colorPalette>
+          <scale type="minMidMax" minValue="0" midValue="500" maxValue="2000"></scale>
+        </format>
+      </table>
+    </panel>
+    <panel>
+      <chart>
+        <title>Top 10 angefragte Pfade (gesamt)</title>
+        <search>
+          <query>
+            <![CDATA[index="demo_tomcat_logs" $loc_filter$
+| rex field=_raw "\"(?:\w+)\s+(?P<uri_path>\S+)\s+HTTP"
+| stats count by uri_path
+| sort -count
+| head 10]]>
+          </query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="charting.chart">bar</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="charting.axisTitleX.text">Pfad</option>
+        <option name="charting.axisTitleY.text">Requests</option>
+        <option name="charting.seriesColors">["0x4e9ac2"]</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>HTTP Methoden Verteilung</title>
+        <search>
+          <query>
+            <![CDATA[index="demo_tomcat_logs" $loc_filter$
+| rex field=_raw "\"(?P<http_method>[A-Z]+)\s+"
+| stats count by http_method
+| sort -count]]>
+          </query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.legend.placement">right</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Top User-Agents (inkl. Scanner / DOS-Tools)</title>
+        <search>
+          <query>
+            <![CDATA[index="demo_tomcat_logs" $loc_filter$
+| rex field=_raw "\"-\"\s+\"(?P<useragent>[^\"]+)\""
+| eval ua_group=case(
+    match(useragent,"Chrome"),           "Chrome",
+    match(useragent,"Firefox"),          "Firefox",
+    match(useragent,"curl"),             "curl",
+    match(useragent,"PostmanRuntime"),   "Postman",
+    match(useragent,"Python"),           "Python/aiohttp",
+    match(useragent,"Jakarta|Apache-Http"), "Java HttpClient",
+    match(useragent,"masscan"),          "[\!] masscan (Scanner)",
+    match(useragent,"Go-http"),          "[\!] Go HTTP Client",
+    match(useragent,"libwww"),           "[\!] libwww-perl",
+    match(useragent,"python-requests"),  "[\!] python-requests",
+    useragent="-",                       "[\!] kein UA (-)",
+    true(), "Sonstige")
+| stats count by ua_group
+| sort -count
+| head 12]]>
+          </query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="charting.chart">bar</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="charting.axisTitleX.text">User-Agent</option>
+        <option name="charting.axisTitleY.text">Requests</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Fehler-Timeline (4xx + 5xx) nach Standort - 5-Min-Intervalle</title>
+        <search>
+          <query>
+            <![CDATA[index="demo_tomcat_logs" $loc_filter$
+| rex field=_raw "HTTP/1\.\d\" (?P<status>\d{3}) "
+| where status >= 400
+| eval location=case(
+    host="atlweb01" OR host="atlweb02", "Atlanta",
+    host="berweb01" OR host="berweb02", "Berlin",
+    host="vieweb01" OR host="vieweb02", "Vienna",
+    true(), "Unknown")
+| timechart span=5m count by location]]>
+          </query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.axisTitleX.text">Zeit</option>
+        <option name="charting.axisTitleY.text">Fehler / 5 Min</option>
+        <option name="charting.seriesColors">["0x65a637","0xd93f3c","0x6db7c6"]</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Top Fehler-Pfade (4xx + 5xx)</title>
+        <search>
+          <query>
+            <![CDATA[index="demo_tomcat_logs" $loc_filter$
+| rex field=_raw "\"(?:\w+)\s+(?P<uri_path>\S+)\s+HTTP/[^\"]+\"\s+(?P<status>\d{3})"
+| where status >= 400
+| eval label=uri_path." [".status."]"
+| stats count by label
+| sort -count
+| head 10]]>
+          </query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="charting.chart">bar</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="charting.axisTitleX.text">Pfad [Status]</option>
+        <option name="charting.axisTitleY.text">Fehler</option>
+        <option name="charting.seriesColors">["0xd93f3c"]</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Letzte 50 Events</title>
+        <search>
+          <query>
+            <![CDATA[index="demo_tomcat_logs" $loc_filter$
+| rex field=_raw "^(?P<clientip>\S+)\s+\S+\s+\S+\s+\[[^\]]+\]\s+\"(?P<http_method>\w+)\s+(?P<uri_path>\S+)\s+HTTP/[^\"]+\"\s+(?P<status>\d{3})\s+(?P<bytes>\d+)\s+\"-\"\s+\"(?P<useragent>[^\"]+)\""
+| eval location=case(
+    host="atlweb01" OR host="atlweb02", "Atlanta",
+    host="berweb01" OR host="berweb02", "Berlin",
+    host="vieweb01" OR host="vieweb02", "Vienna",
+    true(), "Unknown")
+| eval Typ=case(
+    clientip="185.220.101.47" OR clientip="45.142.212.100" OR clientip="91.240.118.222", "[DOS] DOS",
+    status>=500, "[ERR] 5xx",
+    status>=400, "[WARN] 4xx",
+    true(), "[OK] OK")
+| table _time, location, host, clientip, http_method, uri_path, status, bytes, Typ, useragent
+| sort -_time
+| head 50
+| rename
+    _time       as "Zeit",
+    location    as "Standort",
+    host        as "Server",
+    clientip    as "Client IP",
+    http_method as "Methode",
+    uri_path    as "Pfad",
+    status      as "Status",
+    bytes       as "Bytes",
+    useragent   as "User-Agent"]]>
+          </query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="wrap">false</option>
+        <option name="rowNumbers">true</option>
+        <format type="color" field="Status">
+          <colorPalette type="map">{"200":"#65a637","201":"#65a637","204":"#65a637","301":"#6db7c6","304":"#6db7c6","400":"#f8be34","403":"#f8be34","404":"#f8be34","429":"#d93f3c","500":"#d93f3c","503":"#d93f3c"}</colorPalette>
+        </format>
+        <format type="color" field="Typ">
+          <colorPalette type="map">{"[OK] OK":"#65a637","[WARN] 4xx":"#f8be34","[ERR] 5xx":"#d93f3c","[DOS] DOS":"#d41f1f"}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+</form>

@@ -1,0 +1,1319 @@
+<dashboard version="2" theme="dark">
+    <label>Database</label>
+    <description>Database performance for the CoolaShaker SQL Servers</description>
+    <definition><![CDATA[{
+    "title": "Database Performance",
+    "description": "Database performance for the CoolaShaker SQL Servers",
+    "inputs": {
+        "input_time": {
+            "type": "input.timerange",
+            "title": "Time range",
+            "options": {
+                "token": "global_time",
+                "defaultValue": "-60m@m,now"
+            }
+        },
+        "input_site": {
+            "type": "input.dropdown",
+            "title": "Site",
+            "options": {
+                "items": [
+                    {
+                        "label": "All sites",
+                        "value": "*"
+                    },
+                    {
+                        "label": "Atlanta",
+                        "value": "atlanta"
+                    },
+                    {
+                        "label": "Berlin",
+                        "value": "berlin"
+                    },
+                    {
+                        "label": "Vienna",
+                        "value": "vienna"
+                    }
+                ],
+                "token": "site",
+                "defaultValue": "*"
+            }
+        }
+    },
+    "defaults": {
+        "dataSources": {
+            "ds.search": {
+                "options": {
+                    "queryParameters": {
+                        "earliest": "$global_time.earliest$",
+                        "latest": "$global_time.latest$"
+                    }
+                }
+            }
+        },
+        "tokens": {
+            "default": {
+                "db_host": {
+                    "value": "*"
+                }
+            }
+        }
+    },
+    "dataSources": {
+        "ds_base": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_mssql location=\"$site$\" event_type=performance\n| eval db_host=mvindex(host, 0)\n| bin _time span=5m\n| stats avg(cpu_pct) as cpu avg(memory_mb) as mem avg(transactions_per_sec) as tps avg(batch_requests_per_sec) as batch avg(buffer_cache_hit_ratio) as cache avg(page_life_expectancy) as ple avg(disk_queue_length) as disk_queue avg(lock_waits_per_sec) as lock_waits sum(deadlocks_per_sec) as deadlocks max(active_connections) as connections by _time location db_host",
+                "enableSmartSources": true
+            },
+            "name": "SQL Server performance (5 min)"
+        },
+        "ds_k_cpu": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_base",
+                "query": "| timechart span=5m avg(cpu) as CPU"
+            }
+        },
+        "ds_k_cache": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_base",
+                "query": "| timechart span=5m avg(cache) as \"Cache hit\""
+            }
+        },
+        "ds_k_tps": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_base",
+                "query": "| timechart span=5m sum(tps) as TPS"
+            }
+        },
+        "ds_k_dead": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_base",
+                "query": "| timechart span=5m sum(deadlocks) as Deadlocks"
+            }
+        },
+        "ds_k_conn": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_base",
+                "query": "| timechart span=5m sum(connections) as Connections"
+            }
+        },
+        "ds_rings": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_base",
+                "query": "| stats avg(cache) as value avg(ple) as ple by db_host location\n| eval name=db_host, value=round(value, 1), unit=\"%\", min=80, max=100, warn=95, crit=90, better=\"higher\", key=db_host, detail=location.\" · page life \".round(ple, 0).\" s\"\n| table name value unit min max warn crit better detail key"
+            }
+        },
+        "ds_heat_cpu": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_base",
+                "query": "| timechart span=5m limit=0 avg(cpu) by db_host"
+            }
+        },
+        "ds_tps": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_base",
+                "query": "| search db_host=\"$db_host$\" | timechart span=5m sum(tps) as \"Transactions/s\" sum(batch) as \"Batch requests/s\""
+            }
+        },
+        "ds_io": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_base",
+                "query": "| search db_host=\"$db_host$\" | timechart span=5m avg(disk_queue) as \"Disk queue\" avg(lock_waits) as \"Lock waits/s\" sum(deadlocks) as Deadlocks"
+            }
+        },
+        "ds_overview": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_base",
+                "query": "| stats latest(cpu) as \"CPU %\" latest(mem) as \"Memory MB\" latest(connections) as Connections avg(tps) as \"Avg TPS\" latest(cache) as \"Cache hit %\" latest(ple) as PLE sum(deadlocks) as Deadlocks by location db_host\n| eval \"CPU %\"=round('CPU %', 1), \"Memory MB\"=round('Memory MB', 0), \"Avg TPS\"=round('Avg TPS', 0), \"Cache hit %\"=round('Cache hit %', 1), PLE=round(PLE, 0)\n| rename location as Site db_host as Server"
+            }
+        },
+        "ds_queries": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_mssql location=\"$site$\" event_type=query_performance\n| eval db_host=mvindex(host, 0)\n| search db_host=\"$db_host$\"\n| stats avg(duration_ms) as avg max(duration_ms) as max avg(cpu_time_ms) as cpu avg(logical_reads) as reads count as runs by db_host query\n| sort - max\n| head 10\n| eval avg=round(avg, 0), max=round(max, 0), cpu=round(cpu, 0), reads=round(reads, 0)\n| rename db_host as Server query as Query avg as \"Avg ms\" max as \"Max ms\" cpu as \"CPU ms\" reads as \"Logical reads\" runs as Runs",
+                "enableSmartSources": true
+            },
+            "name": "Slow queries"
+        },
+        "ds_query_server": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_queries",
+                "query": "| stats max(\"Max ms\") as \"Max ms\" by Server | sort - \"Max ms\""
+            }
+        },
+        "ds_waits": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_mssql location=\"$site$\" event_type=wait_stats\n| eval db_host=mvindex(host, 0)\n| stats sum(wait_time_ms) as total sum(waiting_tasks_count) as tasks by wait_type\n| sort - total\n| head 10\n| eval total=round(total / 1000, 1)\n| rename wait_type as \"Wait type\" total as \"Wait time s\" tasks as \"Waiting tasks\"",
+                "enableSmartSources": true
+            },
+            "name": "Wait statistics"
+        },
+        "ds_logs": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_mssql location=\"$site$\" event_type IN (log_status, backup)\n| eval db_host=mvindex(host, 0)\n| stats latest(log_space_used_pct) as log_used latest(log_file_size_mb) as log_size avg(log_growth_rate_mb_per_min) as growth latest(backup_type) as backup_type latest(status) as backup_status latest(duration_sec) as backup_s by location db_host\n| eval \"Log used %\"=round(log_used, 1), \"Log MB\"=round(log_size, 0), \"Growth MB/min\"=round(growth, 1), \"Backup s\"=round(backup_s, 0)\n| table location db_host \"Log used %\" \"Log MB\" \"Growth MB/min\" backup_type backup_status \"Backup s\"\n| rename location as Site db_host as Server backup_type as \"Last backup\" backup_status as \"Backup status\"",
+                "enableSmartSources": true
+            },
+            "name": "Logs and backups"
+        }
+    },
+    "visualizations": {
+        "viz_nav_home": {
+            "type": "splunk.image",
+            "options": {
+                "src": "/static/app/coolashaker_studio/images/nav_home.svg",
+                "preserveAspectRatio": true
+            },
+            "eventHandlers": [
+                {
+                    "type": "drilldown.linkToDashboard",
+                    "options": {
+                        "app": "coolashaker_studio",
+                        "dashboard": "cs_home",
+                        "tokens": [],
+                        "newTab": false
+                    }
+                }
+            ]
+        },
+        "viz_nav_exec": {
+            "type": "splunk.image",
+            "options": {
+                "src": "/static/app/coolashaker_studio/images/nav_exec.svg",
+                "preserveAspectRatio": true
+            },
+            "eventHandlers": [
+                {
+                    "type": "drilldown.linkToDashboard",
+                    "options": {
+                        "app": "coolashaker_studio",
+                        "dashboard": "cs_executive",
+                        "tokens": [],
+                        "newTab": false
+                    }
+                }
+            ]
+        },
+        "viz_nav_factory": {
+            "type": "splunk.image",
+            "options": {
+                "src": "/static/app/coolashaker_studio/images/nav_factory.svg",
+                "preserveAspectRatio": true
+            },
+            "eventHandlers": [
+                {
+                    "type": "drilldown.linkToDashboard",
+                    "options": {
+                        "app": "coolashaker_studio",
+                        "dashboard": "cs_manufacturing",
+                        "tokens": [],
+                        "newTab": false
+                    }
+                }
+            ]
+        },
+        "viz_nav_dc": {
+            "type": "splunk.image",
+            "options": {
+                "src": "/static/app/coolashaker_studio/images/nav_dc_on.svg",
+                "preserveAspectRatio": true
+            },
+            "eventHandlers": [
+                {
+                    "type": "drilldown.linkToDashboard",
+                    "options": {
+                        "app": "coolashaker_studio",
+                        "dashboard": "cs_datacenter",
+                        "tokens": [],
+                        "newTab": false
+                    }
+                }
+            ]
+        },
+        "viz_nav_network": {
+            "type": "splunk.image",
+            "options": {
+                "src": "/static/app/coolashaker_studio/images/nav_network.svg",
+                "preserveAspectRatio": true
+            },
+            "eventHandlers": [
+                {
+                    "type": "drilldown.linkToDashboard",
+                    "options": {
+                        "app": "coolashaker_studio",
+                        "dashboard": "cs_network_intelligence",
+                        "tokens": [],
+                        "newTab": false
+                    }
+                }
+            ]
+        },
+        "viz_nav_collab": {
+            "type": "splunk.image",
+            "options": {
+                "src": "/static/app/coolashaker_studio/images/nav_collab.svg",
+                "preserveAspectRatio": true
+            },
+            "eventHandlers": [
+                {
+                    "type": "drilldown.linkToDashboard",
+                    "options": {
+                        "app": "coolashaker_studio",
+                        "dashboard": "cs_collaboration",
+                        "tokens": [],
+                        "newTab": false
+                    }
+                }
+            ]
+        },
+        "viz_nav_web": {
+            "type": "splunk.image",
+            "options": {
+                "src": "/static/app/coolashaker_studio/images/nav_web.svg",
+                "preserveAspectRatio": true
+            },
+            "eventHandlers": [
+                {
+                    "type": "drilldown.linkToDashboard",
+                    "options": {
+                        "app": "coolashaker_studio",
+                        "dashboard": "cs_web",
+                        "tokens": [],
+                        "newTab": false
+                    }
+                }
+            ]
+        },
+        "viz_sub_cs_datacenter": {
+            "type": "splunk.image",
+            "options": {
+                "src": "/static/app/coolashaker_studio/images/sub_cs_datacenter.svg",
+                "preserveAspectRatio": true
+            },
+            "eventHandlers": [
+                {
+                    "type": "drilldown.linkToDashboard",
+                    "options": {
+                        "app": "coolashaker_studio",
+                        "dashboard": "cs_datacenter",
+                        "tokens": [],
+                        "newTab": false
+                    }
+                }
+            ]
+        },
+        "viz_sub_cs_servers": {
+            "type": "splunk.image",
+            "options": {
+                "src": "/static/app/coolashaker_studio/images/sub_cs_servers.svg",
+                "preserveAspectRatio": true
+            },
+            "eventHandlers": [
+                {
+                    "type": "drilldown.linkToDashboard",
+                    "options": {
+                        "app": "coolashaker_studio",
+                        "dashboard": "cs_servers",
+                        "tokens": [],
+                        "newTab": false
+                    }
+                }
+            ]
+        },
+        "viz_sub_cs_database": {
+            "type": "splunk.image",
+            "options": {
+                "src": "/static/app/coolashaker_studio/images/sub_cs_database_on.svg",
+                "preserveAspectRatio": true
+            }
+        },
+        "viz_sub_cs_ai_workload": {
+            "type": "splunk.image",
+            "options": {
+                "src": "/static/app/coolashaker_studio/images/sub_cs_ai_workload.svg",
+                "preserveAspectRatio": true
+            },
+            "eventHandlers": [
+                {
+                    "type": "drilldown.linkToDashboard",
+                    "options": {
+                        "app": "coolashaker_studio",
+                        "dashboard": "cs_ai_workload",
+                        "tokens": [],
+                        "newTab": false
+                    }
+                }
+            ]
+        },
+        "viz_01": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_k_cpu"
+            },
+            "options": {
+                "majorColor": "> majorValue | rangeValue(majorColorConfig)",
+                "backgroundColor": "transparent",
+                "sparklineDisplay": "below",
+                "trendDisplay": "off",
+                "numberPrecision": 1,
+                "sparklineStrokeColor": "#22d3ee",
+                "unit": "%",
+                "unitPosition": "after"
+            },
+            "context": {
+                "majorColorConfig": [
+                    {
+                        "to": 70,
+                        "value": "#34e2a0"
+                    },
+                    {
+                        "from": 70,
+                        "to": 90,
+                        "value": "#ffc53d"
+                    },
+                    {
+                        "from": 90,
+                        "value": "#ff4d6d"
+                    }
+                ]
+            }
+        },
+        "viz_02": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_k_cache"
+            },
+            "options": {
+                "majorColor": "> majorValue | rangeValue(majorColorConfig)",
+                "backgroundColor": "transparent",
+                "sparklineDisplay": "below",
+                "trendDisplay": "off",
+                "numberPrecision": 1,
+                "sparklineStrokeColor": "#22d3ee",
+                "unit": "%",
+                "unitPosition": "after"
+            },
+            "context": {
+                "majorColorConfig": [
+                    {
+                        "to": 90,
+                        "value": "#ff4d6d"
+                    },
+                    {
+                        "from": 90,
+                        "to": 95,
+                        "value": "#ffc53d"
+                    },
+                    {
+                        "from": 95,
+                        "value": "#34e2a0"
+                    }
+                ]
+            }
+        },
+        "viz_03": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_k_tps"
+            },
+            "options": {
+                "majorColor": "#eaf2ff",
+                "backgroundColor": "transparent",
+                "sparklineDisplay": "below",
+                "trendDisplay": "off",
+                "numberPrecision": 0,
+                "sparklineStrokeColor": "#22d3ee"
+            }
+        },
+        "viz_04": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_k_conn"
+            },
+            "options": {
+                "majorColor": "#eaf2ff",
+                "backgroundColor": "transparent",
+                "sparklineDisplay": "below",
+                "trendDisplay": "off",
+                "numberPrecision": 0,
+                "sparklineStrokeColor": "#22d3ee"
+            }
+        },
+        "viz_05": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_k_dead"
+            },
+            "options": {
+                "majorColor": "> majorValue | rangeValue(majorColorConfig)",
+                "backgroundColor": "transparent",
+                "sparklineDisplay": "below",
+                "trendDisplay": "off",
+                "numberPrecision": 0,
+                "sparklineStrokeColor": "#22d3ee"
+            },
+            "context": {
+                "majorColorConfig": [
+                    {
+                        "to": 1,
+                        "value": "#34e2a0"
+                    },
+                    {
+                        "from": 1,
+                        "to": 6,
+                        "value": "#ffc53d"
+                    },
+                    {
+                        "from": 6,
+                        "value": "#ff4d6d"
+                    }
+                ]
+            }
+        },
+        "viz_06": {
+            "type": "coolashaker_studio.health_rings",
+            "dataSources": {
+                "primary": "ds_rings"
+            },
+            "options": {
+                "decimals": 1,
+                "drilldownToken": "db_host"
+            },
+            "eventHandlers": [
+                {
+                    "type": "drilldown.setToken",
+                    "options": {
+                        "tokens": [
+                            {
+                                "token": "db_host",
+                                "key": "value"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "viz_07": {
+            "type": "coolashaker_studio.heat_timeline",
+            "dataSources": {
+                "primary": "ds_heat_cpu"
+            },
+            "options": {
+                "scaleMode": "thresholds",
+                "higherIsBetter": false,
+                "warn": 70,
+                "crit": 90,
+                "unit": "%",
+                "drilldownToken": "db_host"
+            },
+            "eventHandlers": [
+                {
+                    "type": "drilldown.setToken",
+                    "options": {
+                        "tokens": [
+                            {
+                                "token": "db_host",
+                                "key": "value"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "viz_08": {
+            "type": "splunk.line",
+            "dataSources": {
+                "primary": "ds_tps"
+            },
+            "options": {
+                "backgroundColor": "transparent",
+                "legendDisplay": "bottom",
+                "xAxisTitleVisibility": "hide",
+                "yAxisTitleVisibility": "hide",
+                "seriesColors": [
+                    "#2dd4bf",
+                    "#a78bfa"
+                ],
+                "lineWidth": 2
+            }
+        },
+        "viz_09": {
+            "type": "splunk.line",
+            "dataSources": {
+                "primary": "ds_io"
+            },
+            "options": {
+                "backgroundColor": "transparent",
+                "legendDisplay": "bottom",
+                "xAxisTitleVisibility": "hide",
+                "yAxisTitleVisibility": "hide",
+                "seriesColors": [
+                    "#ffc53d",
+                    "#60a5fa",
+                    "#ff4d6d"
+                ],
+                "lineWidth": 2
+            }
+        },
+        "viz_10": {
+            "type": "splunk.table",
+            "dataSources": {
+                "primary": "ds_overview"
+            },
+            "options": {
+                "backgroundColor": "transparent",
+                "count": 6,
+                "headerVisibility": "fixed",
+                "fontSize": "small",
+                "tableFormat": {
+                    "rowBackgroundColors": "> table | seriesByIndex(0) | pick(rowBg)",
+                    "headerBackgroundColor": "#0b1630",
+                    "rowColors": "#eaf2ff",
+                    "headerColor": "#9fb1c9"
+                },
+                "columnFormat": {
+                    "CPU %": {
+                        "rowBackgroundColors": "> table | seriesByName(\"CPU %\") | rangeValue(range_2)"
+                    },
+                    "Cache hit %": {
+                        "rowBackgroundColors": "> table | seriesByName(\"Cache hit %\") | rangeValue(range_3)"
+                    },
+                    "Deadlocks": {
+                        "rowBackgroundColors": "> table | seriesByName(\"Deadlocks\") | rangeValue(range_4)"
+                    }
+                }
+            },
+            "context": {
+                "rowBg": [
+                    "#0a1328",
+                    "#0d1833"
+                ],
+                "statusBg": [
+                    {
+                        "match": "Critical",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "Degraded",
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "match": "Healthy",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "critical",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "high",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "error",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "warning",
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "match": "medium",
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "match": "stopped",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "failed",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "running",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "success",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "good",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "normal",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "Reachable",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "Unreachable",
+                        "value": "#5a1426"
+                    }
+                ],
+                "range_2": [
+                    {
+                        "to": 70,
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "from": 70,
+                        "to": 90,
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "from": 90,
+                        "value": "#5a1426"
+                    }
+                ],
+                "range_3": [
+                    {
+                        "to": 90,
+                        "value": "#5a1426"
+                    },
+                    {
+                        "from": 90,
+                        "to": 95,
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "from": 95,
+                        "value": "#0d3b2c"
+                    }
+                ],
+                "range_4": [
+                    {
+                        "to": 1,
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "from": 1,
+                        "to": 6,
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "from": 6,
+                        "value": "#5a1426"
+                    }
+                ]
+            }
+        },
+        "viz_11": {
+            "type": "splunk.table",
+            "dataSources": {
+                "primary": "ds_queries"
+            },
+            "options": {
+                "backgroundColor": "transparent",
+                "count": 10,
+                "headerVisibility": "fixed",
+                "fontSize": "small",
+                "tableFormat": {
+                    "rowBackgroundColors": "> table | seriesByIndex(0) | pick(rowBg)",
+                    "headerBackgroundColor": "#0b1630",
+                    "rowColors": "#eaf2ff",
+                    "headerColor": "#9fb1c9"
+                },
+                "columnFormat": {
+                    "Max ms": {
+                        "rowBackgroundColors": "> table | seriesByName(\"Max ms\") | rangeValue(range_2)"
+                    }
+                }
+            },
+            "context": {
+                "rowBg": [
+                    "#0a1328",
+                    "#0d1833"
+                ],
+                "statusBg": [
+                    {
+                        "match": "Critical",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "Degraded",
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "match": "Healthy",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "critical",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "high",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "error",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "warning",
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "match": "medium",
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "match": "stopped",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "failed",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "running",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "success",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "good",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "normal",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "Reachable",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "Unreachable",
+                        "value": "#5a1426"
+                    }
+                ],
+                "range_2": [
+                    {
+                        "to": 1000,
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "from": 1000,
+                        "to": 5000,
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "from": 5000,
+                        "value": "#5a1426"
+                    }
+                ]
+            }
+        },
+        "viz_12": {
+            "type": "splunk.bar",
+            "dataSources": {
+                "primary": "ds_query_server"
+            },
+            "options": {
+                "backgroundColor": "transparent",
+                "legendDisplay": "off",
+                "xAxisTitleVisibility": "hide",
+                "yAxisTitleVisibility": "hide",
+                "seriesColors": [
+                    "#ff4d6d"
+                ]
+            }
+        },
+        "viz_13": {
+            "type": "splunk.table",
+            "dataSources": {
+                "primary": "ds_waits"
+            },
+            "options": {
+                "backgroundColor": "transparent",
+                "count": 10,
+                "headerVisibility": "fixed",
+                "fontSize": "small",
+                "tableFormat": {
+                    "rowBackgroundColors": "> table | seriesByIndex(0) | pick(rowBg)",
+                    "headerBackgroundColor": "#0b1630",
+                    "rowColors": "#eaf2ff",
+                    "headerColor": "#9fb1c9"
+                }
+            },
+            "context": {
+                "rowBg": [
+                    "#0a1328",
+                    "#0d1833"
+                ],
+                "statusBg": [
+                    {
+                        "match": "Critical",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "Degraded",
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "match": "Healthy",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "critical",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "high",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "error",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "warning",
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "match": "medium",
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "match": "stopped",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "failed",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "running",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "success",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "good",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "normal",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "Reachable",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "Unreachable",
+                        "value": "#5a1426"
+                    }
+                ]
+            }
+        },
+        "viz_14": {
+            "type": "splunk.table",
+            "dataSources": {
+                "primary": "ds_logs"
+            },
+            "options": {
+                "backgroundColor": "transparent",
+                "count": 8,
+                "headerVisibility": "fixed",
+                "fontSize": "small",
+                "tableFormat": {
+                    "rowBackgroundColors": "> table | seriesByIndex(0) | pick(rowBg)",
+                    "headerBackgroundColor": "#0b1630",
+                    "rowColors": "#eaf2ff",
+                    "headerColor": "#9fb1c9"
+                },
+                "columnFormat": {
+                    "Log used %": {
+                        "rowBackgroundColors": "> table | seriesByName(\"Log used %\") | rangeValue(range_2)"
+                    },
+                    "Backup status": {
+                        "rowBackgroundColors": "> table | seriesByName(\"Backup status\") | matchValue(statusBg)"
+                    }
+                }
+            },
+            "context": {
+                "rowBg": [
+                    "#0a1328",
+                    "#0d1833"
+                ],
+                "statusBg": [
+                    {
+                        "match": "Critical",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "Degraded",
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "match": "Healthy",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "critical",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "high",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "error",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "warning",
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "match": "medium",
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "match": "stopped",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "failed",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "running",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "success",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "good",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "normal",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "Reachable",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "Unreachable",
+                        "value": "#5a1426"
+                    }
+                ],
+                "range_2": [
+                    {
+                        "to": 70,
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "from": 70,
+                        "to": 90,
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "from": 90,
+                        "value": "#5a1426"
+                    }
+                ]
+            }
+        }
+    },
+    "layout": {
+        "type": "absolute",
+        "options": {
+            "width": 1920,
+            "height": 2430,
+            "display": "auto-scale",
+            "backgroundColor": "#050a16",
+            "backgroundImage": {
+                "src": "/static/app/coolashaker_studio/images/bg_cs_database.svg",
+                "sizeType": "cover",
+                "x": 0,
+                "y": 0
+            }
+        },
+        "structure": [
+            {
+                "item": "viz_nav_home",
+                "type": "block",
+                "position": {
+                    "x": 40,
+                    "y": 142,
+                    "w": 236,
+                    "h": 46
+                }
+            },
+            {
+                "item": "viz_nav_exec",
+                "type": "block",
+                "position": {
+                    "x": 290,
+                    "y": 142,
+                    "w": 236,
+                    "h": 46
+                }
+            },
+            {
+                "item": "viz_nav_factory",
+                "type": "block",
+                "position": {
+                    "x": 540,
+                    "y": 142,
+                    "w": 236,
+                    "h": 46
+                }
+            },
+            {
+                "item": "viz_nav_dc",
+                "type": "block",
+                "position": {
+                    "x": 790,
+                    "y": 142,
+                    "w": 236,
+                    "h": 46
+                }
+            },
+            {
+                "item": "viz_nav_network",
+                "type": "block",
+                "position": {
+                    "x": 1040,
+                    "y": 142,
+                    "w": 236,
+                    "h": 46
+                }
+            },
+            {
+                "item": "viz_nav_collab",
+                "type": "block",
+                "position": {
+                    "x": 1290,
+                    "y": 142,
+                    "w": 236,
+                    "h": 46
+                }
+            },
+            {
+                "item": "viz_nav_web",
+                "type": "block",
+                "position": {
+                    "x": 1540,
+                    "y": 142,
+                    "w": 236,
+                    "h": 46
+                }
+            },
+            {
+                "item": "viz_sub_cs_datacenter",
+                "type": "block",
+                "position": {
+                    "x": 40,
+                    "y": 212,
+                    "w": 218,
+                    "h": 36
+                }
+            },
+            {
+                "item": "viz_sub_cs_servers",
+                "type": "block",
+                "position": {
+                    "x": 270,
+                    "y": 212,
+                    "w": 218,
+                    "h": 36
+                }
+            },
+            {
+                "item": "viz_sub_cs_database",
+                "type": "block",
+                "position": {
+                    "x": 500,
+                    "y": 212,
+                    "w": 218,
+                    "h": 36
+                }
+            },
+            {
+                "item": "viz_sub_cs_ai_workload",
+                "type": "block",
+                "position": {
+                    "x": 730,
+                    "y": 212,
+                    "w": 218,
+                    "h": 36
+                }
+            },
+            {
+                "item": "viz_01",
+                "type": "block",
+                "position": {
+                    "x": 52,
+                    "y": 344,
+                    "w": 421,
+                    "h": 94
+                }
+            },
+            {
+                "item": "viz_02",
+                "type": "block",
+                "position": {
+                    "x": 517,
+                    "y": 344,
+                    "w": 421,
+                    "h": 94
+                }
+            },
+            {
+                "item": "viz_03",
+                "type": "block",
+                "position": {
+                    "x": 982,
+                    "y": 344,
+                    "w": 266,
+                    "h": 94
+                }
+            },
+            {
+                "item": "viz_04",
+                "type": "block",
+                "position": {
+                    "x": 1292,
+                    "y": 344,
+                    "w": 266,
+                    "h": 94
+                }
+            },
+            {
+                "item": "viz_05",
+                "type": "block",
+                "position": {
+                    "x": 1602,
+                    "y": 344,
+                    "w": 266,
+                    "h": 94
+                }
+            },
+            {
+                "item": "viz_06",
+                "type": "block",
+                "position": {
+                    "x": 52,
+                    "y": 544,
+                    "w": 731,
+                    "h": 324
+                }
+            },
+            {
+                "item": "viz_07",
+                "type": "block",
+                "position": {
+                    "x": 827,
+                    "y": 544,
+                    "w": 1041,
+                    "h": 324
+                }
+            },
+            {
+                "item": "viz_08",
+                "type": "block",
+                "position": {
+                    "x": 52,
+                    "y": 944,
+                    "w": 886,
+                    "h": 264
+                }
+            },
+            {
+                "item": "viz_09",
+                "type": "block",
+                "position": {
+                    "x": 982,
+                    "y": 944,
+                    "w": 886,
+                    "h": 264
+                }
+            },
+            {
+                "item": "viz_10",
+                "type": "block",
+                "position": {
+                    "x": 52,
+                    "y": 1284,
+                    "w": 1816,
+                    "h": 244
+                }
+            },
+            {
+                "item": "viz_11",
+                "type": "block",
+                "position": {
+                    "x": 52,
+                    "y": 1634,
+                    "w": 1196,
+                    "h": 344
+                }
+            },
+            {
+                "item": "viz_12",
+                "type": "block",
+                "position": {
+                    "x": 1292,
+                    "y": 1634,
+                    "w": 576,
+                    "h": 344
+                }
+            },
+            {
+                "item": "viz_13",
+                "type": "block",
+                "position": {
+                    "x": 52,
+                    "y": 2054,
+                    "w": 731,
+                    "h": 324
+                }
+            },
+            {
+                "item": "viz_14",
+                "type": "block",
+                "position": {
+                    "x": 827,
+                    "y": 2054,
+                    "w": 1041,
+                    "h": 324
+                }
+            }
+        ],
+        "globalInputs": [
+            "input_time",
+            "input_site"
+        ]
+    }
+}]]></definition>
+    <meta type="hiddenElements"><![CDATA[{"hideEdit": false, "hideOpenInSearch": false, "hideExport": false}]]></meta>
+</dashboard>

@@ -1,0 +1,305 @@
+<form version="1.1" theme="dark">
+  <label>Switch Syslog &amp; Telemetry</label>
+  <description>Cisco IOS XE syslog (cisco:ios) and gNMI streaming telemetry (cisco:gnmi) from all campus switches</description>
+  <!-- =====================================================================
+       Data
+         cisco:ios   raw IOS XE syslog, source udp:514
+                     fields: facility severity mnemonic message_text
+                             user src line command interface link_state
+         cisco:gnmi  JSON, source gnmi:telegraf, 60 s sample interval
+                     subscription=interfaces: device site role interface description
+                       admin_status oper_status in_bps out_bps in_errors ...
+                     subscription=system: cpu_* memory_used_pct
+                       interfaces_physical interfaces_oper_up interfaces_admin_down
+       ===================================================================== -->
+  <init>
+    <set token="host_filter">host=*</set>
+  </init>
+  <search id="base_system">
+    <query>
+index=$idx$ sourcetype="cisco:gnmi" subscription=system site="$site$" host="$device$"
+| fields _time host site role platform cpu_one_minute memory_used_pct interfaces_physical interfaces_oper_up interfaces_admin_down
+    </query>
+    <earliest>$time.earliest$</earliest>
+    <latest>$time.latest$</latest>
+  </search>
+  <fieldset submitButton="false" autoRun="true">
+    <input type="dropdown" token="idx" searchWhenChanged="true">
+      <label>Index</label>
+      <choice value="demo_cisco_catalyst">demo_cisco_catalyst</choice>
+      <default>demo_cisco_catalyst</default>
+    </input>
+    <input type="time" token="time" searchWhenChanged="true">
+      <label>Time</label>
+      <default>
+        <earliest>-60m@m</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="site" searchWhenChanged="true">
+      <label>Site</label>
+      <choice value="*">All</choice>
+      <default>*</default>
+      <fieldForLabel>site</fieldForLabel>
+      <fieldForValue>site</fieldForValue>
+      <search>
+        <query>index=$idx$ sourcetype="cisco:gnmi" subscription=system | stats count by site | sort site</query>
+        <earliest>-24h</earliest>
+        <latest>now</latest>
+      </search>
+      <change>
+        <condition value="*">
+          <set token="host_filter">host=*</set>
+        </condition>
+        <condition>
+          <set token="host_filter">[search index=demo_cisco_catalyst sourcetype="cisco:gnmi" subscription=system site="$value$" earliest=-24h | dedup host | fields host]</set>
+        </condition>
+      </change>
+    </input>
+    <input type="dropdown" token="device" searchWhenChanged="true">
+      <label>Device</label>
+      <choice value="*">All</choice>
+      <default>*</default>
+      <fieldForLabel>host</fieldForLabel>
+      <fieldForValue>host</fieldForValue>
+      <search>
+        <query>| tstats count where index=$idx$ sourcetype IN ("cisco:ios", "cisco:gnmi") by host | sort host</query>
+        <earliest>$time.earliest$</earliest>
+        <latest>$time.latest$</latest>
+      </search>
+    </input>
+    <input type="text" token="user" searchWhenChanged="true">
+      <label>User</label>
+      <default>*</default>
+    </input>
+  </fieldset>
+
+  <!-- =====================================================================  ROW 1: KPIs  -->
+  <row>
+    <panel>
+      <single>
+        <title>Syslog messages</title>
+        <search>
+          <query>index=$idx$ sourcetype="cisco:ios" $host_filter$ host="$device$" | stats count</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Configuration commands</title>
+        <search>
+          <query>index=$idx$ sourcetype="cisco:ios" "CFGLOG_LOGGEDCMD" $host_filter$ host="$device$" user="$user$" | stats count</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Users with CLI sessions</title>
+        <search>
+          <query>index=$idx$ sourcetype="cisco:ios" ("LOGIN_SUCCESS" OR "CLI_AUDIT" OR "CFGLOG_LOGGEDCMD") $host_filter$ host="$device$" user="$user$" | stats dc(user)</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Interfaces admin down (latest sample)</title>
+        <search base="base_system">
+          <query>stats latest(interfaces_admin_down) as v by host | stats sum(v) as admin_down</query>
+        </search>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x53a051","0xf8be34","0xdc4e41"]</option>
+        <option name="rangeValues">[0,10]</option>
+        <option name="useColors">1</option>
+        <option name="drilldown">none</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Switches without telemetry (last 5 min)</title>
+        <search>
+          <query>| tstats latest(_time) as last where index=$idx$ sourcetype="cisco:gnmi" $host_filter$ host="$device$" by host | where last &lt; now() - 300 | stats count</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+        </search>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x53a051","0xdc4e41"]</option>
+        <option name="rangeValues">[0]</option>
+        <option name="useColors">1</option>
+        <option name="drilldown">none</option>
+      </single>
+    </panel>
+  </row>
+
+  <!-- =====================================================================  ROW 2: Syslog over time  -->
+  <row>
+    <panel>
+      <chart>
+        <title>Syslog messages by mnemonic</title>
+        <search>
+          <query>index=$idx$ sourcetype="cisco:ios" $host_filter$ host="$device$" | eval msg=facility."-".severity."-".mnemonic | timechart limit=12 useother=t count by msg</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.legend.placement">right</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Interface state changes by device</title>
+        <search>
+          <query>index=$idx$ sourcetype="cisco:ios" ("LINK-" OR "LINEPROTO-") $host_filter$ host="$device$" | timechart limit=12 useother=t count by host</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.legend.placement">right</option>
+      </chart>
+    </panel>
+  </row>
+
+  <!-- =====================================================================  ROW 3: CLI audit  -->
+  <row>
+    <panel>
+      <table>
+        <title>CLI sessions by user</title>
+        <search>
+          <query>index=$idx$ sourcetype="cisco:ios" ("LOGIN_SUCCESS" OR "LOGIN_FAILED" OR "CLI_AUDIT" OR "CFGLOG_LOGGEDCMD" OR "CONFIG_I") $host_filter$ host="$device$" user="$user$"
+| eval login_ok=if(mnemonic="LOGIN_SUCCESS",1,0), login_failed=if(mnemonic="LOGIN_FAILED",1,0), exec=if(mnemonic="LOG",1,0), config=if(mnemonic="CFGLOG_LOGGEDCMD",1,0)
+| stats min(_time) as first max(_time) as last sum(login_ok) as logins sum(login_failed) as failed_logins sum(exec) as exec_commands sum(config) as config_commands values(src) as src dc(host) as devices values(host) as device by user
+| convert ctime(first) ctime(last)
+| sort - config_commands</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">cell</option>
+        <drilldown>
+          <set token="form.user">$row.user$</set>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Command audit (exec and configuration)</title>
+        <search>
+          <query>index=$idx$ sourcetype="cisco:ios" ("CLI_AUDIT" OR "CFGLOG_LOGGEDCMD" OR "CONFIG_I") $host_filter$ host="$device$" user="$user$"
+| eval mode=case(mnemonic="CFGLOG_LOGGEDCMD","config", mnemonic="CONFIG_I","config end", true(),"exec")
+| eval command=coalesce(command, message_text)
+| table _time host user src line mode command
+| sort - _time</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+        </search>
+        <option name="count">20</option>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+
+  <!-- =====================================================================  ROW 4: gNMI device status  -->
+  <row>
+    <panel>
+      <table>
+        <title>gNMI device status (latest sample per switch)</title>
+        <search base="base_system">
+          <query>stats latest(_time) as last_sample latest(site) as site latest(role) as role latest(platform) as platform latest(interfaces_physical) as physical latest(interfaces_oper_up) as oper_up latest(interfaces_admin_down) as admin_down latest(cpu_one_minute) as cpu_pct latest(memory_used_pct) as mem_pct by host
+| eval age_s=round(now()-last_sample), last_sample=strftime(last_sample, "%F %T")
+| sort site role host</query>
+        </search>
+        <option name="count">25</option>
+        <option name="drilldown">cell</option>
+        <format type="color" field="admin_down">
+          <colorPalette type="list">[#53A051,#DC4E41]</colorPalette>
+          <scale type="threshold">1</scale>
+        </format>
+        <format type="color" field="age_s">
+          <colorPalette type="list">[#53A051,#F8BE34,#DC4E41]</colorPalette>
+          <scale type="threshold">180,600</scale>
+        </format>
+        <drilldown>
+          <set token="form.device">$row.host$</set>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Interfaces operationally up per switch</title>
+        <search base="base_system">
+          <query>timechart span=1m limit=15 useother=f max(interfaces_oper_up) by host</query>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.legend.placement">right</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Throughput per switch (Mbit/s, in + out)</title>
+        <search>
+          <query>index=$idx$ sourcetype="cisco:gnmi" subscription=interfaces site="$site$" host="$device$"
+| eval mbps=(in_bps+out_bps)/1000000
+| bin _time span=1m
+| stats sum(mbps) as mbps by _time host
+| timechart span=1m limit=15 useother=f max(mbps) by host</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.legend.placement">right</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Interfaces not up (latest gNMI sample)</title>
+        <search>
+          <query>index=$idx$ sourcetype="cisco:gnmi" subscription=interfaces site="$site$" host="$device$"
+| stats latest(_time) as t latest(admin_status) as admin_status latest(oper_status) as oper_status latest(description) as description latest(speed_mbps) as speed_mbps by host interface
+| where oper_status!="UP" OR admin_status!="UP"
+| eval t=strftime(t, "%F %T")
+| table t host interface description admin_status oper_status speed_mbps
+| sort host interface</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+        </search>
+        <option name="count">15</option>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+
+  <!-- =====================================================================  ROW 5: raw syslog  -->
+  <row>
+    <panel>
+      <table>
+        <title>Syslog messages</title>
+        <search>
+          <query>index=$idx$ sourcetype="cisco:ios" $host_filter$ host="$device$" | table _time host severity mnemonic message_text | sort - _time</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+        </search>
+        <option name="count">20</option>
+        <option name="drilldown">none</option>
+        <format type="color" field="severity">
+          <colorPalette type="map">{"0":#DC4E41,"1":#DC4E41,"2":#DC4E41,"3":#F1813F,"4":#F8BE34}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+</form>

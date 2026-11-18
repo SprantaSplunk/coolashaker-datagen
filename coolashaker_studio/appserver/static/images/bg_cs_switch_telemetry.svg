@@ -1,0 +1,227 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="2920" viewBox="0 0 1920 2920">
+  <defs>
+    <radialGradient id="glowA" cx="0.12" cy="0.02" r="0.7">
+      <stop offset="0" stop-color="#60a5fa" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#60a5fa" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0.95" cy="0.85" r="0.75">
+      <stop offset="0" stop-color="#22d3ee" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="base" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#071022"/>
+      <stop offset="1" stop-color="#040812"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#101d3a" stop-opacity="0.82"/>
+      <stop offset="1" stop-color="#0a1328" stop-opacity="0.74"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#60a5fa" stop-opacity="0.45"/>
+      <stop offset="0.5" stop-color="#9fb1c9" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0.35"/>
+    </linearGradient>
+    <linearGradient id="titleFill" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#60a5fa"/>
+    </linearGradient>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#9fb1c9" fill-opacity="0.10"/>
+    </pattern>
+    <style>
+      .pt { font: 700 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 1.6px; fill: #cfe0f7; }
+      .ph { font: 500 12px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #8ea3bf; }
+      .sec { font: 800 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 3px; fill: #60a5fa; }
+    </style>
+  </defs>
+  <rect width="1920" height="2920" fill="url(#base)"/>
+  <rect width="1920" height="2920" fill="url(#dots)"/>
+  <rect width="1920" height="2920" fill="url(#glowA)"/>
+  <rect width="1920" height="2920" fill="url(#glowB)"/>
+  <g>
+    <line x1="1653.9" y1="150.7" x2="1581.6" y2="80.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1653.9" y1="150.7" x2="1699.7" y2="156.5" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1653.9" y1="150.7" x2="1571" y2="131.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1653.9" y1="150.7" x2="1722.1" y2="41.8" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1653.9" y1="150.7" x2="1598.5" y2="44.8" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1653.9" y1="150.7" x2="1539.8" y2="140.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1653.9" y1="150.7" x2="1599.8" y2="79" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1653.9" y1="150.7" x2="1596.1" y2="111.1" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1653.9" y1="150.7" x2="1628.2" y2="81.1" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1252.2" y1="59" x2="1211.6" y2="94.7" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1252.2" y1="59" x2="1315" y2="107.5" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1252.2" y1="59" x2="1184.5" y2="100" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1252.2" y1="59" x2="1149.7" y2="50.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1581.6" y1="80.1" x2="1699.7" y2="156.5" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1581.6" y1="80.1" x2="1571" y2="131.1" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1581.6" y1="80.1" x2="1722.1" y2="41.8" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1581.6" y1="80.1" x2="1481.9" y2="143.2" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1581.6" y1="80.1" x2="1598.5" y2="44.8" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1581.6" y1="80.1" x2="1427.6" y2="87.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1581.6" y1="80.1" x2="1539.8" y2="140.7" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1581.6" y1="80.1" x2="1448.6" y2="56.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1581.6" y1="80.1" x2="1599.8" y2="79" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1581.6" y1="80.1" x2="1596.1" y2="111.1" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1581.6" y1="80.1" x2="1628.2" y2="81.1" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1211.6" y1="94.7" x2="1079.6" y2="10.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1211.6" y1="94.7" x2="1315" y2="107.5" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1211.6" y1="94.7" x2="1184.5" y2="100" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1211.6" y1="94.7" x2="1149.7" y2="50.7" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1699.7" y1="156.5" x2="1571" y2="131.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1699.7" y1="156.5" x2="1722.1" y2="41.8" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1699.7" y1="156.5" x2="1598.5" y2="44.8" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1699.7" y1="156.5" x2="1866.4" y2="174.2" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1699.7" y1="156.5" x2="1539.8" y2="140.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1699.7" y1="156.5" x2="1599.8" y2="79" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1699.7" y1="156.5" x2="1596.1" y2="111.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1699.7" y1="156.5" x2="1628.2" y2="81.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1571" y1="131.1" x2="1481.9" y2="143.2" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1571" y1="131.1" x2="1598.5" y2="44.8" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1571" y1="131.1" x2="1427.6" y2="87.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1571" y1="131.1" x2="1539.8" y2="140.7" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1571" y1="131.1" x2="1448.6" y2="56.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1571" y1="131.1" x2="1599.8" y2="79" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1571" y1="131.1" x2="1406.2" y2="145.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1571" y1="131.1" x2="1596.1" y2="111.1" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1571" y1="131.1" x2="1628.2" y2="81.1" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1722.1" y1="41.8" x2="1598.5" y2="44.8" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1722.1" y1="41.8" x2="1863.1" y2="78.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1722.1" y1="41.8" x2="1599.8" y2="79" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1722.1" y1="41.8" x2="1596.1" y2="111.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1722.1" y1="41.8" x2="1628.2" y2="81.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1079.6" y1="10.1" x2="1184.5" y2="100" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1079.6" y1="10.1" x2="1149.7" y2="50.7" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1481.9" y1="143.2" x2="1598.5" y2="44.8" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1481.9" y1="143.2" x2="1427.6" y2="87.7" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1481.9" y1="143.2" x2="1539.8" y2="140.7" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1481.9" y1="143.2" x2="1448.6" y2="56.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1481.9" y1="143.2" x2="1599.8" y2="79" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1481.9" y1="143.2" x2="1406.2" y2="145.4" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1481.9" y1="143.2" x2="1596.1" y2="111.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1481.9" y1="143.2" x2="1628.2" y2="81.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1598.5" y1="44.8" x2="1539.8" y2="140.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1598.5" y1="44.8" x2="1448.6" y2="56.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1598.5" y1="44.8" x2="1599.8" y2="79" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1598.5" y1="44.8" x2="1596.1" y2="111.1" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1598.5" y1="44.8" x2="1628.2" y2="81.1" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1315" y1="107.5" x2="1184.5" y2="100" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1315" y1="107.5" x2="1427.6" y2="87.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1315" y1="107.5" x2="1448.6" y2="56.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1315" y1="107.5" x2="1406.2" y2="145.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1866.4" y1="174.2" x2="1863.1" y2="78.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1184.5" y1="100" x2="1149.7" y2="50.7" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1427.6" y1="87.7" x2="1539.8" y2="140.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1427.6" y1="87.7" x2="1448.6" y2="56.6" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1427.6" y1="87.7" x2="1406.2" y2="145.4" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1539.8" y1="140.7" x2="1448.6" y2="56.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1539.8" y1="140.7" x2="1599.8" y2="79" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1539.8" y1="140.7" x2="1406.2" y2="145.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1539.8" y1="140.7" x2="1596.1" y2="111.1" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1539.8" y1="140.7" x2="1628.2" y2="81.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1448.6" y1="56.6" x2="1599.8" y2="79" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1448.6" y1="56.6" x2="1406.2" y2="145.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1448.6" y1="56.6" x2="1596.1" y2="111.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1599.8" y1="79" x2="1596.1" y2="111.1" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1599.8" y1="79" x2="1628.2" y2="81.1" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1596.1" y1="111.1" x2="1628.2" y2="81.1" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <circle cx="1653.9" cy="150.7" r="2.7" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1252.2" cy="59" r="2.9" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1581.6" cy="80.1" r="3.1" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1211.6" cy="94.7" r="2.7" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1699.7" cy="156.5" r="2.3" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1571" cy="131.1" r="3.1" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1722.1" cy="41.8" r="3.4" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1079.6" cy="10.1" r="1.9" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1481.9" cy="143.2" r="2.4" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1598.5" cy="44.8" r="2.6" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1315" cy="107.5" r="3.1" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1866.4" cy="174.2" r="3.7" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1184.5" cy="100" r="4.1" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1427.6" cy="87.7" r="2.5" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1863.1" cy="78.4" r="3" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1539.8" cy="140.7" r="2.7" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1448.6" cy="56.6" r="3.7" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1149.7" cy="50.7" r="3.9" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1599.8" cy="79" r="2.5" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1406.2" cy="145.4" r="3.3" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1596.1" cy="111.1" r="2.5" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1628.2" cy="81.1" r="1.8" fill="#60a5fa" fill-opacity="0.6"/>
+  </g>
+  <rect x="0" y="198" width="1920" height="1" fill="#60a5fa" fill-opacity="0.18"/>
+  <text x="40" y="44" style="font: 800 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 4px; fill: #60a5fa;">COOLASHAKER STUDIO · NETWORK</text>
+  <text x="38" y="94" style="font: 800 44px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: -0.5px; fill: url(#titleFill);">Switch Syslog &amp; Telemetry</text>
+  <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">IOS XE syslog, gNMI streaming telemetry and the CLI command audit per switch</text>
+  <g>
+    <text x="40" y="284" class="sec">SWITCH KPIS</text>
+    <line x1="161.4" y1="279" x2="1880" y2="279" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <text x="40" y="484" class="sec">SYSLOG</text>
+    <line x1="114.4" y1="479" x2="1880" y2="479" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <text x="40" y="1274" class="sec">GNMI TELEMETRY</text>
+    <line x1="189.6" y1="1269" x2="1880" y2="1269" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <text x="40" y="2084" class="sec">CLI AUDIT</text>
+    <line x1="142.60000000000002" y1="2079" x2="1880" y2="2079" stroke="#60a5fa" stroke-opacity="0.18"/>
+  </g>
+  <g>
+    <rect x="40" y="300" width="368" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="329" class="pt">SYSLOG MESSAGES</text>
+    <rect x="428" y="300" width="368" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="446" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="448" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="460" y="329" class="pt">CONFIGURATION COMMANDS</text>
+    <rect x="816" y="300" width="368" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="834" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="836" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="848" y="329" class="pt">AVG SWITCH CPU</text>
+    <rect x="1204" y="300" width="329" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1222" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="1224" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="1236" y="329" class="pt">INTERFACES ADMIN DOWN</text>
+    <rect x="1553" y="300" width="329" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1571" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="1573" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="1585" y="329" class="pt">SWITCHES WITHOUT TELEMETRY</text>
+    <rect x="40" y="500" width="1220" height="400" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="500" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="516" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="529" class="pt">SYSLOG HEAT BY MESSAGE TYPE</text>
+    <rect x="1280" y="500" width="600" height="400" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1298" y="500" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="1300" y="516" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="1312" y="529" class="pt">SWITCH CPU BY SITE</text>
+    <text x="1860" y="529" class="ph" text-anchor="end">click to filter the page</text>
+    <rect x="40" y="920" width="910" height="320" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="920" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="936" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="949" class="pt">INTERFACE STATE CHANGES BY SWITCH</text>
+    <rect x="970" y="920" width="910" height="320" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="988" y="920" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="990" y="936" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="1002" y="949" class="pt">THROUGHPUT PER SWITCH (MBIT/S)</text>
+    <rect x="40" y="1290" width="1840" height="420" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1290" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="1306" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="1319" class="pt">DEVICE STATUS, LATEST SAMPLE PER SWITCH</text>
+    <rect x="40" y="1730" width="910" height="320" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1730" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="1746" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="1759" class="pt">INTERFACES OPERATIONALLY UP</text>
+    <rect x="970" y="1730" width="910" height="320" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="988" y="1730" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="990" y="1746" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="1002" y="1759" class="pt">INTERFACES NOT UP</text>
+    <rect x="40" y="2100" width="755" height="340" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="2100" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="2116" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="2129" class="pt">CLI SESSIONS BY USER</text>
+    <rect x="815" y="2100" width="1065" height="340" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="833" y="2100" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="835" y="2116" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="847" y="2129" class="pt">COMMAND AUDIT (EXEC AND CONFIGURATION)</text>
+    <rect x="40" y="2460" width="1840" height="420" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="2460" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="2476" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="2489" class="pt">LATEST SYSLOG MESSAGES</text>
+  </g>
+</svg>

@@ -1,0 +1,1227 @@
+<dashboard version="2" theme="dark">
+    <label>Collaboration</label>
+    <description>Network and collaboration: Teams media quality, HTTP availability and Teams activity</description>
+    <definition><![CDATA[{
+    "title": "Network & Collaboration",
+    "description": "Network and collaboration: Teams media quality, HTTP availability and Teams activity",
+    "inputs": {
+        "input_time": {
+            "type": "input.timerange",
+            "title": "Time range",
+            "options": {
+                "token": "global_time",
+                "defaultValue": "-60m@m,now"
+            }
+        },
+        "input_site": {
+            "type": "input.dropdown",
+            "title": "Site",
+            "options": {
+                "items": [
+                    {
+                        "label": "All sites",
+                        "value": "*"
+                    },
+                    {
+                        "label": "Atlanta",
+                        "value": "atlanta"
+                    },
+                    {
+                        "label": "Berlin",
+                        "value": "berlin"
+                    },
+                    {
+                        "label": "Vienna",
+                        "value": "vienna"
+                    }
+                ],
+                "token": "site",
+                "defaultValue": "*"
+            }
+        }
+    },
+    "defaults": {
+        "dataSources": {
+            "ds.search": {
+                "options": {
+                    "queryParameters": {
+                        "earliest": "$global_time.earliest$",
+                        "latest": "$global_time.latest$"
+                    }
+                }
+            }
+        }
+    },
+    "dataSources": {
+        "ds_net": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_thousendeyes sourcetype=\"thousendeyes:json\" \"thousandeyes.agent.location\"=\"$site$\" ((\"thousandeyes.test.type\"=\"agent-to-server\" \"thousandeyes.test.name\"=\"Teams Media Quality\") OR \"thousandeyes.test.type\"=\"http-server\")\n| eval type='thousandeyes.test.type', test='thousandeyes.test.name', agent='thousandeyes.agent.location', target='server.address'\n| bin _time span=5m\n| stats avg(metric_name:network.latency) as latency_s avg(metric_name:network.loss) as loss avg(metric_name:network.jitter) as jitter avg(metric_name:http.server.request.availability) as avail avg(metric_name:http.client.request.duration) as http_s avg(metric_name:http.server.throughput) as bps by _time type test agent target",
+                "enableSmartSources": true
+            },
+            "name": "ThousandEyes Teams paths (5 min)"
+        },
+        "ds_teams": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_msteams location=\"$site$\" event_type!=call_queue_stats\n| eval call=if(in(event_type, \"call_ended\", \"call_failed\"), 1, 0), call_ok=if(event_type=\"call_ended\", 1, 0), issue=if(in(event_type, \"call_failed\", \"meeting_join_failed\"), 1, 0), quality=coalesce(call_quality, \"n/a\")\n| bin _time span=5m\n| stats count sum(call) as calls sum(call_ok) as calls_ok sum(issue) as issues avg(packet_loss_pct) as media_loss avg(duration_minutes) as duration avg(participant_count) as participants values(user_email) as users by _time location event_type quality",
+                "enableSmartSources": true
+            },
+            "name": "Teams activity (5 min)"
+        },
+        "ds_k_latency": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_net",
+                "query": "| where type=\"agent-to-server\" | eval ms=latency_s * 1000 | timechart span=5m avg(ms) as Latency"
+            }
+        },
+        "ds_k_loss": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_net",
+                "query": "| where type=\"agent-to-server\" | timechart span=5m avg(loss) as \"Packet loss\""
+            }
+        },
+        "ds_k_users": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_teams",
+                "query": "| stats dc(users) as Users"
+            }
+        },
+        "ds_k_success": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_teams",
+                "query": "| timechart span=5m sum(calls_ok) as ok sum(calls) as calls | eval \"Call success\"=if(calls > 0, round(100 * ok / calls, 1), null()) | fields _time \"Call success\""
+            }
+        },
+        "ds_k_issues": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_teams",
+                "query": "| timechart span=5m sum(issues) as Issues"
+            }
+        },
+        "ds_rings": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_teams",
+                "query": "| stats sum(calls_ok) as ok sum(calls) as calls avg(media_loss) as loss by location\n| eval name=location, value=if(calls > 0, round(100 * ok / calls, 1), null()), unit=\"%\", min=0, max=100, warn=95, crit=85, better=\"higher\", key=location, detail=calls.\" calls · media loss \".round(loss, 1).\" %\"\n| table name value unit min max warn crit better detail key"
+            }
+        },
+        "ds_heat_loss": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_net",
+                "query": "| where type=\"agent-to-server\" | timechart span=5m avg(loss) by agent"
+            }
+        },
+        "ds_latency": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_net",
+                "query": "| where type=\"agent-to-server\" | eval ms=latency_s * 1000 | timechart span=5m avg(ms) by agent"
+            }
+        },
+        "ds_jitter": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_net",
+                "query": "| where type=\"agent-to-server\" | timechart span=5m avg(jitter) by agent"
+            }
+        },
+        "ds_http": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_net",
+                "query": "| where type=\"http-server\" AND (like(test, \"%Teams%\") OR like(test, \"M365%\")) | timechart span=5m avg(avail) by test"
+            }
+        },
+        "ds_path_table": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_net",
+                "query": "| where type=\"agent-to-server\"\n| eval ms=latency_s * 1000\n| stats avg(ms) as \"Avg latency ms\" max(ms) as \"Max latency ms\" avg(loss) as \"Avg loss %\" avg(jitter) as \"Avg jitter ms\" by agent target\n| eval \"Avg latency ms\"=round('Avg latency ms', 1), \"Max latency ms\"=round('Max latency ms', 1), \"Avg loss %\"=round('Avg loss %', 2), \"Avg jitter ms\"=round('Avg jitter ms', 1)\n| rename agent as Agent target as Target"
+            }
+        },
+        "ds_activity": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_teams",
+                "query": "| timechart span=5m limit=8 sum(count) by event_type"
+            }
+        },
+        "ds_quality": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_teams",
+                "query": "| where event_type=\"call_ended\" | stats sum(count) as Calls by quality"
+            }
+        },
+        "ds_meetings": {
+            "type": "ds.chain",
+            "options": {
+                "extend": "ds_teams",
+                "query": "| where in(event_type, \"call_ended\", \"meeting_ended\")\n| stats sum(count) as Total avg(duration) as \"Avg duration min\" avg(participants) as \"Avg participants\" sum(eval(if(in(quality, \"excellent\", \"good\"), count, 0))) as good sum(eval(if(in(quality, \"fair\", \"poor\"), count, 0))) as poor avg(media_loss) as \"Media loss %\" by location\n| eval \"Quality %\"=round(100 * good / (good + poor), 1), \"Avg duration min\"=round('Avg duration min', 1), \"Avg participants\"=round('Avg participants', 1), \"Media loss %\"=round('Media loss %', 2)\n| table location Total \"Avg duration min\" \"Avg participants\" \"Quality %\" \"Media loss %\"\n| rename location as Site"
+            }
+        },
+        "ds_issues": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_msteams location=\"$site$\" (severity=high OR event_type IN (call_failed, meeting_join_failed))\n| head 50\n| eval Time=strftime(_time, \"%H:%M:%S\"), error=coalesce(error_message, error)\n| table Time location event_type user_name error error_code severity\n| rename location as Site event_type as Event user_name as User error as Error error_code as Code severity as Severity",
+                "enableSmartSources": true
+            },
+            "name": "Teams issues"
+        }
+    },
+    "visualizations": {
+        "viz_nav_home": {
+            "type": "splunk.image",
+            "options": {
+                "src": "/static/app/coolashaker_studio/images/nav_home.svg",
+                "preserveAspectRatio": true
+            },
+            "eventHandlers": [
+                {
+                    "type": "drilldown.linkToDashboard",
+                    "options": {
+                        "app": "coolashaker_studio",
+                        "dashboard": "cs_home",
+                        "tokens": [],
+                        "newTab": false
+                    }
+                }
+            ]
+        },
+        "viz_nav_exec": {
+            "type": "splunk.image",
+            "options": {
+                "src": "/static/app/coolashaker_studio/images/nav_exec.svg",
+                "preserveAspectRatio": true
+            },
+            "eventHandlers": [
+                {
+                    "type": "drilldown.linkToDashboard",
+                    "options": {
+                        "app": "coolashaker_studio",
+                        "dashboard": "cs_executive",
+                        "tokens": [],
+                        "newTab": false
+                    }
+                }
+            ]
+        },
+        "viz_nav_factory": {
+            "type": "splunk.image",
+            "options": {
+                "src": "/static/app/coolashaker_studio/images/nav_factory.svg",
+                "preserveAspectRatio": true
+            },
+            "eventHandlers": [
+                {
+                    "type": "drilldown.linkToDashboard",
+                    "options": {
+                        "app": "coolashaker_studio",
+                        "dashboard": "cs_manufacturing",
+                        "tokens": [],
+                        "newTab": false
+                    }
+                }
+            ]
+        },
+        "viz_nav_dc": {
+            "type": "splunk.image",
+            "options": {
+                "src": "/static/app/coolashaker_studio/images/nav_dc.svg",
+                "preserveAspectRatio": true
+            },
+            "eventHandlers": [
+                {
+                    "type": "drilldown.linkToDashboard",
+                    "options": {
+                        "app": "coolashaker_studio",
+                        "dashboard": "cs_datacenter",
+                        "tokens": [],
+                        "newTab": false
+                    }
+                }
+            ]
+        },
+        "viz_nav_network": {
+            "type": "splunk.image",
+            "options": {
+                "src": "/static/app/coolashaker_studio/images/nav_network.svg",
+                "preserveAspectRatio": true
+            },
+            "eventHandlers": [
+                {
+                    "type": "drilldown.linkToDashboard",
+                    "options": {
+                        "app": "coolashaker_studio",
+                        "dashboard": "cs_network_intelligence",
+                        "tokens": [],
+                        "newTab": false
+                    }
+                }
+            ]
+        },
+        "viz_nav_collab": {
+            "type": "splunk.image",
+            "options": {
+                "src": "/static/app/coolashaker_studio/images/nav_collab_on.svg",
+                "preserveAspectRatio": true
+            }
+        },
+        "viz_nav_web": {
+            "type": "splunk.image",
+            "options": {
+                "src": "/static/app/coolashaker_studio/images/nav_web.svg",
+                "preserveAspectRatio": true
+            },
+            "eventHandlers": [
+                {
+                    "type": "drilldown.linkToDashboard",
+                    "options": {
+                        "app": "coolashaker_studio",
+                        "dashboard": "cs_web",
+                        "tokens": [],
+                        "newTab": false
+                    }
+                }
+            ]
+        },
+        "viz_01": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_k_success"
+            },
+            "options": {
+                "majorColor": "> majorValue | rangeValue(majorColorConfig)",
+                "backgroundColor": "transparent",
+                "sparklineDisplay": "below",
+                "trendDisplay": "off",
+                "numberPrecision": 1,
+                "sparklineStrokeColor": "#22d3ee",
+                "unit": "%",
+                "unitPosition": "after"
+            },
+            "context": {
+                "majorColorConfig": [
+                    {
+                        "to": 85,
+                        "value": "#ff4d6d"
+                    },
+                    {
+                        "from": 85,
+                        "to": 95,
+                        "value": "#ffc53d"
+                    },
+                    {
+                        "from": 95,
+                        "value": "#34e2a0"
+                    }
+                ]
+            }
+        },
+        "viz_02": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_k_issues"
+            },
+            "options": {
+                "majorColor": "> majorValue | rangeValue(majorColorConfig)",
+                "backgroundColor": "transparent",
+                "sparklineDisplay": "below",
+                "trendDisplay": "off",
+                "numberPrecision": 0,
+                "sparklineStrokeColor": "#22d3ee"
+            },
+            "context": {
+                "majorColorConfig": [
+                    {
+                        "to": 1,
+                        "value": "#34e2a0"
+                    },
+                    {
+                        "from": 1,
+                        "to": 6,
+                        "value": "#ffc53d"
+                    },
+                    {
+                        "from": 6,
+                        "value": "#ff4d6d"
+                    }
+                ]
+            }
+        },
+        "viz_03": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_k_latency"
+            },
+            "options": {
+                "majorColor": "> majorValue | rangeValue(majorColorConfig)",
+                "backgroundColor": "transparent",
+                "sparklineDisplay": "below",
+                "trendDisplay": "off",
+                "numberPrecision": 0,
+                "sparklineStrokeColor": "#22d3ee",
+                "unit": "ms",
+                "unitPosition": "after"
+            },
+            "context": {
+                "majorColorConfig": [
+                    {
+                        "to": 150,
+                        "value": "#34e2a0"
+                    },
+                    {
+                        "from": 150,
+                        "to": 300,
+                        "value": "#ffc53d"
+                    },
+                    {
+                        "from": 300,
+                        "value": "#ff4d6d"
+                    }
+                ]
+            }
+        },
+        "viz_04": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_k_loss"
+            },
+            "options": {
+                "majorColor": "> majorValue | rangeValue(majorColorConfig)",
+                "backgroundColor": "transparent",
+                "sparklineDisplay": "below",
+                "trendDisplay": "off",
+                "numberPrecision": 2,
+                "sparklineStrokeColor": "#22d3ee",
+                "unit": "%",
+                "unitPosition": "after"
+            },
+            "context": {
+                "majorColorConfig": [
+                    {
+                        "to": 1,
+                        "value": "#34e2a0"
+                    },
+                    {
+                        "from": 1,
+                        "to": 3,
+                        "value": "#ffc53d"
+                    },
+                    {
+                        "from": 3,
+                        "value": "#ff4d6d"
+                    }
+                ]
+            }
+        },
+        "viz_05": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_k_users"
+            },
+            "options": {
+                "majorColor": "#f472b6",
+                "backgroundColor": "transparent",
+                "sparklineDisplay": "off",
+                "trendDisplay": "off",
+                "numberPrecision": 0,
+                "sparklineStrokeColor": "#22d3ee"
+            }
+        },
+        "viz_06": {
+            "type": "coolashaker_studio.health_rings",
+            "dataSources": {
+                "primary": "ds_rings"
+            },
+            "options": {
+                "decimals": 1,
+                "drilldownToken": "site"
+            },
+            "eventHandlers": [
+                {
+                    "type": "drilldown.setToken",
+                    "options": {
+                        "tokens": [
+                            {
+                                "token": "site",
+                                "key": "value"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "viz_07": {
+            "type": "coolashaker_studio.heat_timeline",
+            "dataSources": {
+                "primary": "ds_heat_loss"
+            },
+            "options": {
+                "scaleMode": "thresholds",
+                "higherIsBetter": false,
+                "warn": 1,
+                "crit": 3,
+                "unit": "%",
+                "decimals": 2
+            }
+        },
+        "viz_08": {
+            "type": "splunk.line",
+            "dataSources": {
+                "primary": "ds_latency"
+            },
+            "options": {
+                "backgroundColor": "transparent",
+                "legendDisplay": "bottom",
+                "xAxisTitleVisibility": "hide",
+                "yAxisTitleVisibility": "hide",
+                "seriesColors": [
+                    "#22d3ee",
+                    "#a78bfa",
+                    "#34e2a0",
+                    "#ffc53d",
+                    "#ff4d6d",
+                    "#60a5fa",
+                    "#f472b6",
+                    "#2dd4bf",
+                    "#fb923c",
+                    "#e879f9"
+                ],
+                "seriesColorsByField": {
+                    "atlanta": "#22d3ee",
+                    "berlin": "#a78bfa",
+                    "vienna": "#ffb020",
+                    "frankfurt": "#34e2a0",
+                    "Atlanta": "#22d3ee",
+                    "Berlin": "#a78bfa",
+                    "Vienna": "#ffb020",
+                    "Frankfurt": "#34e2a0"
+                },
+                "lineWidth": 2
+            }
+        },
+        "viz_09": {
+            "type": "splunk.line",
+            "dataSources": {
+                "primary": "ds_jitter"
+            },
+            "options": {
+                "backgroundColor": "transparent",
+                "legendDisplay": "bottom",
+                "xAxisTitleVisibility": "hide",
+                "yAxisTitleVisibility": "hide",
+                "seriesColors": [
+                    "#22d3ee",
+                    "#a78bfa",
+                    "#34e2a0",
+                    "#ffc53d",
+                    "#ff4d6d",
+                    "#60a5fa",
+                    "#f472b6",
+                    "#2dd4bf",
+                    "#fb923c",
+                    "#e879f9"
+                ],
+                "seriesColorsByField": {
+                    "atlanta": "#22d3ee",
+                    "berlin": "#a78bfa",
+                    "vienna": "#ffb020",
+                    "frankfurt": "#34e2a0",
+                    "Atlanta": "#22d3ee",
+                    "Berlin": "#a78bfa",
+                    "Vienna": "#ffb020",
+                    "Frankfurt": "#34e2a0"
+                },
+                "lineWidth": 2
+            }
+        },
+        "viz_10": {
+            "type": "splunk.line",
+            "dataSources": {
+                "primary": "ds_http"
+            },
+            "options": {
+                "backgroundColor": "transparent",
+                "legendDisplay": "bottom",
+                "xAxisTitleVisibility": "hide",
+                "yAxisTitleVisibility": "hide",
+                "seriesColors": [
+                    "#22d3ee",
+                    "#a78bfa",
+                    "#34e2a0",
+                    "#ffc53d",
+                    "#ff4d6d",
+                    "#60a5fa",
+                    "#f472b6",
+                    "#2dd4bf",
+                    "#fb923c",
+                    "#e879f9"
+                ],
+                "lineWidth": 2
+            }
+        },
+        "viz_11": {
+            "type": "splunk.table",
+            "dataSources": {
+                "primary": "ds_path_table"
+            },
+            "options": {
+                "backgroundColor": "transparent",
+                "count": 4,
+                "headerVisibility": "fixed",
+                "fontSize": "small",
+                "tableFormat": {
+                    "rowBackgroundColors": "> table | seriesByIndex(0) | pick(rowBg)",
+                    "headerBackgroundColor": "#0b1630",
+                    "rowColors": "#eaf2ff",
+                    "headerColor": "#9fb1c9"
+                },
+                "columnFormat": {
+                    "Avg loss %": {
+                        "rowBackgroundColors": "> table | seriesByName(\"Avg loss %\") | rangeValue(range_2)"
+                    },
+                    "Avg latency ms": {
+                        "rowBackgroundColors": "> table | seriesByName(\"Avg latency ms\") | rangeValue(range_3)"
+                    },
+                    "Avg jitter ms": {
+                        "rowBackgroundColors": "> table | seriesByName(\"Avg jitter ms\") | rangeValue(range_4)"
+                    }
+                }
+            },
+            "context": {
+                "rowBg": [
+                    "#0a1328",
+                    "#0d1833"
+                ],
+                "statusBg": [
+                    {
+                        "match": "Critical",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "Degraded",
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "match": "Healthy",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "critical",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "high",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "error",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "warning",
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "match": "medium",
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "match": "stopped",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "failed",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "running",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "success",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "good",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "normal",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "Reachable",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "Unreachable",
+                        "value": "#5a1426"
+                    }
+                ],
+                "range_2": [
+                    {
+                        "to": 1,
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "from": 1,
+                        "to": 3,
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "from": 3,
+                        "value": "#5a1426"
+                    }
+                ],
+                "range_3": [
+                    {
+                        "to": 150,
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "from": 150,
+                        "to": 300,
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "from": 300,
+                        "value": "#5a1426"
+                    }
+                ],
+                "range_4": [
+                    {
+                        "to": 30,
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "from": 30,
+                        "to": 50,
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "from": 50,
+                        "value": "#5a1426"
+                    }
+                ]
+            }
+        },
+        "viz_12": {
+            "type": "splunk.area",
+            "dataSources": {
+                "primary": "ds_activity"
+            },
+            "options": {
+                "backgroundColor": "transparent",
+                "legendDisplay": "bottom",
+                "xAxisTitleVisibility": "hide",
+                "yAxisTitleVisibility": "hide",
+                "seriesColors": [
+                    "#22d3ee",
+                    "#a78bfa",
+                    "#34e2a0",
+                    "#ffc53d",
+                    "#ff4d6d",
+                    "#60a5fa",
+                    "#f472b6",
+                    "#2dd4bf",
+                    "#fb923c",
+                    "#e879f9"
+                ],
+                "stackMode": "stacked",
+                "areaOpacity": 0.35
+            }
+        },
+        "viz_13": {
+            "type": "splunk.pie",
+            "dataSources": {
+                "primary": "ds_quality"
+            },
+            "options": {
+                "backgroundColor": "transparent",
+                "labelDisplay": "valuesAndPercentage",
+                "seriesColors": [
+                    "#34e2a0",
+                    "#ffb020",
+                    "#22d3ee",
+                    "#ff4d6d"
+                ],
+                "showDonutHole": true
+            }
+        },
+        "viz_14": {
+            "type": "splunk.table",
+            "dataSources": {
+                "primary": "ds_meetings"
+            },
+            "options": {
+                "backgroundColor": "transparent",
+                "count": 4,
+                "headerVisibility": "fixed",
+                "fontSize": "small",
+                "tableFormat": {
+                    "rowBackgroundColors": "> table | seriesByIndex(0) | pick(rowBg)",
+                    "headerBackgroundColor": "#0b1630",
+                    "rowColors": "#eaf2ff",
+                    "headerColor": "#9fb1c9"
+                },
+                "columnFormat": {
+                    "Quality %": {
+                        "rowBackgroundColors": "> table | seriesByName(\"Quality %\") | rangeValue(range_2)"
+                    },
+                    "Media loss %": {
+                        "rowBackgroundColors": "> table | seriesByName(\"Media loss %\") | rangeValue(range_3)"
+                    }
+                }
+            },
+            "context": {
+                "rowBg": [
+                    "#0a1328",
+                    "#0d1833"
+                ],
+                "statusBg": [
+                    {
+                        "match": "Critical",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "Degraded",
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "match": "Healthy",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "critical",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "high",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "error",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "warning",
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "match": "medium",
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "match": "stopped",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "failed",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "running",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "success",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "good",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "normal",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "Reachable",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "Unreachable",
+                        "value": "#5a1426"
+                    }
+                ],
+                "range_2": [
+                    {
+                        "to": 60,
+                        "value": "#5a1426"
+                    },
+                    {
+                        "from": 60,
+                        "to": 80,
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "from": 80,
+                        "value": "#0d3b2c"
+                    }
+                ],
+                "range_3": [
+                    {
+                        "to": 1,
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "from": 1,
+                        "to": 3,
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "from": 3,
+                        "value": "#5a1426"
+                    }
+                ]
+            }
+        },
+        "viz_15": {
+            "type": "splunk.table",
+            "dataSources": {
+                "primary": "ds_issues"
+            },
+            "options": {
+                "backgroundColor": "transparent",
+                "count": 9,
+                "headerVisibility": "fixed",
+                "fontSize": "small",
+                "tableFormat": {
+                    "rowBackgroundColors": "> table | seriesByIndex(0) | pick(rowBg)",
+                    "headerBackgroundColor": "#0b1630",
+                    "rowColors": "#eaf2ff",
+                    "headerColor": "#9fb1c9"
+                },
+                "columnFormat": {
+                    "Severity": {
+                        "rowBackgroundColors": "> table | seriesByName(\"Severity\") | matchValue(statusBg)"
+                    }
+                }
+            },
+            "context": {
+                "rowBg": [
+                    "#0a1328",
+                    "#0d1833"
+                ],
+                "statusBg": [
+                    {
+                        "match": "Critical",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "Degraded",
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "match": "Healthy",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "critical",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "high",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "error",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "warning",
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "match": "medium",
+                        "value": "#4d3a08"
+                    },
+                    {
+                        "match": "stopped",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "failed",
+                        "value": "#5a1426"
+                    },
+                    {
+                        "match": "running",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "success",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "good",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "normal",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "Reachable",
+                        "value": "#0d3b2c"
+                    },
+                    {
+                        "match": "Unreachable",
+                        "value": "#5a1426"
+                    }
+                ]
+            }
+        }
+    },
+    "layout": {
+        "type": "absolute",
+        "options": {
+            "width": 1920,
+            "height": 2222,
+            "display": "auto-scale",
+            "backgroundColor": "#050a16",
+            "backgroundImage": {
+                "src": "/static/app/coolashaker_studio/images/bg_cs_collaboration.svg",
+                "sizeType": "cover",
+                "x": 0,
+                "y": 0
+            }
+        },
+        "structure": [
+            {
+                "item": "viz_nav_home",
+                "type": "block",
+                "position": {
+                    "x": 40,
+                    "y": 142,
+                    "w": 236,
+                    "h": 46
+                }
+            },
+            {
+                "item": "viz_nav_exec",
+                "type": "block",
+                "position": {
+                    "x": 290,
+                    "y": 142,
+                    "w": 236,
+                    "h": 46
+                }
+            },
+            {
+                "item": "viz_nav_factory",
+                "type": "block",
+                "position": {
+                    "x": 540,
+                    "y": 142,
+                    "w": 236,
+                    "h": 46
+                }
+            },
+            {
+                "item": "viz_nav_dc",
+                "type": "block",
+                "position": {
+                    "x": 790,
+                    "y": 142,
+                    "w": 236,
+                    "h": 46
+                }
+            },
+            {
+                "item": "viz_nav_network",
+                "type": "block",
+                "position": {
+                    "x": 1040,
+                    "y": 142,
+                    "w": 236,
+                    "h": 46
+                }
+            },
+            {
+                "item": "viz_nav_collab",
+                "type": "block",
+                "position": {
+                    "x": 1290,
+                    "y": 142,
+                    "w": 236,
+                    "h": 46
+                }
+            },
+            {
+                "item": "viz_nav_web",
+                "type": "block",
+                "position": {
+                    "x": 1540,
+                    "y": 142,
+                    "w": 236,
+                    "h": 46
+                }
+            },
+            {
+                "item": "viz_01",
+                "type": "block",
+                "position": {
+                    "x": 52,
+                    "y": 286,
+                    "w": 344,
+                    "h": 94
+                }
+            },
+            {
+                "item": "viz_02",
+                "type": "block",
+                "position": {
+                    "x": 440,
+                    "y": 286,
+                    "w": 266,
+                    "h": 94
+                }
+            },
+            {
+                "item": "viz_03",
+                "type": "block",
+                "position": {
+                    "x": 750,
+                    "y": 286,
+                    "w": 344,
+                    "h": 94
+                }
+            },
+            {
+                "item": "viz_04",
+                "type": "block",
+                "position": {
+                    "x": 1138,
+                    "y": 286,
+                    "w": 344,
+                    "h": 94
+                }
+            },
+            {
+                "item": "viz_05",
+                "type": "block",
+                "position": {
+                    "x": 1526,
+                    "y": 286,
+                    "w": 344,
+                    "h": 94
+                }
+            },
+            {
+                "item": "viz_06",
+                "type": "block",
+                "position": {
+                    "x": 52,
+                    "y": 486,
+                    "w": 576,
+                    "h": 284
+                }
+            },
+            {
+                "item": "viz_07",
+                "type": "block",
+                "position": {
+                    "x": 672,
+                    "y": 486,
+                    "w": 1196,
+                    "h": 284
+                }
+            },
+            {
+                "item": "viz_08",
+                "type": "block",
+                "position": {
+                    "x": 52,
+                    "y": 876,
+                    "w": 576,
+                    "h": 244
+                }
+            },
+            {
+                "item": "viz_09",
+                "type": "block",
+                "position": {
+                    "x": 672,
+                    "y": 876,
+                    "w": 576,
+                    "h": 244
+                }
+            },
+            {
+                "item": "viz_10",
+                "type": "block",
+                "position": {
+                    "x": 1292,
+                    "y": 876,
+                    "w": 576,
+                    "h": 244
+                }
+            },
+            {
+                "item": "viz_11",
+                "type": "block",
+                "position": {
+                    "x": 52,
+                    "y": 1196,
+                    "w": 1816,
+                    "h": 204
+                }
+            },
+            {
+                "item": "viz_12",
+                "type": "block",
+                "position": {
+                    "x": 52,
+                    "y": 1506,
+                    "w": 1196,
+                    "h": 264
+                }
+            },
+            {
+                "item": "viz_13",
+                "type": "block",
+                "position": {
+                    "x": 1292,
+                    "y": 1506,
+                    "w": 576,
+                    "h": 264
+                }
+            },
+            {
+                "item": "viz_14",
+                "type": "block",
+                "position": {
+                    "x": 52,
+                    "y": 1846,
+                    "w": 731,
+                    "h": 324
+                }
+            },
+            {
+                "item": "viz_15",
+                "type": "block",
+                "position": {
+                    "x": 827,
+                    "y": 1846,
+                    "w": 1041,
+                    "h": 324
+                }
+            }
+        ],
+        "globalInputs": [
+            "input_time",
+            "input_site"
+        ]
+    }
+}]]></definition>
+    <meta type="hiddenElements"><![CDATA[{"hideEdit": false, "hideOpenInSearch": false, "hideExport": false}]]></meta>
+</dashboard>

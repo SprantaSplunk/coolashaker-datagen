@@ -1,0 +1,164 @@
+{
+  "showTitleAndDescription": true,
+  "includeInToolbar": true,
+  "includeInVizSwitcher": true,
+  "showDrilldown": true,
+  "canSetTokens": [
+    "dynamic"
+  ],
+  "hasEventHandlers": true,
+  "config": {
+    "name": "Network Pulse Map",
+    "description": "Track site health and the paths between sites on a map, with traffic animated by loss and latency",
+    "category": "CoolaShaker",
+    "icon": null,
+    "dataContract": {
+      "requiredDataSources": [
+        "primary"
+      ],
+      "optionalDataSources": []
+    },
+    "size": {
+      "initialWidth": 900,
+      "initialHeight": 460
+    },
+    "optionsSchema": {
+      "view": {
+        "type": "string",
+        "enum": [
+          "auto",
+          "atlantic",
+          "europe",
+          "world"
+        ],
+        "default": "auto"
+      },
+      "scoreWarn": {
+        "type": "number",
+        "default": 80
+      },
+      "scoreCrit": {
+        "type": "number",
+        "default": 50
+      },
+      "lossWarn": {
+        "type": "number",
+        "default": 1
+      },
+      "lossCrit": {
+        "type": "number",
+        "default": 5
+      },
+      "latencyWarn": {
+        "type": "number",
+        "default": 150
+      },
+      "showLabels": {
+        "type": "boolean",
+        "default": true
+      },
+      "animate": {
+        "type": "boolean",
+        "default": true
+      },
+      "drilldownToken": {
+        "type": "string",
+        "default": "site"
+      }
+    },
+    "editorConfig": [
+      {
+        "label": "Map",
+        "layout": [
+          [
+            {
+              "editor": "editor.select",
+              "label": "Map section",
+              "option": "view",
+              "editorProps": {
+                "values": [
+                  {
+                    "label": "Fit to sites",
+                    "value": "auto"
+                  },
+                  {
+                    "label": "North Atlantic",
+                    "value": "atlantic"
+                  },
+                  {
+                    "label": "Europe",
+                    "value": "europe"
+                  },
+                  {
+                    "label": "World",
+                    "value": "world"
+                  }
+                ]
+              }
+            }
+          ],
+          [
+            {
+              "editor": "editor.checkbox",
+              "label": "Show site labels",
+              "option": "showLabels"
+            },
+            {
+              "editor": "editor.checkbox",
+              "label": "Animate traffic",
+              "option": "animate"
+            }
+          ]
+        ]
+      },
+      {
+        "label": "Thresholds",
+        "layout": [
+          [
+            {
+              "editor": "editor.number",
+              "label": "Site score degraded at or below",
+              "option": "scoreWarn"
+            },
+            {
+              "editor": "editor.number",
+              "label": "Site score critical at or below",
+              "option": "scoreCrit"
+            }
+          ],
+          [
+            {
+              "editor": "editor.number",
+              "label": "Path loss degraded from (%)",
+              "option": "lossWarn"
+            },
+            {
+              "editor": "editor.number",
+              "label": "Path loss critical from (%)",
+              "option": "lossCrit"
+            }
+          ],
+          [
+            {
+              "editor": "editor.number",
+              "label": "Path latency degraded from (ms)",
+              "option": "latencyWarn"
+            }
+          ]
+        ]
+      },
+      {
+        "label": "Interaction",
+        "layout": [
+          [
+            {
+              "editor": "editor.text",
+              "label": "Drilldown field name",
+              "option": "drilldownToken"
+            }
+          ]
+        ]
+      }
+    ]
+  }
+}

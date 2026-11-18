@@ -1,0 +1,641 @@
+<dashboard version="2" theme="dark">
+    <label>Cisco Network Intelligence — Catalyst Center &amp; Meraki</label>
+    <description>Unified network dashboard | index: demo_cisco_catalyst + demo_cisco_meraki | Sites: Vienna · Berlin · Atlanta</description>
+    <definition><![CDATA[{
+    "title": "Cisco Network Intelligence — Catalyst Center & Meraki",
+    "description": "Unified network dashboard | index: demo_cisco_catalyst + demo_cisco_meraki | Sites: Vienna · Berlin · Atlanta",
+    "defaults": {
+        "dataSources": {
+            "ds.search": {
+                "options": {
+                    "queryParameters": {
+                        "earliest": "$global_time.earliest$",
+                        "latest": "$global_time.latest$"
+                    }
+                }
+            }
+        }
+    },
+    "inputs": {
+        "input_timerange": {
+            "type": "input.timerange",
+            "options": {
+                "defaultValue": "-4h,now",
+                "token": "global_time"
+            },
+            "title": "Time Range"
+        }
+    },
+    "dataSources": {
+        "ds_kpi_total_devices": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_cisco_catalyst sourcetype=cisco:dnac:devicehealth | stats dc(DeviceID) as total_devices",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_kpi_avg_health": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_cisco_catalyst sourcetype=cisco:dnac:devicehealth | stats avg(HealthScore) as avg_health | eval avg_health=round(avg_health,1)",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_kpi_critical_advisories": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_cisco_catalyst sourcetype=cisco:dnac:securityadvisory | search advisorySeverity=CRITICAL OR advisorySeverity=HIGH | stats dc(advisoryId) as critical_advisories",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_kpi_meraki_alerts": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_cisco_meraki sourcetype=meraki:assurancealerts | search severity=critical | stats count as critical_alerts",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_kpi_offline_devices": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_cisco_meraki sourcetype=meraki:devicesavailabilitieschangehistory | search \"details.new{}.value\"=offline | stats dc(\"device.serial\") as offline_devices",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_kpi_avg_packet_loss": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_cisco_meraki sourcetype=meraki:wirelessdevicespacketlossbydevice | stats avg(\"downstream.lossPercentage\") as avg_loss | eval avg_loss=round(avg_loss,2)",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_catalyst_health_by_site": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_cisco_catalyst sourcetype=cisco:dnac:devicehealth | stats avg(HealthScore) as \"Avg Health Score\" avg(CpuUtilization) as \"Avg CPU %\" avg(MemoryUtilization) as \"Avg Memory %\" count as Devices by site_name | eval \"Avg Health Score\"=round('Avg Health Score',1) | eval \"Avg CPU %\"=round('Avg CPU %',1) | eval \"Avg Memory %\"=round('Avg Memory %',1) | rename site_name as Site",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_catalyst_health_by_family": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_cisco_catalyst sourcetype=cisco:dnac:devicehealth | stats avg(HealthScore) as avg_health count as Devices by DeviceFamily | eval avg_health=round(avg_health,1)",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_catalyst_cpu_by_family": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_cisco_catalyst sourcetype=cisco:dnac:devicehealth | stats avg(CpuUtilization) as avg_cpu avg(MemoryUtilization) as avg_mem by DeviceFamily | eval avg_cpu=round(avg_cpu,1) | eval avg_mem=round(avg_mem,1)",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_security_by_severity": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_cisco_catalyst sourcetype=cisco:dnac:securityadvisory | stats dc(advisoryId) as count by advisorySeverity",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_security_advisories_table": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_cisco_catalyst sourcetype=cisco:dnac:securityadvisory | stats first(description) as Description first(cvssScore) as CVSS first(status) as Status first(Location) as Location dc(DeviceName) as \"Affected Devices\" by advisoryId advisorySeverity | rename advisoryId as \"Advisory ID\" advisorySeverity as Severity | sort -CVSS | head 10",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_meraki_packet_loss_by_network": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_cisco_meraki sourcetype=meraki:wirelessdevicespacketlossbydevice | stats avg(\"downstream.lossPercentage\") as \"Downstream Loss %\" avg(\"upstream.lossPercentage\") as \"Upstream Loss %\" by \"network.name\" | eval \"Downstream Loss %\"=round('Downstream Loss %',2) | eval \"Upstream Loss %\"=round('Upstream Loss %',2) | rename \"network.name\" as Network",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_meraki_alerts_by_severity": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_cisco_meraki sourcetype=meraki:assurancealerts | stats count by severity",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_meraki_alerts_by_type": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_cisco_meraki sourcetype=meraki:assurancealerts\n| eval Site=mvindex(split(mvindex('network.name',0), \"-\"), 0)\n| chart count over alertType by Site\n| addtotals fieldname=_total\n| sort - _total\n| head 10",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_meraki_alerts_table": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_cisco_meraki sourcetype=meraki:assurancealerts | stats first(description) as Description first(alertType) as \"Alert Type\" first(startedAt) as \"Started At\" by \"network.name\" severity alertId | rename \"network.name\" as Network severity as Severity alertId as \"Alert ID\" | sort -Severity | head 10",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_meraki_device_changes": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_cisco_meraki sourcetype=meraki:devicesavailabilitieschangehistory | stats count by \"network.name\" \"details.new{}.value\" | rename \"network.name\" as Network \"details.new{}.value\" as \"New Status\" | sort Network",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        },
+        "ds_meraki_networks": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=demo_cisco_meraki sourcetype=meraki:organizationsnetworks | stats latest(timeZone) as \"Time Zone\" values(\"tags{}{}\") as Tags latest(notes) as Notes by name | rename name as Network",
+                "queryParameters": {
+                    "earliest": "$global_time.earliest$",
+                    "latest": "$global_time.latest$"
+                }
+            }
+        }
+    },
+    "visualizations": {
+        "viz_kpi_total_devices": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_kpi_total_devices"
+            },
+            "options": {
+                "majorField": "total_devices",
+                "backgroundColor": "transparent"
+            },
+            "title": "Total Managed Devices"
+        },
+        "viz_kpi_avg_health": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_kpi_avg_health"
+            },
+            "options": {
+                "majorField": "avg_health",
+                "majorColor": "> majorValue | rangeValue(majorColorEditorConfig)",
+                "majorColorEditorConfig": [
+                    {
+                        "value": 8,
+                        "display": "#22d3a5"
+                    },
+                    {
+                        "value": 6,
+                        "display": "#f59e0b"
+                    },
+                    {
+                        "display": "#ef4444"
+                    }
+                ],
+                "backgroundColor": "transparent"
+            },
+            "title": "Avg Device Health Score"
+        },
+        "viz_kpi_critical_advisories": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_kpi_critical_advisories"
+            },
+            "options": {
+                "majorField": "critical_advisories",
+                "majorColor": "> majorValue | rangeValue(majorColorEditorConfig)",
+                "majorColorEditorConfig": [
+                    {
+                        "value": 0,
+                        "display": "#22d3a5"
+                    },
+                    {
+                        "value": 1,
+                        "display": "#f59e0b"
+                    },
+                    {
+                        "display": "#ef4444"
+                    }
+                ],
+                "backgroundColor": "transparent"
+            },
+            "title": "Critical/High Advisories"
+        },
+        "viz_kpi_meraki_alerts": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_kpi_meraki_alerts"
+            },
+            "options": {
+                "majorField": "critical_alerts",
+                "majorColor": "> majorValue | rangeValue(majorColorEditorConfig)",
+                "majorColorEditorConfig": [
+                    {
+                        "value": 0,
+                        "display": "#22d3a5"
+                    },
+                    {
+                        "value": 1,
+                        "display": "#f59e0b"
+                    },
+                    {
+                        "display": "#ef4444"
+                    }
+                ],
+                "backgroundColor": "transparent"
+            },
+            "title": "Meraki Critical Alerts"
+        },
+        "viz_kpi_offline_devices": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_kpi_offline_devices"
+            },
+            "options": {
+                "majorField": "offline_devices",
+                "majorColor": "> majorValue | rangeValue(majorColorEditorConfig)",
+                "majorColorEditorConfig": [
+                    {
+                        "value": 0,
+                        "display": "#22d3a5"
+                    },
+                    {
+                        "value": 1,
+                        "display": "#f59e0b"
+                    },
+                    {
+                        "display": "#ef4444"
+                    }
+                ],
+                "backgroundColor": "transparent"
+            },
+            "title": "Devices Gone Offline"
+        },
+        "viz_kpi_avg_packet_loss": {
+            "type": "splunk.singlevalue",
+            "dataSources": {
+                "primary": "ds_kpi_avg_packet_loss"
+            },
+            "options": {
+                "majorField": "avg_loss",
+                "unit": "%",
+                "majorColor": "> majorValue | rangeValue(majorColorEditorConfig)",
+                "majorColorEditorConfig": [
+                    {
+                        "value": 0,
+                        "display": "#22d3a5"
+                    },
+                    {
+                        "value": 2,
+                        "display": "#f59e0b"
+                    },
+                    {
+                        "display": "#ef4444"
+                    }
+                ],
+                "backgroundColor": "transparent"
+            },
+            "title": "Avg Wireless Packet Loss"
+        },
+        "viz_catalyst_health_by_site": {
+            "type": "splunk.table",
+            "dataSources": {
+                "primary": "ds_catalyst_health_by_site"
+            },
+            "options": {},
+            "title": "Catalyst — Device Health by Site"
+        },
+        "viz_catalyst_health_by_family": {
+            "type": "splunk.bar",
+            "dataSources": {
+                "primary": "ds_catalyst_health_by_family"
+            },
+            "options": {
+                "xAxisTitleText": "Device Family",
+                "yAxisTitleText": "Avg Health Score",
+                "seriesColors": [
+                    "#00b4d8"
+                ],
+                "legendDisplay": "off"
+            },
+            "title": "Catalyst — Avg Health Score by Device Family"
+        },
+        "viz_catalyst_cpu_mem": {
+            "type": "splunk.bar",
+            "dataSources": {
+                "primary": "ds_catalyst_cpu_by_family"
+            },
+            "options": {
+                "xAxisTitleText": "Device Family",
+                "yAxisTitleText": "Utilization %",
+                "seriesColors": [
+                    "#f59e0b",
+                    "#00f5d4"
+                ],
+                "legendDisplay": "bottom"
+            },
+            "title": "Catalyst — CPU & Memory Utilization by Device Family"
+        },
+        "viz_security_by_severity": {
+            "type": "splunk.pie",
+            "dataSources": {
+                "primary": "ds_security_by_severity"
+            },
+            "options": {
+                "labelField": "advisorySeverity",
+                "valueField": "count",
+                "seriesColors": [
+                    "#ef4444",
+                    "#f59e0b",
+                    "#00b4d8",
+                    "#22d3a5"
+                ],
+                "legendDisplay": "bottom"
+            },
+            "title": "Catalyst — Security Advisories by Severity"
+        },
+        "viz_security_advisories_table": {
+            "type": "splunk.table",
+            "dataSources": {
+                "primary": "ds_security_advisories_table"
+            },
+            "options": {},
+            "title": "Catalyst — Top Security Advisories (by CVSS)"
+        },
+        "viz_meraki_packet_loss": {
+            "type": "splunk.bar",
+            "dataSources": {
+                "primary": "ds_meraki_packet_loss_by_network"
+            },
+            "options": {
+                "xAxisTitleText": "Network",
+                "yAxisTitleText": "Loss %",
+                "seriesColors": [
+                    "#ff6b35",
+                    "#00b4d8"
+                ],
+                "legendDisplay": "bottom"
+            },
+            "title": "Meraki — Wireless Packet Loss by Network"
+        },
+        "viz_meraki_alerts_severity": {
+            "type": "splunk.pie",
+            "dataSources": {
+                "primary": "ds_meraki_alerts_by_severity"
+            },
+            "options": {
+                "labelField": "severity",
+                "valueField": "count",
+                "seriesColors": [
+                    "#ef4444",
+                    "#f59e0b",
+                    "#00b4d8"
+                ],
+                "legendDisplay": "bottom"
+            },
+            "title": "Meraki — Alerts by Severity"
+        },
+        "viz_meraki_alerts_type": {
+            "type": "splunk.bar",
+            "dataSources": {
+                "primary": "ds_meraki_alerts_by_type"
+            },
+            "options": {
+                "xAxisTitleText": "Alert Type",
+                "yAxisTitleText": "Count",
+                "seriesColors": [
+                    "#a78bfa"
+                ],
+                "legendDisplay": "off"
+            },
+            "title": "Meraki — Alerts by Type and Site"
+        },
+        "viz_meraki_alerts_table": {
+            "type": "splunk.table",
+            "dataSources": {
+                "primary": "ds_meraki_alerts_table"
+            },
+            "options": {},
+            "title": "Meraki — Active Alerts (Top 10)"
+        },
+        "viz_meraki_device_changes": {
+            "type": "splunk.table",
+            "dataSources": {
+                "primary": "ds_meraki_device_changes"
+            },
+            "options": {},
+            "title": "Meraki — Device Status Changes by Network"
+        }
+    },
+    "layout": {
+        "tabs": {
+            "items": [
+                {
+                    "layoutId": "layout_1",
+                    "label": "Neue Registerkarte"
+                }
+            ]
+        },
+        "layoutDefinitions": {
+            "layout_1": {
+                "type": "grid",
+                "options": {
+                    "backgroundColor": "#080c14"
+                },
+                "structure": [
+                    {
+                        "item": "viz_kpi_total_devices",
+                        "position": {
+                            "x": 0,
+                            "y": 0,
+                            "w": 200,
+                            "h": 100
+                        }
+                    },
+                    {
+                        "item": "viz_kpi_avg_health",
+                        "position": {
+                            "x": 200,
+                            "y": 0,
+                            "w": 200,
+                            "h": 100
+                        }
+                    },
+                    {
+                        "item": "viz_kpi_critical_advisories",
+                        "position": {
+                            "x": 400,
+                            "y": 0,
+                            "w": 200,
+                            "h": 100
+                        }
+                    },
+                    {
+                        "item": "viz_kpi_meraki_alerts",
+                        "position": {
+                            "x": 600,
+                            "y": 0,
+                            "w": 200,
+                            "h": 100
+                        }
+                    },
+                    {
+                        "item": "viz_kpi_offline_devices",
+                        "position": {
+                            "x": 800,
+                            "y": 0,
+                            "w": 200,
+                            "h": 100
+                        }
+                    },
+                    {
+                        "item": "viz_kpi_avg_packet_loss",
+                        "position": {
+                            "x": 1000,
+                            "y": 0,
+                            "w": 200,
+                            "h": 100
+                        }
+                    },
+                    {
+                        "item": "viz_catalyst_health_by_site",
+                        "position": {
+                            "x": 0,
+                            "y": 100,
+                            "w": 450,
+                            "h": 220
+                        }
+                    },
+                    {
+                        "item": "viz_catalyst_health_by_family",
+                        "position": {
+                            "x": 450,
+                            "y": 100,
+                            "w": 375,
+                            "h": 220
+                        }
+                    },
+                    {
+                        "item": "viz_catalyst_cpu_mem",
+                        "position": {
+                            "x": 825,
+                            "y": 100,
+                            "w": 375,
+                            "h": 220
+                        }
+                    },
+                    {
+                        "item": "viz_security_by_severity",
+                        "position": {
+                            "x": 0,
+                            "y": 320,
+                            "w": 300,
+                            "h": 260
+                        }
+                    },
+                    {
+                        "item": "viz_security_advisories_table",
+                        "position": {
+                            "x": 300,
+                            "y": 320,
+                            "w": 900,
+                            "h": 260
+                        }
+                    },
+                    {
+                        "item": "viz_meraki_packet_loss",
+                        "position": {
+                            "x": 0,
+                            "y": 580,
+                            "w": 500,
+                            "h": 240
+                        }
+                    },
+                    {
+                        "item": "viz_meraki_alerts_severity",
+                        "position": {
+                            "x": 500,
+                            "y": 580,
+                            "w": 300,
+                            "h": 240
+                        }
+                    },
+                    {
+                        "item": "viz_meraki_alerts_type",
+                        "position": {
+                            "x": 800,
+                            "y": 580,
+                            "w": 400,
+                            "h": 240
+                        }
+                    },
+                    {
+                        "item": "viz_meraki_alerts_table",
+                        "position": {
+                            "x": 0,
+                            "y": 820,
+                            "w": 750,
+                            "h": 260
+                        }
+                    },
+                    {
+                        "item": "viz_meraki_device_changes",
+                        "position": {
+                            "x": 750,
+                            "y": 820,
+                            "w": 450,
+                            "h": 260
+                        }
+                    }
+                ]
+            }
+        },
+        "globalInputs": [
+            "input_timerange"
+        ],
+        "options": {
+            "submitButton": false,
+            "showTitleAndDescription": true
+        }
+    }
+}]]></definition>
+</dashboard>

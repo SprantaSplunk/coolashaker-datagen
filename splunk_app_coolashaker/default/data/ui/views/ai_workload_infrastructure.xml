@@ -1,0 +1,208 @@
+<form version="1.1" theme="dark">
+  <label>AI Workload Infrastructure</label>
+  <description>AI Support Bot end to end: customers ask the bot on support.coolashaker.com, Cisco AI Defense inspects every prompt, the LLM answers from the GPU cluster in the Frankfurt DC. If the bot cannot help, the customer calls the Support Hotline.</description>
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="time_token" searchWhenChanged="true">
+      <label>Time Range</label>
+      <default>
+        <earliest>-60m@m</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <html>
+        <p><b>Read from left to right:</b> network to DC Frankfurt → AI Support Bot → Cisco AI Defense → GPUs in Frankfurt → Support Hotline. The first red box from the left is closest to the cause.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>1 · Network: loss to DC Frankfurt</title>
+      <single>
+        <search>
+          <query>index=demo_thousendeyes thousandeyes.test.type=agent-to-agent thousandeyes.target.agent.location=frankfurt
+| eval loss='metric_name:network.loss'
+| stats avg(loss) as loss
+| eval loss=round(loss, 1)</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="rangeColors">["0x53a051","0xf8be34","0xdc4e41"]</option>
+        <option name="rangeValues">[1,3]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">ThousandEyes, all plants</option>
+      </single>
+    </panel>
+    <panel>
+      <title>2 · AI Support Bot: response time</title>
+      <single>
+        <search>
+          <query>index=demo_thousendeyes "thousandeyes.test.name"="AI Support Assistant API"
+| eval duration='metric_name:api.duration'
+| stats avg(duration) as duration
+| eval duration=round(duration, 1)</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="rangeColors">["0x53a051","0xf8be34","0xdc4e41"]</option>
+        <option name="rangeValues">[3,6]</option>
+        <option name="unit">s</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">ThousandEyes API test</option>
+      </single>
+    </panel>
+    <panel>
+      <title>3 · AI Defense: prompts without answer</title>
+      <single>
+        <search>
+          <query>index=demo_ai_defense sourcetype="cisco:ai:defense"
+| stats count(eval(event_message_type="prompt" AND event_action="Allow")) as prompts count(eval(event_message_type="response")) as responses
+| eval unanswered=round(100 * (prompts - responses) / prompts, 1)
+| fields unanswered</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="rangeColors">["0x53a051","0xf8be34","0xdc4e41"]</option>
+        <option name="rangeValues">[5,15]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">allowed prompts, no response</option>
+      </single>
+    </panel>
+    <panel>
+      <title>4 · GPUs Frankfurt: aborted requests</title>
+      <single>
+        <search>
+          <query>| mstats avg(_value) as aborted WHERE index=demo_vmware_metrics metric_name="vmware.vm.gpu.llm.requests.aborted.pct" location="frankfurt"
+| eval aborted=round(aborted, 0)</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="rangeColors">["0x53a051","0xf8be34","0xdc4e41"]</option>
+        <option name="rangeValues">[5,15]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">computed, never delivered</option>
+      </single>
+    </panel>
+    <panel>
+      <title>5 · Support Hotline: calls waiting</title>
+      <single>
+        <search>
+          <query>index=demo_msteams event_type=call_queue_stats queue_name="Support Hotline"
+| stats latest(calls_waiting) as waiting</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="rangeColors">["0x53a051","0xf8be34","0xdc4e41"]</option>
+        <option name="rangeValues">[5,12]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Teams call queue</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>1 · Loss to DC Frankfurt by plant (ThousandEyes)</title>
+      <chart>
+        <search>
+          <query>index=demo_thousendeyes thousandeyes.test.type=agent-to-agent thousandeyes.target.agent.location=frankfurt
+| eval loss='metric_name:network.loss'
+| timechart span=1m avg(loss) by thousandeyes.agent.location</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleY.text">loss %</option>
+        <option name="charting.legend.placement">bottom</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>2 · AI Support Bot response time by plant (ThousandEyes)</title>
+      <chart>
+        <search>
+          <query>index=demo_thousendeyes "thousandeyes.test.name"="AI Support Assistant API"
+| eval duration='metric_name:api.duration'
+| timechart span=1m avg(duration) by thousandeyes.agent.location</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleY.text">seconds</option>
+        <option name="charting.legend.placement">bottom</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>3 · Cisco AI Defense: prompts vs. responses</title>
+      <chart>
+        <search>
+          <query>index=demo_ai_defense sourcetype="cisco:ai:defense"
+| eval message=if(event_message_type="prompt", "Prompts", "Responses")
+| timechart span=1m count by message</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleY.text">messages / min</option>
+        <option name="charting.legend.placement">bottom</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>3 · Cisco AI Defense: guardrail hits</title>
+      <table>
+        <search>
+          <query>index=demo_ai_defense sourcetype="cisco:ai:defense" "event_policy_guardrail_assocs{}.policy_guardrail_assoc.guardrail_avail_entity.guardrail_entity_name"=*
+| rename "event_policy_guardrail_assocs{}.policy_guardrail_assoc.guardrail_avail_entity.guardrail_entity_name" as Guardrail
+| stats count as Hits by Guardrail event_action event_message_type
+| rename event_action as Action event_message_type as Direction
+| sort - Hits</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>4 · GPUs Frankfurt: busy, but answers do not arrive</title>
+      <chart>
+        <search>
+          <query>| mstats avg(_value) as value WHERE index=demo_vmware_metrics location="frankfurt" metric_name IN ("vmware.vm.gpu.utilization.pct", "vmware.vm.gpu.llm.requests.aborted.pct") BY metric_name span=1m
+| eval metric=case(metric_name="vmware.vm.gpu.utilization.pct", "GPU utilization %", true(), "Aborted requests %")
+| timechart span=1m avg(value) by metric</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisY.maximumNumber">100</option>
+        <option name="charting.axisTitleY.text">%</option>
+        <option name="charting.legend.placement">bottom</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>5 · Support Hotline queue (Teams)</title>
+      <chart>
+        <search>
+          <query>index=demo_msteams event_type=call_queue_stats queue_name="Support Hotline"
+| timechart span=1m max(calls_waiting) as "Calls waiting" sum(bot_handoffs) as "Handed over by the bot"</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleY.text">calls</option>
+        <option name="charting.legend.placement">bottom</option>
+      </chart>
+    </panel>
+  </row>
+</form>

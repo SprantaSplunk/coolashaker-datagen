@@ -1,0 +1,39 @@
+<nav search_view="search" color="#53A051">
+  <view name="dashboard_home" default="true" />
+
+  <collection label="CoolaShaker">
+    <view name="dashboard_home" />
+    <view name="dashboard_executive_overview" />
+    <divider />
+    <collection label="Manufacturing">
+      <view name="dashboard_manufacturing" />
+      <view name="dashboard_sap" />
+    </collection>
+    <divider />
+    <collection label="Infrastructure">
+      <view name="dashboard_infrastructure" />
+      <view name="dashboard_server_infrastructure" />
+      <view name="dashboard_database" />
+      <view name="ai_workload_infrastructure" />
+    </collection>
+    <divider />
+    <collection label="Network &amp; Communication">
+      <view name="dashboard_network_collaboration" />
+      <view name="dashboard_catalyst" />
+      <view name="switch_syslog_telemetry" />
+      <view name="lab_network_assurance" />
+      <view name="dashboard_meraki" />
+    </collection>
+    <divider />
+    <collection label="Network Observability">
+      <view name="NetworkObservability" />
+      <view name="cs_thousendeyes" />
+    </collection>
+    <divider />
+    <collection label="Webapplications">
+      <view name="dashboard_tomcat" />
+    </collection>
+    <divider />
+    <a href="/app/itsi/homeview?savedHomeViewId=d8e73853-06a1-11f1-82fc-fa163eaeabc5&amp;owner=nobody&amp;serviceId=b30a01d7-67cb-4edf-ad7e-4d88dbf6249a&amp;earliest=-12h&amp;latest=now&amp;view=standard&amp;viewType=service_topology&amp;service=CoolaShaker&amp;service=Coolashaker%20-%20MS%20Saas%20Services&amp;kpi=&amp;sidePanelTab=kpis-and-episodes">ITSI Service Tree</a>
+  </collection>
+</nav>

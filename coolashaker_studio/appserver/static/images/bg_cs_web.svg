@@ -1,0 +1,241 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="2742" viewBox="0 0 1920 2742">
+  <defs>
+    <radialGradient id="glowA" cx="0.12" cy="0.02" r="0.7">
+      <stop offset="0" stop-color="#34e2a0" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#34e2a0" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0.95" cy="0.85" r="0.75">
+      <stop offset="0" stop-color="#22d3ee" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="base" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#071022"/>
+      <stop offset="1" stop-color="#040812"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#101d3a" stop-opacity="0.82"/>
+      <stop offset="1" stop-color="#0a1328" stop-opacity="0.74"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#34e2a0" stop-opacity="0.45"/>
+      <stop offset="0.5" stop-color="#9fb1c9" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0.35"/>
+    </linearGradient>
+    <linearGradient id="titleFill" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#34e2a0"/>
+    </linearGradient>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#9fb1c9" fill-opacity="0.10"/>
+    </pattern>
+    <style>
+      .pt { font: 700 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 1.6px; fill: #cfe0f7; }
+      .ph { font: 500 12px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #8ea3bf; }
+      .sec { font: 800 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 3px; fill: #34e2a0; }
+    </style>
+  </defs>
+  <rect width="1920" height="2742" fill="url(#base)"/>
+  <rect width="1920" height="2742" fill="url(#dots)"/>
+  <rect width="1920" height="2742" fill="url(#glowA)"/>
+  <rect width="1920" height="2742" fill="url(#glowB)"/>
+  <g>
+    <rect x="1120.7" y="16" width="67.8" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1201.3" y="16" width="36" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1249.8" y="16" width="93.2" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1377.3" y="16" width="78.5" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1478.8" y="16" width="19.5" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1523.5" y="16" width="58.3" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.1"/>
+    <rect x="1611.8" y="16" width="95.5" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1728.3" y="16" width="44.7" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1790.1" y="16" width="77.4" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1179.8" y="31" width="19.1" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1215.3" y="31" width="105.4" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1340.8" y="31" width="66.1" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.1"/>
+    <rect x="1442" y="31" width="50.4" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1530.3" y="31" width="97" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1652.2" y="31" width="83.4" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1748.1" y="31" width="43.7" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1830.2" y="31" width="28.8" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1154.1" y="46" width="92.5" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1280.6" y="46" width="100.7" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.1"/>
+    <rect x="1418.6" y="46" width="74.8" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1530.8" y="46" width="30.2" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1590.3" y="46" width="37" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.1"/>
+    <rect x="1667.1" y="46" width="89.9" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1795.7" y="46" width="48.7" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1862.4" y="46" width="17.6" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1176.4" y="61" width="56.5" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1255.6" y="61" width="43.8" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1338.7" y="61" width="103.1" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1462.5" y="61" width="95.3" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1581.5" y="61" width="82.6" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.1"/>
+    <rect x="1688.2" y="61" width="70.3" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1777" y="61" width="72.4" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1874.3" y="61" width="5.7" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1173.3" y="76" width="83.3" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.2"/>
+    <rect x="1273.8" y="76" width="50.4" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.2"/>
+    <rect x="1347.6" y="76" width="78.9" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1451.8" y="76" width="58" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1537.3" y="76" width="58.1" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1614.9" y="76" width="24.2" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1670.7" y="76" width="47.4" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1732.9" y="76" width="76.7" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.1"/>
+    <rect x="1841.7" y="76" width="31.2" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.1"/>
+    <rect x="1132.3" y="91" width="96.3" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1247.6" y="91" width="73.9" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1343.2" y="91" width="26.2" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1404.4" y="91" width="53.9" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1480.6" y="91" width="87.7" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1597" y="91" width="77.2" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1712.2" y="91" width="45.2" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1784.9" y="91" width="36" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1856.6" y="91" width="23.4" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1130.1" y="106" width="76.2" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.2"/>
+    <rect x="1217.2" y="106" width="31.8" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1268.7" y="106" width="59.1" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1350.7" y="106" width="63.4" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1447.5" y="106" width="40.8" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1504" y="106" width="36.4" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.1"/>
+    <rect x="1571.5" y="106" width="44.1" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1639.5" y="106" width="75.5" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1738.1" y="106" width="104.6" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.1"/>
+    <rect x="1855.1" y="106" width="24.9" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1159" y="121" width="28.3" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.2"/>
+    <rect x="1212.6" y="121" width="41.3" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1268" y="121" width="30.9" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1313.9" y="121" width="32.6" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.1"/>
+    <rect x="1357.6" y="121" width="60.7" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.1"/>
+    <rect x="1430.8" y="121" width="67.7" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1524.6" y="121" width="28" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1573.8" y="121" width="72.1" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1659.5" y="121" width="82.7" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1759.4" y="121" width="76.1" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1872.2" y="121" width="7.8" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1153.1" y="136" width="73.9" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1240.1" y="136" width="88.4" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.1"/>
+    <rect x="1355.5" y="136" width="61" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1426.6" y="136" width="77.8" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.1"/>
+    <rect x="1531.1" y="136" width="92.7" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1644.1" y="136" width="68.9" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1746.3" y="136" width="34" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1796.5" y="136" width="82.9" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1127.3" y="151" width="80.3" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1219.8" y="151" width="28.5" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1273.1" y="151" width="48.1" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.1"/>
+    <rect x="1356.2" y="151" width="35.3" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.1"/>
+    <rect x="1401.8" y="151" width="63.7" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.1"/>
+    <rect x="1478.8" y="151" width="58.4" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1558.4" y="151" width="59.5" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1645.9" y="151" width="90.6" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1773.2" y="151" width="24.1" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.1"/>
+    <rect x="1817.3" y="151" width="33.2" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1180.4" y="166" width="64.8" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1255.7" y="166" width="83.9" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1357" y="166" width="100.9" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1491.9" y="166" width="24.3" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.2"/>
+    <rect x="1530.2" y="166" width="67.5" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1612.7" y="166" width="103" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1732" y="166" width="95.2" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1866.5" y="166" width="13.5" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.2"/>
+    <rect x="1183.1" y="181" width="59.6" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1255.7" y="181" width="64.1" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1351.2" y="181" width="106.9" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1489.4" y="181" width="22.7" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.1"/>
+    <rect x="1549.3" y="181" width="45.6" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.1"/>
+    <rect x="1634.3" y="181" width="107" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+    <rect x="1769.3" y="181" width="18.2" height="5" rx="2.5" fill="#34e2a0" fill-opacity="0.2"/>
+    <rect x="1806.5" y="181" width="61.9" height="5" rx="2.5" fill="#9fb1c9" fill-opacity="0.1"/>
+  </g>
+  <rect x="0" y="198" width="1920" height="1" fill="#34e2a0" fill-opacity="0.18"/>
+  <text x="40" y="44" style="font: 800 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 4px; fill: #34e2a0;">COOLASHAKER STUDIO · WEB</text>
+  <text x="38" y="94" style="font: 800 44px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: -0.5px; fill: url(#titleFill);">Tomcat Web Server Monitor</text>
+  <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">Requests, errors and attackers across all six Tomcat servers</text>
+  <g>
+    <text x="40" y="226" class="sec">TRAFFIC KPIS</text>
+    <line x1="170.8" y1="221" x2="1880" y2="221" stroke="#34e2a0" stroke-opacity="0.18"/>
+    <text x="40" y="426" class="sec">SERVERS</text>
+    <line x1="123.8" y1="421" x2="1880" y2="421" stroke="#34e2a0" stroke-opacity="0.18"/>
+    <text x="40" y="1176" class="sec">ATTACKERS</text>
+    <line x1="142.60000000000002" y1="1171" x2="1880" y2="1171" stroke="#34e2a0" stroke-opacity="0.18"/>
+    <text x="40" y="1566" class="sec">REQUESTS</text>
+    <line x1="133.2" y1="1561" x2="1880" y2="1561" stroke="#34e2a0" stroke-opacity="0.18"/>
+  </g>
+  <g>
+    <rect x="40" y="242" width="368" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="242" width="120" height="2" rx="1" fill="#34e2a0" fill-opacity="0.85"/>
+    <rect x="60" y="258" width="4" height="16" rx="2" fill="#34e2a0"/>
+    <text x="72" y="271" class="pt">REQUESTS</text>
+    <rect x="428" y="242" width="368" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="446" y="242" width="120" height="2" rx="1" fill="#34e2a0" fill-opacity="0.85"/>
+    <rect x="448" y="258" width="4" height="16" rx="2" fill="#34e2a0"/>
+    <text x="460" y="271" class="pt">ERRORS (4XX + 5XX)</text>
+    <rect x="816" y="242" width="368" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="834" y="242" width="120" height="2" rx="1" fill="#34e2a0" fill-opacity="0.85"/>
+    <rect x="836" y="258" width="4" height="16" rx="2" fill="#34e2a0"/>
+    <text x="848" y="271" class="pt">ERROR RATE</text>
+    <rect x="1204" y="242" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1222" y="242" width="120" height="2" rx="1" fill="#34e2a0" fill-opacity="0.85"/>
+    <rect x="1224" y="258" width="4" height="16" rx="2" fill="#34e2a0"/>
+    <text x="1236" y="271" class="pt">VOLUME</text>
+    <rect x="1514" y="242" width="368" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1532" y="242" width="120" height="2" rx="1" fill="#34e2a0" fill-opacity="0.85"/>
+    <rect x="1534" y="258" width="4" height="16" rx="2" fill="#34e2a0"/>
+    <text x="1546" y="271" class="pt">REQUESTS FROM EXTERNAL IPS</text>
+    <rect x="40" y="442" width="1220" height="380" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="442" width="120" height="2" rx="1" fill="#34e2a0" fill-opacity="0.85"/>
+    <rect x="60" y="458" width="4" height="16" rx="2" fill="#34e2a0"/>
+    <text x="72" y="471" class="pt">ERROR RATE HEAT BY SERVER (%)</text>
+    <text x="1240" y="471" class="ph" text-anchor="end">click a server to focus the details</text>
+    <rect x="1280" y="442" width="600" height="380" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1298" y="442" width="120" height="2" rx="1" fill="#34e2a0" fill-opacity="0.85"/>
+    <rect x="1300" y="458" width="4" height="16" rx="2" fill="#34e2a0"/>
+    <text x="1312" y="471" class="pt">SERVERS</text>
+    <text x="1860" y="471" class="ph" text-anchor="end">click a row to focus</text>
+    <rect x="40" y="842" width="755" height="300" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="842" width="120" height="2" rx="1" fill="#34e2a0" fill-opacity="0.85"/>
+    <rect x="60" y="858" width="4" height="16" rx="2" fill="#34e2a0"/>
+    <text x="72" y="871" class="pt">REQUESTS BY SITE</text>
+    <rect x="815" y="842" width="600" height="300" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="833" y="842" width="120" height="2" rx="1" fill="#34e2a0" fill-opacity="0.85"/>
+    <rect x="835" y="858" width="4" height="16" rx="2" fill="#34e2a0"/>
+    <text x="847" y="871" class="pt">ERRORS BY SITE</text>
+    <rect x="1435" y="842" width="445" height="300" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1453" y="842" width="120" height="2" rx="1" fill="#34e2a0" fill-opacity="0.85"/>
+    <rect x="1455" y="858" width="4" height="16" rx="2" fill="#34e2a0"/>
+    <text x="1467" y="871" class="pt">STATUS CLASSES</text>
+    <rect x="40" y="1192" width="755" height="340" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1192" width="120" height="2" rx="1" fill="#34e2a0" fill-opacity="0.85"/>
+    <rect x="60" y="1208" width="4" height="16" rx="2" fill="#34e2a0"/>
+    <text x="72" y="1221" class="pt">BERLIN: EXTERNAL IPS VS. INTERNAL TRAFFIC</text>
+    <rect x="815" y="1192" width="1065" height="340" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="833" y="1192" width="120" height="2" rx="1" fill="#34e2a0" fill-opacity="0.85"/>
+    <rect x="835" y="1208" width="4" height="16" rx="2" fill="#34e2a0"/>
+    <text x="847" y="1221" class="pt">EXTERNAL CLIENT IPS (ATTACKERS)</text>
+    <rect x="40" y="1582" width="600" height="340" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1582" width="120" height="2" rx="1" fill="#34e2a0" fill-opacity="0.85"/>
+    <rect x="60" y="1598" width="4" height="16" rx="2" fill="#34e2a0"/>
+    <text x="72" y="1611" class="pt">TOP PATHS</text>
+    <text x="620" y="1611" class="ph" text-anchor="end">selected server or all</text>
+    <rect x="660" y="1582" width="600" height="340" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="678" y="1582" width="120" height="2" rx="1" fill="#34e2a0" fill-opacity="0.85"/>
+    <rect x="680" y="1598" width="4" height="16" rx="2" fill="#34e2a0"/>
+    <text x="692" y="1611" class="pt">TOP ERROR PATHS</text>
+    <rect x="1280" y="1582" width="600" height="340" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1298" y="1582" width="120" height="2" rx="1" fill="#34e2a0" fill-opacity="0.85"/>
+    <rect x="1300" y="1598" width="4" height="16" rx="2" fill="#34e2a0"/>
+    <text x="1312" y="1611" class="pt">USER AGENTS INCL. SCANNERS</text>
+    <rect x="40" y="1942" width="445" height="300" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1942" width="120" height="2" rx="1" fill="#34e2a0" fill-opacity="0.85"/>
+    <rect x="60" y="1958" width="4" height="16" rx="2" fill="#34e2a0"/>
+    <text x="72" y="1971" class="pt">HTTP METHODS</text>
+    <rect x="505" y="1942" width="1375" height="300" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="523" y="1942" width="120" height="2" rx="1" fill="#34e2a0" fill-opacity="0.85"/>
+    <rect x="525" y="1958" width="4" height="16" rx="2" fill="#34e2a0"/>
+    <text x="537" y="1971" class="pt">REQUESTS PER SERVER</text>
+    <rect x="40" y="2262" width="1840" height="440" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="2262" width="120" height="2" rx="1" fill="#34e2a0" fill-opacity="0.85"/>
+    <rect x="60" y="2278" width="4" height="16" rx="2" fill="#34e2a0"/>
+    <text x="72" y="2291" class="pt">LATEST 50 REQUESTS</text>
+    <text x="1860" y="2291" class="ph" text-anchor="end">site and server filters apply</text>
+  </g>
+</svg>

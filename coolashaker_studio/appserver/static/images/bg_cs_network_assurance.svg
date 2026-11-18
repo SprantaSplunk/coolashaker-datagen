@@ -1,0 +1,203 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1610" viewBox="0 0 1920 1610">
+  <defs>
+    <radialGradient id="glowA" cx="0.12" cy="0.02" r="0.7">
+      <stop offset="0" stop-color="#60a5fa" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#60a5fa" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0.95" cy="0.85" r="0.75">
+      <stop offset="0" stop-color="#22d3ee" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="base" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#071022"/>
+      <stop offset="1" stop-color="#040812"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#101d3a" stop-opacity="0.82"/>
+      <stop offset="1" stop-color="#0a1328" stop-opacity="0.74"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#60a5fa" stop-opacity="0.45"/>
+      <stop offset="0.5" stop-color="#9fb1c9" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0.35"/>
+    </linearGradient>
+    <linearGradient id="titleFill" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#60a5fa"/>
+    </linearGradient>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#9fb1c9" fill-opacity="0.10"/>
+    </pattern>
+    <style>
+      .pt { font: 700 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 1.6px; fill: #cfe0f7; }
+      .ph { font: 500 12px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #8ea3bf; }
+      .sec { font: 800 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 3px; fill: #60a5fa; }
+    </style>
+  </defs>
+  <rect width="1920" height="1610" fill="url(#base)"/>
+  <rect width="1920" height="1610" fill="url(#dots)"/>
+  <rect width="1920" height="1610" fill="url(#glowA)"/>
+  <rect width="1920" height="1610" fill="url(#glowB)"/>
+  <g>
+    <line x1="1175.3" y1="135.3" x2="1301.2" y2="108.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1175.3" y1="135.3" x2="1207.3" y2="98.2" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1175.3" y1="135.3" x2="1108" y2="59.8" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1175.3" y1="135.3" x2="1285.2" y2="50.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1175.3" y1="135.3" x2="1190.5" y2="109.2" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1175.3" y1="135.3" x2="1223.2" y2="18.9" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1175.3" y1="135.3" x2="1127.1" y2="100.4" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1721.3" y1="43.7" x2="1732.2" y2="185.8" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1721.3" y1="43.7" x2="1727.7" y2="61.3" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1721.3" y1="43.7" x2="1644.1" y2="135.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1721.3" y1="43.7" x2="1731.7" y2="101.6" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1721.3" y1="43.7" x2="1879.7" y2="70.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1721.3" y1="43.7" x2="1707" y2="43.7" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1721.3" y1="43.7" x2="1838" y2="153.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1732.2" y1="185.8" x2="1727.7" y2="61.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1732.2" y1="185.8" x2="1854.7" y2="173.9" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1732.2" y1="185.8" x2="1644.1" y2="135.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1732.2" y1="185.8" x2="1731.7" y2="101.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1732.2" y1="185.8" x2="1707" y2="43.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1732.2" y1="185.8" x2="1838" y2="153.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1301.2" y1="108.4" x2="1207.3" y2="98.2" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1301.2" y1="108.4" x2="1348.6" y2="43.8" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1301.2" y1="108.4" x2="1285.2" y2="50.1" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1301.2" y1="108.4" x2="1190.5" y2="109.2" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1301.2" y1="108.4" x2="1223.2" y2="18.9" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1301.2" y1="108.4" x2="1432.8" y2="72.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1727.7" y1="61.3" x2="1854.7" y2="173.9" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1727.7" y1="61.3" x2="1644.1" y2="135.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1727.7" y1="61.3" x2="1731.7" y2="101.6" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1727.7" y1="61.3" x2="1879.7" y2="70.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1727.7" y1="61.3" x2="1707" y2="43.7" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1727.7" y1="61.3" x2="1838" y2="153.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1854.7" y1="173.9" x2="1731.7" y2="101.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1854.7" y1="173.9" x2="1879.7" y2="70.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1854.7" y1="173.9" x2="1838" y2="153.6" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1644.1" y1="135.1" x2="1485.7" y2="79.2" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1644.1" y1="135.1" x2="1535.7" y2="34.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1644.1" y1="135.1" x2="1731.7" y2="101.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1644.1" y1="135.1" x2="1556.8" y2="119.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1644.1" y1="135.1" x2="1707" y2="43.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1207.3" y1="98.2" x2="1348.6" y2="43.8" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1207.3" y1="98.2" x2="1108" y2="59.8" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1207.3" y1="98.2" x2="1285.2" y2="50.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1207.3" y1="98.2" x2="1190.5" y2="109.2" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1207.3" y1="98.2" x2="1223.2" y2="18.9" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1207.3" y1="98.2" x2="1127.1" y2="100.4" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1348.6" y1="43.8" x2="1485.7" y2="79.2" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1348.6" y1="43.8" x2="1285.2" y2="50.1" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1348.6" y1="43.8" x2="1223.2" y2="18.9" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1348.6" y1="43.8" x2="1432.8" y2="72.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1485.7" y1="79.2" x2="1535.7" y2="34.1" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1485.7" y1="79.2" x2="1556.8" y2="119.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1485.7" y1="79.2" x2="1432.8" y2="72.3" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1108" y1="59.8" x2="1190.5" y2="109.2" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1108" y1="59.8" x2="1223.2" y2="18.9" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1108" y1="59.8" x2="1127.1" y2="100.4" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1285.2" y1="50.1" x2="1190.5" y2="109.2" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1285.2" y1="50.1" x2="1223.2" y2="18.9" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1285.2" y1="50.1" x2="1127.1" y2="100.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1285.2" y1="50.1" x2="1432.8" y2="72.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1190.5" y1="109.2" x2="1223.2" y2="18.9" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1190.5" y1="109.2" x2="1127.1" y2="100.4" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1535.7" y1="34.1" x2="1556.8" y2="119.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1535.7" y1="34.1" x2="1432.8" y2="72.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1731.7" y1="101.6" x2="1879.7" y2="70.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1731.7" y1="101.6" x2="1707" y2="43.7" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1731.7" y1="101.6" x2="1838" y2="153.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1223.2" y1="18.9" x2="1127.1" y2="100.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1879.7" y1="70.3" x2="1838" y2="153.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1556.8" y1="119.7" x2="1707" y2="43.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1556.8" y1="119.7" x2="1432.8" y2="72.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <circle cx="1175.3" cy="135.3" r="3.9" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1721.3" cy="43.7" r="1.8" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1732.2" cy="185.8" r="4.2" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1301.2" cy="108.4" r="4" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1727.7" cy="61.3" r="4" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1854.7" cy="173.9" r="2.6" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1644.1" cy="135.1" r="2.7" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1207.3" cy="98.2" r="2.8" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1348.6" cy="43.8" r="4" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1485.7" cy="79.2" r="3.6" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1108" cy="59.8" r="4.1" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1285.2" cy="50.1" r="2.4" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1190.5" cy="109.2" r="3.8" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1535.7" cy="34.1" r="2.2" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1731.7" cy="101.6" r="3.7" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1223.2" cy="18.9" r="3.1" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1879.7" cy="70.3" r="2.8" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1556.8" cy="119.7" r="1.8" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1127.1" cy="100.4" r="2.7" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1707" cy="43.7" r="2.3" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1432.8" cy="72.3" r="3.1" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1838" cy="153.6" r="4.1" fill="#60a5fa" fill-opacity="0.6"/>
+  </g>
+  <rect x="0" y="198" width="1920" height="1" fill="#60a5fa" fill-opacity="0.18"/>
+  <text x="40" y="44" style="font: 800 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 4px; fill: #60a5fa;">COOLASHAKER STUDIO · NETWORK</text>
+  <text x="38" y="94" style="font: 800 44px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: -0.5px; fill: url(#titleFill);">Network Assurance &amp; Service Health</text>
+  <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">Leading network indicators side by side with the business impact they cause</text>
+  <g>
+    <text x="40" y="284" class="sec">LEADING INDICATOR → IMPACT</text>
+    <line x1="302.4" y1="279" x2="1880" y2="279" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <text x="40" y="484" class="sec">SERVICE HEALTH MATRIX</text>
+    <line x1="255.4" y1="479" x2="1880" y2="479" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <text x="40" y="794" class="sec">CAUSE AND EFFECT</text>
+    <line x1="208.4" y1="789" x2="1880" y2="789" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <text x="40" y="1174" class="sec">PATHS</text>
+    <line x1="105" y1="1169" x2="1880" y2="1169" stroke="#60a5fa" stroke-opacity="0.18"/>
+  </g>
+  <g>
+    <rect x="40" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="329" class="pt">LEADING · LOSS TO DC FRANKFURT</text>
+    <rect x="350" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="368" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="370" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="382" y="329" class="pt">IMPACT · HOTLINE CALLS WAITING</text>
+    <rect x="660" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="678" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="680" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="692" y="329" class="pt">LEADING · BERLIN DC PATH LOSS</text>
+    <rect x="970" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="988" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="990" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="1002" y="329" class="pt">IMPACT · BERLIN HTTP 504</text>
+    <rect x="1280" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1298" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="1300" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="1312" y="329" class="pt">LEADING · BGP REACHABILITY</text>
+    <rect x="1590" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1608" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="1610" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="1622" y="329" class="pt">IMPACT · B2B ORDER COMPLETION</text>
+    <rect x="40" y="500" width="1840" height="260" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="500" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="516" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="529" class="pt">SERVICE HEALTH BY SITE AND DOMAIN</text>
+    <text x="1860" y="529" class="ph" text-anchor="end">live · last 10 min</text>
+    <rect x="40" y="810" width="600" height="330" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="810" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="826" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="839" class="pt">DC FRANKFURT</text>
+    <rect x="660" y="810" width="600" height="330" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="678" y="810" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="680" y="826" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="692" y="839" class="pt">BERLIN WAN</text>
+    <rect x="1280" y="810" width="600" height="330" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1298" y="810" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="1300" y="826" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="1312" y="839" class="pt">ATLANTA INTERNET PATH</text>
+    <rect x="40" y="1190" width="910" height="380" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1190" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="1206" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="1219" class="pt">THOUSANDEYES DC PATHS</text>
+    <text x="930" y="1219" class="ph" text-anchor="end">live · last 5 min</text>
+    <rect x="970" y="1190" width="910" height="380" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="988" y="1190" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="990" y="1206" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="1002" y="1219" class="pt">BGP AS PATH PER VANTAGE POINT</text>
+    <text x="1860" y="1219" class="ph" text-anchor="end">live · last 10 min</text>
+  </g>
+</svg>

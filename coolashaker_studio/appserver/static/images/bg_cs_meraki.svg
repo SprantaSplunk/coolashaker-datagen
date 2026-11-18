@@ -1,0 +1,219 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="2910" viewBox="0 0 1920 2910">
+  <defs>
+    <radialGradient id="glowA" cx="0.12" cy="0.02" r="0.7">
+      <stop offset="0" stop-color="#60a5fa" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#60a5fa" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0.95" cy="0.85" r="0.75">
+      <stop offset="0" stop-color="#22d3ee" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="base" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#071022"/>
+      <stop offset="1" stop-color="#040812"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#101d3a" stop-opacity="0.82"/>
+      <stop offset="1" stop-color="#0a1328" stop-opacity="0.74"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#60a5fa" stop-opacity="0.45"/>
+      <stop offset="0.5" stop-color="#9fb1c9" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0.35"/>
+    </linearGradient>
+    <linearGradient id="titleFill" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#60a5fa"/>
+    </linearGradient>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#9fb1c9" fill-opacity="0.10"/>
+    </pattern>
+    <style>
+      .pt { font: 700 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 1.6px; fill: #cfe0f7; }
+      .ph { font: 500 12px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #8ea3bf; }
+      .sec { font: 800 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 3px; fill: #60a5fa; }
+    </style>
+  </defs>
+  <rect width="1920" height="2910" fill="url(#base)"/>
+  <rect width="1920" height="2910" fill="url(#dots)"/>
+  <rect width="1920" height="2910" fill="url(#glowA)"/>
+  <rect width="1920" height="2910" fill="url(#glowB)"/>
+  <g>
+    <line x1="1792.3" y1="91.9" x2="1668.2" y2="139.5" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1792.3" y1="91.9" x2="1700.2" y2="28" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1792.3" y1="91.9" x2="1688.6" y2="104.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1792.3" y1="91.9" x2="1764.8" y2="146.8" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1792.3" y1="91.9" x2="1773.3" y2="139" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1418.8" y1="185.1" x2="1354.8" y2="90.7" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1418.8" y1="185.1" x2="1437.2" y2="110.2" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1418.8" y1="185.1" x2="1435.7" y2="66.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1418.8" y1="185.1" x2="1504.8" y2="144.5" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1418.8" y1="185.1" x2="1374.9" y2="126" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1344.3" y1="23.8" x2="1354.8" y2="90.7" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1344.3" y1="23.8" x2="1437.2" y2="110.2" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1344.3" y1="23.8" x2="1435.7" y2="66.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1344.3" y1="23.8" x2="1374.9" y2="126" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1344.3" y1="23.8" x2="1235.4" y2="135" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1344.3" y1="23.8" x2="1205.1" y2="55.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1354.8" y1="90.7" x2="1437.2" y2="110.2" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1354.8" y1="90.7" x2="1435.7" y2="66.6" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1354.8" y1="90.7" x2="1504.8" y2="144.5" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1354.8" y1="90.7" x2="1374.9" y2="126" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1354.8" y1="90.7" x2="1235.4" y2="135" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1354.8" y1="90.7" x2="1188.2" y2="115.2" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1354.8" y1="90.7" x2="1185.5" y2="88.9" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1354.8" y1="90.7" x2="1223.4" y2="153.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1354.8" y1="90.7" x2="1205.1" y2="55.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1437.2" y1="110.2" x2="1435.7" y2="66.6" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1437.2" y1="110.2" x2="1504.8" y2="144.5" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1437.2" y1="110.2" x2="1374.9" y2="126" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1437.2" y1="110.2" x2="1554.1" y2="67.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1178.3" y1="180" x2="1235.4" y2="135" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1178.3" y1="180" x2="1188.2" y2="115.2" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1178.3" y1="180" x2="1131.1" y2="59.9" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1178.3" y1="180" x2="1185.5" y2="88.9" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1178.3" y1="180" x2="1223.4" y2="153.3" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1178.3" y1="180" x2="1119.6" y2="73.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1178.3" y1="180" x2="1205.1" y2="55.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1435.7" y1="66.6" x2="1504.8" y2="144.5" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1435.7" y1="66.6" x2="1374.9" y2="126" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1435.7" y1="66.6" x2="1554.1" y2="67.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1668.2" y1="139.5" x2="1504.8" y2="144.5" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1668.2" y1="139.5" x2="1700.2" y2="28" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1668.2" y1="139.5" x2="1554.1" y2="67.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1668.2" y1="139.5" x2="1688.6" y2="104.1" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1668.2" y1="139.5" x2="1764.8" y2="146.8" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1668.2" y1="139.5" x2="1773.3" y2="139" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1504.8" y1="144.5" x2="1374.9" y2="126" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1504.8" y1="144.5" x2="1554.1" y2="67.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1700.2" y1="28" x2="1554.1" y2="67.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1700.2" y1="28" x2="1688.6" y2="104.1" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1700.2" y1="28" x2="1764.8" y2="146.8" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1700.2" y1="28" x2="1773.3" y2="139" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1374.9" y1="126" x2="1235.4" y2="135" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1374.9" y1="126" x2="1223.4" y2="153.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1235.4" y1="135" x2="1188.2" y2="115.2" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1235.4" y1="135" x2="1131.1" y2="59.9" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1235.4" y1="135" x2="1185.5" y2="88.9" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1235.4" y1="135" x2="1223.4" y2="153.3" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1235.4" y1="135" x2="1119.6" y2="73.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1235.4" y1="135" x2="1205.1" y2="55.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1554.1" y1="67.3" x2="1688.6" y2="104.1" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1188.2" y1="115.2" x2="1131.1" y2="59.9" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1188.2" y1="115.2" x2="1185.5" y2="88.9" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1188.2" y1="115.2" x2="1223.4" y2="153.3" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1188.2" y1="115.2" x2="1119.6" y2="73.4" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1188.2" y1="115.2" x2="1205.1" y2="55.4" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1131.1" y1="59.9" x2="1185.5" y2="88.9" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1131.1" y1="59.9" x2="1223.4" y2="153.3" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1131.1" y1="59.9" x2="1119.6" y2="73.4" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1131.1" y1="59.9" x2="1205.1" y2="55.4" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1185.5" y1="88.9" x2="1223.4" y2="153.3" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1185.5" y1="88.9" x2="1119.6" y2="73.4" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1185.5" y1="88.9" x2="1205.1" y2="55.4" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1688.6" y1="104.1" x2="1764.8" y2="146.8" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1688.6" y1="104.1" x2="1773.3" y2="139" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1764.8" y1="146.8" x2="1773.3" y2="139" stroke="#60a5fa" stroke-opacity="0.2" stroke-width="1"/>
+    <line x1="1223.4" y1="153.3" x2="1119.6" y2="73.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1223.4" y1="153.3" x2="1205.1" y2="55.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <line x1="1119.6" y1="73.4" x2="1205.1" y2="55.4" stroke="#60a5fa" stroke-opacity="0.1" stroke-width="1"/>
+    <circle cx="1792.3" cy="91.9" r="3" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1418.8" cy="185.1" r="2" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1344.3" cy="23.8" r="3" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1354.8" cy="90.7" r="2.9" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1437.2" cy="110.2" r="2.6" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1178.3" cy="180" r="2.1" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1435.7" cy="66.6" r="3.1" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1668.2" cy="139.5" r="2.5" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1504.8" cy="144.5" r="3.5" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1700.2" cy="28" r="2" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1374.9" cy="126" r="3.4" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1235.4" cy="135" r="2.9" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1554.1" cy="67.3" r="2.1" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1188.2" cy="115.2" r="3.9" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1131.1" cy="59.9" r="2.1" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1185.5" cy="88.9" r="2.8" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1688.6" cy="104.1" r="2.4" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1764.8" cy="146.8" r="2.7" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1223.4" cy="153.3" r="2.9" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1773.3" cy="139" r="3.1" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1119.6" cy="73.4" r="3.3" fill="#60a5fa" fill-opacity="0.6"/>
+    <circle cx="1205.1" cy="55.4" r="3.2" fill="#60a5fa" fill-opacity="0.6"/>
+  </g>
+  <rect x="0" y="198" width="1920" height="1" fill="#60a5fa" fill-opacity="0.18"/>
+  <text x="40" y="44" style="font: 800 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 4px; fill: #60a5fa;">COOLASHAKER STUDIO · NETWORK</text>
+  <text x="38" y="94" style="font: 800 44px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: -0.5px; fill: url(#titleFill);">Cisco Meraki</text>
+  <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">Assurance alerts, SD-WAN uplinks and device availability across every Meraki network</text>
+  <g>
+    <text x="40" y="284" class="sec">ALERT KPIS</text>
+    <line x1="152" y1="279" x2="1880" y2="279" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <text x="40" y="484" class="sec">ALERT LANDSCAPE</text>
+    <line x1="199" y1="479" x2="1880" y2="479" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <text x="40" y="2084" class="sec">SD-WAN</text>
+    <line x1="114.4" y1="2079" x2="1880" y2="2079" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <text x="40" y="2474" class="sec">INVENTORY</text>
+    <line x1="142.60000000000002" y1="2469" x2="1880" y2="2469" stroke="#60a5fa" stroke-opacity="0.18"/>
+  </g>
+  <g>
+    <rect x="40" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="329" class="pt">MANAGED NETWORKS</text>
+    <rect x="350" y="300" width="368" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="368" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="370" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="382" y="329" class="pt">CRITICAL ALERTS</text>
+    <rect x="738" y="300" width="368" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="756" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="758" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="770" y="329" class="pt">MEDIUM ALERTS</text>
+    <rect x="1126" y="300" width="368" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1144" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="1146" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="1158" y="329" class="pt">INFORMATIONAL ALERTS</text>
+    <rect x="1514" y="300" width="368" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1532" y="300" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="1534" y="316" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="1546" y="329" class="pt">DISTINCT ALERT TYPES</text>
+    <rect x="40" y="500" width="1220" height="400" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="500" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="516" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="529" class="pt">ALERT HEAT BY NETWORK</text>
+    <text x="1240" y="529" class="ph" text-anchor="end">severity filter applies · click a network to focus</text>
+    <rect x="1280" y="500" width="600" height="400" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1298" y="500" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="1300" y="516" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="1312" y="529" class="pt">ALERTS BY SEVERITY</text>
+    <text x="1860" y="529" class="ph" text-anchor="end">selected network or all</text>
+    <rect x="40" y="920" width="600" height="330" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="920" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="936" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="949" class="pt">ALERTS BY CATEGORY</text>
+    <rect x="660" y="920" width="1220" height="330" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="678" y="920" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="680" y="936" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="692" y="949" class="pt">TOP ALERT TYPES</text>
+    <rect x="40" y="1270" width="1840" height="340" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1270" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="1286" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="1299" class="pt">ALERT SUMMARY PER NETWORK</text>
+    <text x="1860" y="1299" class="ph" text-anchor="end">click a network to focus</text>
+    <rect x="40" y="1630" width="1840" height="420" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1630" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="1646" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="1659" class="pt">LATEST ALERTS</text>
+    <text x="1860" y="1659" class="ph" text-anchor="end">site, severity and network filters apply</text>
+    <rect x="40" y="2100" width="910" height="340" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="2100" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="2116" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="2129" class="pt">MX UPLINK ALERTS</text>
+    <rect x="970" y="2100" width="910" height="340" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="988" y="2100" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="990" y="2116" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="1002" y="2129" class="pt">MX UPLINK AND CONNECTIVITY CHANGES</text>
+    <rect x="40" y="2490" width="1840" height="380" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="2490" width="120" height="2" rx="1" fill="#60a5fa" fill-opacity="0.85"/>
+    <rect x="60" y="2506" width="4" height="16" rx="2" fill="#60a5fa"/>
+    <text x="72" y="2519" class="pt">NETWORKS</text>
+  </g>
+</svg>

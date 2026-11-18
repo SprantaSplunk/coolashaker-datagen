@@ -1,0 +1,17 @@
+[]
+access = read : [ * ], write : [ admin, sc_admin, power ]
+
+[visualizations/factory_floor]
+export = system
+
+[visualizations/health_rings]
+export = system
+
+[visualizations/heat_timeline]
+export = system
+
+[visualizations/pulse_map]
+export = system
+
+[visualizations/service_flow]
+export = system

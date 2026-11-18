@@ -1,0 +1,7 @@
+keg_id,beer_type,tap_label,brewery,style
+KEG-01,Coors Banquet,Tap 1 – Coors Banquet,Coors Brewing Co.,American Lager
+KEG-02,Breckenridge Avalanche,Tap 2 – Breckenridge Avalanche,Breckenridge Brewery,Amber Ale
+KEG-03,Blue Moon,Tap 3 – Blue Moon,Blue Moon Brewing,Belgian Wheat
+KEG-04,Odell IPA,Tap 4 – Odell IPA,Odell Brewing Co.,India Pale Ale
+KEG-05,New Belgium Fat Tire,Tap 5 – New Belgium Fat Tire,New Belgium Brewing,Amber Ale
+KEG-06,Colorado Lager,Tap 6 – Colorado Lager,Colorado Brewing Co.,American Lager

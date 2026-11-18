@@ -1,0 +1,350 @@
+<form version="1.1" theme="dark">
+  <label>CoolaShaker - Cisco Meraki</label>
+  <description>Meraki Organization Overview · Network Inventory · Assurance Alerts</description>
+
+  <!-- =====================================================================
+       BASE SEARCHES
+       - base_alerts  : meraki:assurancealerts  (spath für dot-notation Felder)
+       - base_networks: meraki:organizationsnetworks (dedup = neuester Snapshot)
+       ===================================================================== -->
+  <search id="base_alerts">
+    <query>
+index=demo_cisco_meraki sourcetype="meraki:assurancealerts"
+| rename "network.name" as network_name
+| rename "network.id"   as network_id
+| eval site = case(
+    match(network_name,"Vienna"), "Vienna",
+    match(network_name,"Berlin"),  "Berlin",
+    match(network_name,"Atlanta"), "Atlanta",
+    1=1, "Other")
+| search site="$site_token$" OR "$site_token$"="*"
+| fields _time organizationId categoryType network_name network_id site severity alertType description alertId
+    </query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+
+  <search id="base_networks">
+    <query>
+index=demo_cisco_meraki sourcetype="meraki:organizationsnetworks"
+| dedup name sortby -_time
+| eval site = case(
+    match(name,"Vienna"), "Vienna",
+    match(name,"Berlin"),  "Berlin",
+    match(name,"Atlanta"), "Atlanta",
+    1=1, "Other")
+| eval net_type = case(
+    match(name,"Corporate"), "Corporate",
+    match(name,"Factory"),   "Factory",
+    match(name,"Guest"),     "Guest",
+    1=1, "Other")
+| search site="$site_token$" OR "$site_token$"="*"
+| fields _time id name timeZone site net_type notes
+    </query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+
+  <!-- =====================================================================  INPUTS  -->
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="time_token" searchWhenChanged="true">
+      <label>Time Range</label>
+      <default>
+        <earliest>-60m@m</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="site_token" searchWhenChanged="true">
+      <label>Site</label>
+      <choice value="*">All Sites</choice>
+      <choice value="Vienna">Vienna</choice>
+      <choice value="Berlin">Berlin</choice>
+      <choice value="Atlanta">Atlanta</choice>
+      <default>*</default>
+    </input>
+    <input type="dropdown" token="severity_token" searchWhenChanged="true">
+      <label>Severity Filter</label>
+      <choice value="*">All Severities</choice>
+      <choice value="critical">Critical</choice>
+      <choice value="warning">Warning</choice>
+      <choice value="informational">Informational</choice>
+      <default>*</default>
+    </input>
+  </fieldset>
+
+  <!-- =====================================================================  ROW 1: KPI Singles  -->
+  <row>
+    <panel>
+      <title>Managed Networks</title>
+      <single>
+        <search base="base_networks">
+          <query>| stats dc(name) as total</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="underLabel">Total Networks</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Critical Alerts</title>
+      <single>
+        <search base="base_alerts">
+          <query>
+| search severity="critical"
+| stats count as cnt
+| rangemap field=cnt low=0-0 elevated=1-2 severe=3-9999
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[0,2]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Critical Alerts</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Warning Alerts</title>
+      <single>
+        <search base="base_alerts">
+          <query>
+| search severity="warning"
+| stats count as cnt
+| rangemap field=cnt low=0-3 elevated=4-8 severe=9-9999
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[3,8]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Warning Alerts</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Informational Alerts</title>
+      <single>
+        <search base="base_alerts">
+          <query>| search severity="informational" | stats count as cnt</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="underLabel">Informational Alerts</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Distinct Alert Types</title>
+      <single>
+        <search base="base_alerts">
+          <query>| stats dc(alertType) as cnt</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="underLabel">Unique Alert Types</option>
+      </single>
+    </panel>
+  </row>
+
+  <!-- =====================================================================  ROW 2: Timeline + Category Pie  -->
+  <row>
+    <panel>
+      <title>Alert Timeline by Severity</title>
+      <chart>
+        <search base="base_alerts">
+          <query>| timechart span=5m count by severity</query>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Alert Count</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.fieldColors">{"critical": 0xdc4e41, "warning": 0xf58f39, "informational": 0x53a051}</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Alerts by Category</title>
+      <chart>
+        <search base="base_alerts">
+          <query>| stats count by categoryType | sort -count</query>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+
+  <!-- =====================================================================  ROW 3: Alerts by Network + Top Alert Types  -->
+  <row>
+    <panel>
+      <title>Alerts by Network (nach Severity gestapelt)</title>
+      <chart>
+        <search base="base_alerts">
+          <query>
+| stats count by network_name severity
+| sort network_name
+          </query>
+        </search>
+        <option name="charting.chart">bar</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.axisTitleX.text">Alert Count</option>
+        <option name="charting.axisTitleY.text">Network</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.fieldColors">{"critical": 0xdc4e41, "warning": 0xf58f39, "informational": 0x53a051}</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Top Alert Types</title>
+      <chart>
+        <search base="base_alerts">
+          <query>
+| stats count by alertType
+| sort -count
+| head 10
+          </query>
+        </search>
+        <option name="charting.chart">bar</option>
+        <option name="charting.axisTitleX.text">Count</option>
+        <option name="charting.axisTitleY.text">Alert Type</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+
+  <!-- =====================================================================  ROW 4: Alert Detail Table  -->
+  <row>
+    <panel>
+      <title>Assurance Alert Detail</title>
+      <table>
+        <search base="base_alerts">
+          <query>
+| search severity="$severity_token$" OR "$severity_token$"="*"
+| eval Time = strftime(_time, "%Y-%m-%d %H:%M:%S")
+| sort -_time
+| table Time site network_name categoryType severity alertType description alertId
+| rename
+    Time         as "Time",
+    site         as "Site",
+    network_name as "Network",
+    categoryType as "Category",
+    severity     as "Severity",
+    alertType    as "Alert Type",
+    description  as "Description",
+    alertId      as "Alert ID"
+          </query>
+        </search>
+        <option name="count">20</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="Severity">
+          <colorPalette type="map">{"critical":"#dc4e41","warning":"#f58f39","informational":"#53a051"}</colorPalette>
+        </format>
+        <format type="color" field="Category">
+          <colorPalette type="map">{"connectivity":"#1182f3","device_health":"#f58f39","insights":"#7c55c7","configuration":"#53a051"}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+
+  <!-- =====================================================================  ROW 5: Alert Summary pro Netzwerk  -->
+  <row>
+    <panel>
+      <title>Alert Summary pro Netzwerk</title>
+      <table>
+        <search base="base_alerts">
+          <query>
+| stats
+    count                                   as "Total",
+    count(eval(severity="critical"))         as "Critical",
+    count(eval(severity="warning"))          as "Warning",
+    count(eval(severity="informational"))    as "Info",
+    dc(alertType)                            as "Distinct Types",
+    values(alertType)                        as "Alert Types"
+    by site network_name
+| sort site network_name
+| rename
+    site         as "Site",
+    network_name as "Network"
+          </query>
+        </search>
+        <option name="count">15</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="Critical">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" midColor="#f58f39" minColor="#53a051"></colorPalette>
+          <scale type="minMidMax" minValue="0" midValue="1" maxValue="3"></scale>
+        </format>
+        <format type="color" field="Warning">
+          <colorPalette type="minMidMax" maxColor="#f58f39" midColor="#f8be34" minColor="#53a051"></colorPalette>
+          <scale type="minMidMax" minValue="0" midValue="3" maxValue="6"></scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+
+  <!-- =====================================================================  ROW 6: Network Inventory  -->
+  <row>
+    <panel>
+      <title>Netzwerk Inventar</title>
+      <table>
+        <search base="base_networks">
+          <query>
+| table name id timeZone site net_type notes
+| rename
+    name     as "Network Name",
+    id       as "Network ID",
+    timeZone as "Timezone",
+    site     as "Site",
+    net_type as "Type",
+    notes    as "Notes"
+| sort "Site" "Network Name"
+          </query>
+        </search>
+        <option name="count">15</option>
+        <option name="drilldown">none</option>
+        <format type="color" field="Type">
+          <colorPalette type="map">{"Corporate":"#1182f3","Factory":"#f58f39","Guest":"#53a051"}</colorPalette>
+        </format>
+        <format type="color" field="Site">
+          <colorPalette type="map">{"Vienna":"#7c55c7","Berlin":"#1182f3","Atlanta":"#53a051"}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>SD-WAN – MX uplink alerts</title>
+      <chart>
+        <search>
+          <query>index=demo_cisco_meraki sourcetype="meraki:assurancealerts" categoryType=connectivity
+    alertType IN ("high_latency", "packet_loss", "uplink_jitter", "uplink_failover", "vpn_tunnel_degraded", "uplink_loss", "vpn_tunnel_down")
+| timechart span=1m count by alertType</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.legend.placement">bottom</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>SD-WAN – MX uplink and connectivity changes</title>
+      <table>
+        <search>
+          <query>index=demo_cisco_meraki sourcetype="meraki:devicesavailabilitieschangehistory" "device.model"="MX*"
+    "details.new{}.name" IN ("activeUplink", "connectivity")
+| eval change=mvindex('details.new{}.name', 0) . ": " . mvindex('details.old{}.value', 0) . " -&gt; " . mvindex('details.new{}.value', 0)
+| stats latest(_time) as last_seen count as changes latest(change) as "Last change" by "network.name" "device.name"
+| eval last_seen=strftime(last_seen, "%Y-%m-%d %H:%M:%S")
+| rename "network.name" as Network "device.name" as Device last_seen as "Last seen" changes as Changes
+| sort - Changes</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+</form>

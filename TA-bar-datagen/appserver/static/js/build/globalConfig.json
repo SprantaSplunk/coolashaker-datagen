@@ -1,0 +1,934 @@
+{
+    "pages": {
+        "configuration": {
+            "tabs": [
+                {
+                    "name": "hec_setup",
+                    "title": "HEC Setup",
+                    "entity": [
+                        {
+                            "type": "radio",
+                            "field": "send_mode",
+                            "label": "Send mode",
+                            "required": true,
+                            "defaultValue": "hec",
+                            "options": {
+                                "items": [
+                                    {
+                                        "value": "hec",
+                                        "label": "HEC"
+                                    },
+                                    {
+                                        "value": "direct",
+                                        "label": "Direct (no token)"
+                                    }
+                                ]
+                            },
+                            "help": "HEC is the default. Choose Direct if the search head cannot reach the HEC endpoint – the modular input then writes straight into the index.",
+                            "modifyFieldsOnValue": [
+                                {
+                                    "fieldValue": "direct",
+                                    "fieldsToModify": [
+                                        {
+                                            "fieldId": "hec_url",
+                                            "display": false
+                                        },
+                                        {
+                                            "fieldId": "hec_token",
+                                            "display": false
+                                        },
+                                        {
+                                            "fieldId": "hec_batch_size",
+                                            "display": false
+                                        },
+                                        {
+                                            "fieldId": "hec_verify_ssl",
+                                            "display": false
+                                        }
+                                    ]
+                                },
+                                {
+                                    "fieldValue": "hec",
+                                    "fieldsToModify": [
+                                        {
+                                            "fieldId": "hec_url",
+                                            "display": true
+                                        },
+                                        {
+                                            "fieldId": "hec_token",
+                                            "display": true
+                                        },
+                                        {
+                                            "fieldId": "hec_batch_size",
+                                            "display": true
+                                        },
+                                        {
+                                            "fieldId": "hec_verify_ssl",
+                                            "display": true
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "text",
+                            "field": "hec_url",
+                            "label": "HEC URL",
+                            "required": false,
+                            "help": "Splunk Cloud: https://http-inputs-<stack>.splunkcloud.com:443  |  Enterprise: https://<host>:8088",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "pattern": "^https://[^\\s/]+(:\\d+)?/?$",
+                                    "errorMsg": "Use https://host[:port] without a path."
+                                }
+                            ]
+                        },
+                        {
+                            "type": "text",
+                            "field": "hec_token",
+                            "label": "HEC token",
+                            "required": false,
+                            "encrypted": true,
+                            "help": "The token must allow the target index (default bar_demo). Stored encrypted in Splunk's credential store.",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "pattern": "^([0-9a-fA-F-]{36}|\\*+)$",
+                                    "errorMsg": "A HEC token is a 36-character GUID."
+                                }
+                            ]
+                        },
+                        {
+                            "type": "checkbox",
+                            "field": "hec_verify_ssl",
+                            "label": "Verify TLS certificate",
+                            "defaultValue": 1,
+                            "help": "Keep enabled for Splunk Cloud. Disable only for lab instances with a self-signed certificate on port 8088."
+                        },
+                        {
+                            "type": "text",
+                            "field": "hec_batch_size",
+                            "label": "Events per HEC request",
+                            "defaultValue": "500",
+                            "required": false,
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        10,
+                                        5000
+                                    ],
+                                    "errorMsg": "10 – 5000"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "logging",
+                    "title": "Logging",
+                    "entity": [
+                        {
+                            "type": "singleSelect",
+                            "label": "Log level",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "DEBUG",
+                                        "label": "DEBUG"
+                                    },
+                                    {
+                                        "value": "INFO",
+                                        "label": "INFO"
+                                    },
+                                    {
+                                        "value": "WARNING",
+                                        "label": "WARNING"
+                                    },
+                                    {
+                                        "value": "ERROR",
+                                        "label": "ERROR"
+                                    },
+                                    {
+                                        "value": "CRITICAL",
+                                        "label": "CRITICAL"
+                                    }
+                                ]
+                            },
+                            "defaultValue": "INFO",
+                            "field": "loglevel",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Log level must be one of: DEBUG, INFO, WARNING, ERROR, CRITICAL",
+                                    "pattern": "^DEBUG|INFO|WARNING|ERROR|CRITICAL$"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "title": "Setup",
+            "description": "Step 1: tell the datagen where to send events. Step 2: go to Inputs and switch the generator on/off."
+        },
+        "inputs": {
+            "services": [
+                {
+                    "name": "bar_datagen",
+                    "entity": [
+                        {
+                            "type": "text",
+                            "label": "Name",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Input Name must begin with a letter and consist exclusively of alphanumeric characters and underscores.",
+                                    "pattern": "^[a-zA-Z]\\w*$"
+                                },
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Length of input name should be between 1 and 100",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                }
+                            ],
+                            "field": "name",
+                            "help": "A unique name for the data input.",
+                            "required": true
+                        },
+                        {
+                            "type": "text",
+                            "field": "interval",
+                            "label": "Run every (seconds)",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Run every (seconds) must be either a non-negative number, CRON interval or -1.",
+                                    "pattern": "^((?:-1|\\d+(?:\\.\\d+)?)|(([\\*\\d{1,2}\\,\\-\\/]+\\s){4}[\\*\\d{1,2}\\,\\-\\/]+))$"
+                                },
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        30,
+                                        300
+                                    ],
+                                    "errorMsg": "Run every (seconds) must be between 30 and 300"
+                                }
+                            ],
+                            "help": "Each run generates all events since the previous run (10-second resolution) and sends them.",
+                            "required": true,
+                            "defaultValue": "60"
+                        },
+                        {
+                            "type": "singleSelect",
+                            "field": "index",
+                            "label": "Index",
+                            "defaultValue": "bar_demo",
+                            "options": {
+                                "endpointUrl": "data/indexes?search=isInternal=0+disabled=0",
+                                "denyList": "^_.*$",
+                                "createSearchChoice": true
+                            },
+                            "validators": [
+                                {
+                                    "type": "index_name"
+                                }
+                            ],
+                            "help": "Must exist and (HEC mode) be allowed for the HEC token.",
+                            "required": true
+                        },
+                        {
+                            "type": "text",
+                            "field": "bar_host",
+                            "label": "Host field",
+                            "defaultValue": "bar-datagen",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "pattern": "^[\\w.-]+$",
+                                    "errorMsg": "Letters, digits, . _ - only"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "text",
+                            "field": "timezone",
+                            "label": "Bar time zone",
+                            "defaultValue": "America/Denver",
+                            "required": true,
+                            "help": "IANA name. Opening hours (Tue–Sun 18:00–01:00) are evaluated in this zone.",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "pattern": "^[A-Za-z_]+(/[A-Za-z_+-]+)*$",
+                                    "errorMsg": "IANA name, e.g. America/Denver"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "text",
+                            "field": "backfill_days",
+                            "label": "Backfill days on first start",
+                            "defaultValue": "14",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        0,
+                                        30
+                                    ],
+                                    "errorMsg": "0 – 30"
+                                }
+                            ],
+                            "help": "Only runs the very first time this input starts (5-minute resolution). 0 = realtime only. Clone the input under a new name to backfill again."
+                        },
+                        {
+                            "type": "text",
+                            "field": "max_gap_minutes",
+                            "label": "Fill gaps up to (minutes)",
+                            "defaultValue": "15",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        0,
+                                        1440
+                                    ],
+                                    "errorMsg": "0 – 1440"
+                                }
+                            ],
+                            "help": "After a stop/start, gaps shorter than this are filled. Longer gaps are skipped and generation resumes at 'now'."
+                        }
+                    ],
+                    "inputHelperModule": "bar_datagen_helper",
+                    "title": "Bar datagen"
+                },
+                {
+                    "name": "coolashaker",
+                    "title": "CoolaShaker (virtual coffee cup producer)",
+                    "inputHelperModule": "coolashaker_helper",
+                    "entity": [
+                        {
+                            "type": "text",
+                            "label": "Name",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Input Name must begin with a letter and consist exclusively of alphanumeric characters and underscores.",
+                                    "pattern": "^[a-zA-Z]\\w*$"
+                                },
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Length of input name should be between 1 and 100",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                }
+                            ],
+                            "field": "name",
+                            "help": "A unique name for the data input.",
+                            "required": true
+                        },
+                        {
+                            "type": "text",
+                            "field": "interval",
+                            "label": "Restart check (seconds)",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Restart check (seconds) must be either a non-negative number, CRON interval or -1.",
+                                    "pattern": "^((?:-1|\\d+(?:\\.\\d+)?)|(([\\*\\d{1,2}\\,\\-\\/]+\\s){4}[\\*\\d{1,2}\\,\\-\\/]+))$"
+                                },
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        30,
+                                        300
+                                    ],
+                                    "errorMsg": "Restart check (seconds) must be between 30 and 300"
+                                }
+                            ],
+                            "help": "Long-running input: splunkd only uses this to restart the generator if it ever stops unexpectedly.",
+                            "required": true,
+                            "defaultValue": "60"
+                        },
+                        {
+                            "type": "radio",
+                            "field": "volume",
+                            "label": "Volume",
+                            "defaultValue": "reduced",
+                            "required": true,
+                            "options": {
+                                "items": [
+                                    {
+                                        "value": "reduced",
+                                        "label": "Reduced (~0.6 GB/day)"
+                                    },
+                                    {
+                                        "value": "original",
+                                        "label": "Original (~1.9 GB/day)"
+                                    }
+                                ]
+                            },
+                            "help": "Reduced keeps 1 of 10 lines of the Berlin Tomcat DoS bursts (the pattern stays visible). Everything else is identical."
+                        },
+                        {
+                            "type": "text",
+                            "field": "cs_host",
+                            "label": "Default host",
+                            "defaultValue": "coolashaker",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "pattern": "^[\\w.-]+$",
+                                    "errorMsg": "Letters, digits, . _ - only"
+                                }
+                            ],
+                            "help": "Used when an event carries no host of its own (ESXi, Tomcat and DB servers keep their names)."
+                        },
+                        {
+                            "type": "text",
+                            "field": "timezone",
+                            "label": "Time zone",
+                            "defaultValue": "Europe/Vienna",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "pattern": "^[A-Za-z_]+(/[A-Za-z_+-]+)*$",
+                                    "errorMsg": "IANA name, e.g. Europe/Vienna"
+                                }
+                            ],
+                            "help": "Business hours and the minute-of-hour fault windows run in this zone (the original ran on local time)."
+                        },
+                        {
+                            "type": "text",
+                            "field": "backfill_minutes",
+                            "label": "Backfill on first start (minutes)",
+                            "defaultValue": "0",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        0,
+                                        10080
+                                    ],
+                                    "errorMsg": "0 – 10080"
+                                }
+                            ],
+                            "help": "0 = realtime only. 60 min ≈ 25 MB (reduced). Runs only the first time this input starts."
+                        },
+                        {
+                            "type": "text",
+                            "field": "max_gap_minutes",
+                            "label": "Fill gaps up to (minutes)",
+                            "defaultValue": "15",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        0,
+                                        1440
+                                    ],
+                                    "errorMsg": "0 – 1440"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "checkbox",
+                            "field": "scenario_dc_frankfurt",
+                            "label": "Lab scenario: DC Frankfurt connection degraded (AI Support Bot)",
+                            "defaultValue": 0,
+                            "help": "Continuous while on. Loss/latency on every ThousandEyes path to the Frankfurt DC → AI Support Bot (LLM on the Frankfurt GPUs) slow, prompts unanswered and retried (Cisco AI Defense), GPUs busy with aborted requests → after ~6 min calls pile up in the Support Hotline queue (Teams)."
+                        },
+                        {
+                            "type": "checkbox",
+                            "field": "scenario_sdwan_brownout",
+                            "label": "Lab scenario: SD-WAN brownout (Berlin)",
+                            "defaultValue": 0,
+                            "help": "Continuous while on. Loss/jitter on Berlin WAN paths, Meraki MX uplink alerts → after ~6 min failover to cellular, Teams Berlin poor, Tomcat 504, MES Berlin delayed."
+                        },
+                        {
+                            "type": "checkbox",
+                            "field": "scenario_isp_route_leak",
+                            "label": "Lab scenario: ISP route leak (Atlanta)",
+                            "defaultValue": 0,
+                            "help": "Continuous while on. BGP path changes and DNS slowness from Atlanta → after ~6 min SaaS, B2B order transaction and AI Support Assistant degraded. Own network stays green."
+                        },
+                        {
+                            "type": "checkbox",
+                            "field": "scenario_berlin_db",
+                            "label": "Demo scenario: Berlin DB chain (berdb001)",
+                            "defaultValue": 0,
+                            "help": "Minute 0–15 / 30–45: password change on the scheduled-task account → log cleanup task fails → disk/log full, CPU/memory up → MSSQL → MES Berlin + Prod-API Berlin. Off = all sources normal. Applied live (~10 s)."
+                        },
+                        {
+                            "type": "checkbox",
+                            "field": "scenario_berlin_dos",
+                            "label": "Demo scenario: Berlin Tomcat DoS",
+                            "defaultValue": 0,
+                            "help": "Minute 0–15 / 30–45: request burst from attacker IPs on berweb01/02. Off = normal access logs."
+                        },
+                        {
+                            "type": "checkbox",
+                            "field": "scenario_atlanta_teams",
+                            "label": "Demo scenario: Teams outage Atlanta",
+                            "defaultValue": 0,
+                            "help": "Minute 0–10: Teams call/meeting failures, ThousandEyes Teams tests degraded."
+                        },
+                        {
+                            "type": "checkbox",
+                            "field": "scenario_vienna_teams",
+                            "label": "Demo scenario: Teams issues Vienna",
+                            "defaultValue": 0,
+                            "help": "Minute 20–28: ThousandEyes Teams/M365 HTTP and media tests degraded."
+                        },
+                        {
+                            "type": "checkbox",
+                            "field": "scenario_atlanta_network",
+                            "label": "Demo scenario: Atlanta network outage",
+                            "defaultValue": 0,
+                            "help": "Minute 40–45: Catalyst Center + Meraki (alerts, offline devices, packet loss); MES Atlanta 45–50."
+                        },
+                        {
+                            "type": "checkbox",
+                            "field": "scenario_sap_idoc",
+                            "label": "Lab scenario: SAP IDoc interface ERP → MII broken",
+                            "defaultValue": 0,
+                            "help": "Continuous while on. tRFC from SAP ERP PRD to the MII IDoc listeners fails (client certificate expired) → IDoc errors and backlog, MII order buffers drain → after ~6 min production stops in Atlanta, Berlin and Vienna."
+                        }
+                    ]
+                },
+                {
+                    "name": "ni_datagen",
+                    "title": "Network Intelligence (Meraki, Catalyst Center, ThousandEyes, SC4SNMP)",
+                    "inputHelperModule": "ni_datagen_helper",
+                    "entity": [
+                        {
+                            "type": "text",
+                            "label": "Name",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Input Name must begin with a letter and consist exclusively of alphanumeric characters and underscores.",
+                                    "pattern": "^[a-zA-Z]\\w*$"
+                                },
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Length of input name should be between 1 and 100",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                }
+                            ],
+                            "field": "name",
+                            "help": "A unique name for the data input.",
+                            "required": true
+                        },
+                        {
+                            "type": "text",
+                            "field": "interval",
+                            "label": "Collection cycle (seconds)",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Collection cycle (seconds) must be either a non-negative number, CRON interval or -1.",
+                                    "pattern": "^((?:-1|\\d+(?:\\.\\d+)?)|(([\\*\\d{1,2}\\,\\-\\/]+\\s){4}[\\*\\d{1,2}\\,\\-\\/]+))$"
+                                },
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        60,
+                                        3600
+                                    ],
+                                    "errorMsg": "Collection cycle (seconds) must be between 60 and 3600"
+                                }
+                            ],
+                            "help": "One full snapshot of all ~214 devices per cycle (≈1,350 events). 300 = original --interval.",
+                            "required": true,
+                            "defaultValue": "300"
+                        },
+                        {
+                            "type": "text",
+                            "field": "seed",
+                            "label": "Inventory seed",
+                            "defaultValue": "2690",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        1,
+                                        999999
+                                    ],
+                                    "errorMsg": "1 – 999999"
+                                }
+                            ],
+                            "help": "Keep it stable: same seed = same serials, MACs and IDs, so the app's graph stays stable."
+                        },
+                        {
+                            "type": "text",
+                            "field": "index_meraki",
+                            "label": "Index Meraki",
+                            "defaultValue": "demo_cisco_meraki",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "pattern": "^[a-z0-9_][a-z0-9_-]*$",
+                                    "errorMsg": "lower-case index name"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "text",
+                            "field": "index_catalyst",
+                            "label": "Index Catalyst Center",
+                            "defaultValue": "demo_cisco_catalyst",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "pattern": "^[a-z0-9_][a-z0-9_-]*$",
+                                    "errorMsg": "lower-case index name"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "text",
+                            "field": "index_thousandeyes",
+                            "label": "Index ThousandEyes",
+                            "defaultValue": "demo_thousendeyes",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "pattern": "^[a-z0-9_][a-z0-9_-]*$",
+                                    "errorMsg": "lower-case index name"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "text",
+                            "field": "index_snmp",
+                            "label": "Index SC4SNMP",
+                            "defaultValue": "netops",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "pattern": "^[a-z0-9_][a-z0-9_-]*$",
+                                    "errorMsg": "lower-case index name"
+                                }
+                            ],
+                            "help": "Read by the app's ni_sc4snmp_indexes macro."
+                        },
+                        {
+                            "type": "text",
+                            "field": "index_summary",
+                            "label": "Index health history",
+                            "defaultValue": "ni_capability_summary",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "pattern": "^[a-z0-9_][a-z0-9_-]*$",
+                                    "errorMsg": "lower-case index name"
+                                }
+                            ],
+                            "help": "Ships with the Network Intelligence app."
+                        },
+                        {
+                            "type": "text",
+                            "field": "alert_backfill_hours",
+                            "label": "Backfill alerts (hours)",
+                            "defaultValue": "48",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        0,
+                                        168
+                                    ],
+                                    "errorMsg": "0 – 168"
+                                }
+                            ],
+                            "help": "First start only."
+                        },
+                        {
+                            "type": "text",
+                            "field": "backfill_hours",
+                            "label": "Backfill raw telemetry (hours)",
+                            "defaultValue": "2",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        0,
+                                        48
+                                    ],
+                                    "errorMsg": "0 – 48"
+                                }
+                            ],
+                            "help": "First start only."
+                        },
+                        {
+                            "type": "text",
+                            "field": "summary_backfill_hours",
+                            "label": "Backfill health history (hours)",
+                            "defaultValue": "24",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        0,
+                                        168
+                                    ],
+                                    "errorMsg": "0 – 168"
+                                }
+                            ],
+                            "help": "First start only, written to the health-history index (~2,000 observations per 15 min). 0 disables."
+                        },
+                        {
+                            "type": "text",
+                            "field": "max_gap_minutes",
+                            "label": "Fill gaps up to (minutes)",
+                            "defaultValue": "30",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        0,
+                                        1440
+                                    ],
+                                    "errorMsg": "0 – 1440"
+                                }
+                            ],
+                            "help": "After stop/start, missed snapshots are only resent for shorter gaps. Alert open/close transitions are always caught up."
+                        }
+                    ]
+                }
+            ],
+            "title": "Inputs",
+            "description": "One input per generator. Use the Status toggle to start / stop it.",
+            "table": {
+                "actions": [
+                    "edit",
+                    "delete",
+                    "clone"
+                ],
+                "header": [
+                    {
+                        "label": "Name",
+                        "field": "name"
+                    },
+                    {
+                        "label": "Type",
+                        "field": "serviceTitle"
+                    },
+                    {
+                        "label": "Interval",
+                        "field": "interval"
+                    },
+                    {
+                        "label": "Status",
+                        "field": "disabled"
+                    }
+                ],
+                "moreInfo": [
+                    {
+                        "label": "Index",
+                        "field": "index"
+                    },
+                    {
+                        "label": "Volume",
+                        "field": "volume"
+                    },
+                    {
+                        "label": "Host",
+                        "field": "bar_host"
+                    },
+                    {
+                        "label": "Host",
+                        "field": "cs_host"
+                    },
+                    {
+                        "label": "Time zone",
+                        "field": "timezone"
+                    },
+                    {
+                        "label": "Backfill days",
+                        "field": "backfill_days"
+                    },
+                    {
+                        "label": "Backfill minutes",
+                        "field": "backfill_minutes"
+                    },
+                    {
+                        "label": "Fill gaps (min)",
+                        "field": "max_gap_minutes"
+                    },
+                    {
+                        "label": "Lab: DC Frankfurt (AI Support Bot)",
+                        "field": "scenario_dc_frankfurt",
+                        "mapping": {
+                            "1": "On",
+                            "true": "On",
+                            "0": "Off",
+                            "false": "Off"
+                        }
+                    },
+                    {
+                        "label": "Lab: SD-WAN brownout (Berlin)",
+                        "field": "scenario_sdwan_brownout",
+                        "mapping": {
+                            "1": "On",
+                            "true": "On",
+                            "0": "Off",
+                            "false": "Off"
+                        }
+                    },
+                    {
+                        "label": "Lab: ISP route leak (Atlanta)",
+                        "field": "scenario_isp_route_leak",
+                        "mapping": {
+                            "1": "On",
+                            "true": "On",
+                            "0": "Off",
+                            "false": "Off"
+                        }
+                    },
+                    {
+                        "label": "Scenario Berlin DB chain",
+                        "field": "scenario_berlin_db",
+                        "mapping": {
+                            "1": "On",
+                            "true": "On",
+                            "0": "Off",
+                            "false": "Off"
+                        }
+                    },
+                    {
+                        "label": "Scenario Berlin DoS",
+                        "field": "scenario_berlin_dos",
+                        "mapping": {
+                            "1": "On",
+                            "true": "On",
+                            "0": "Off",
+                            "false": "Off"
+                        }
+                    },
+                    {
+                        "label": "Scenario Teams Atlanta",
+                        "field": "scenario_atlanta_teams",
+                        "mapping": {
+                            "1": "On",
+                            "true": "On",
+                            "0": "Off",
+                            "false": "Off"
+                        }
+                    },
+                    {
+                        "label": "Scenario Teams Vienna",
+                        "field": "scenario_vienna_teams",
+                        "mapping": {
+                            "1": "On",
+                            "true": "On",
+                            "0": "Off",
+                            "false": "Off"
+                        }
+                    },
+                    {
+                        "label": "Scenario Atlanta network",
+                        "field": "scenario_atlanta_network",
+                        "mapping": {
+                            "1": "On",
+                            "true": "On",
+                            "0": "Off",
+                            "false": "Off"
+                        }
+                    },
+                    {
+                        "label": "Scenario SAP IDoc",
+                        "field": "scenario_sap_idoc",
+                        "mapping": {
+                            "1": "On",
+                            "true": "On",
+                            "0": "Off",
+                            "false": "Off"
+                        }
+                    },
+                    {
+                        "label": "Seed",
+                        "field": "seed"
+                    },
+                    {
+                        "label": "Index Meraki",
+                        "field": "index_meraki"
+                    },
+                    {
+                        "label": "Index Catalyst",
+                        "field": "index_catalyst"
+                    },
+                    {
+                        "label": "Index ThousandEyes",
+                        "field": "index_thousandeyes"
+                    },
+                    {
+                        "label": "Index SC4SNMP",
+                        "field": "index_snmp"
+                    },
+                    {
+                        "label": "Index health history",
+                        "field": "index_summary"
+                    },
+                    {
+                        "label": "Status",
+                        "field": "disabled",
+                        "mapping": {
+                            "true": "Stopped",
+                            "false": "Running"
+                        }
+                    }
+                ]
+            },
+            "useInputToggleConfirmation": true
+        },
+        "dashboard": {
+            "panels": [
+                {
+                    "name": "default"
+                }
+            ]
+        }
+    },
+    "meta": {
+        "name": "TA-bar-datagen",
+        "restRoot": "TA_bar_datagen",
+        "version": "1.9.0",
+        "displayName": "Demo Datagen (Buttercup Bar, CoolaShaker, Network Intelligence)",
+        "schemaVersion": "0.0.10",
+        "supportedThemes": [
+            "light",
+            "dark"
+        ],
+        "defaultView": "configuration",
+        "supportedPythonVersion": [
+            "3.9",
+            "3.13"
+        ],
+        "checkForUpdates": false,
+        "_uccVersion": "6.6.0"
+    }
+}

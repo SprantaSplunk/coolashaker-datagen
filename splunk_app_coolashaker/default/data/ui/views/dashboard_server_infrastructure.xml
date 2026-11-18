@@ -1,0 +1,407 @@
+<form version="1.1" theme="dark">
+  <label>CoolaShaker - Server Infrastructure</label>
+  <description>VMware and Windows Server performance monitoring</description>
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="time_token" searchWhenChanged="true">
+      <label>Time Range</label>
+      <default>
+        <earliest>-60m@m</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="location_token" searchWhenChanged="true">
+      <label>Location</label>
+      <choice value="*">All Locations</choice>
+      <choice value="vienna">Vienna</choice>
+      <choice value="berlin">Berlin</choice>
+      <choice value="atlanta">Atlanta</choice>
+      <default>*</default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Average VM CPU Usage</title>
+      <single>
+        <search>
+          <query>
+| mstats avg(_value) as avg_cpu 
+    WHERE index=demo_vmware_metrics metric_name=vmware.vm.cpu.usage.pct location=$location_token$
+| eval avg_cpu=round(avg_cpu, 1)
+| eval range=case(
+    avg_cpu &lt;= 70, "low",
+    avg_cpu &lt;= 85, "elevated",
+    1=1, "severe")
+| rangemap field=avg_cpu low=0-70 elevated=70-85 severe=85-100
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[70,85]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Virtual Machines</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Average ESXi CPU Usage</title>
+      <single>
+        <search>
+          <query>
+| mstats avg(_value) as avg_cpu 
+    WHERE index=demo_vmware_metrics metric_name=vmware.esxi.cpu.usage.pct location=$location_token$
+| eval avg_cpu=round(avg_cpu, 1)
+| eval range=case(
+    avg_cpu &lt;= 70, "low",
+    avg_cpu &lt;= 85, "elevated",
+    1=1, "severe")
+| rangemap field=avg_cpu low=0-70 elevated=70-85 severe=85-100
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[70,85]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Hypervisor Hosts</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Total VMs</title>
+      <single>
+        <search>
+          <query>
+| mstats latest(_value) as value 
+    WHERE index=demo_vmware_metrics metric_name=vmware.vm.cpu.usage.pct location=$location_token$
+    BY vm_name
+| stats dc(vm_name) as vm_count
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="underLabel">Virtual Machines</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Total ESXi Hosts</title>
+      <single>
+        <search>
+          <query>| mstats latest(_value) as value 
+    WHERE index=demo_vmware_metrics metric_name=vmware.esxi.cpu.usage.pct location=$location_token$
+    BY host
+| stats dc(host) as esxi_count</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="underLabel">Hypervisor Hosts</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>VM CPU Usage Trend</title>
+      <chart>
+        <search>
+          <query>
+| mstats avg(_value) as cpu_usage 
+    WHERE index=demo_vmware_metrics metric_name=vmware.vm.cpu.usage.pct location=$location_token$
+    BY vm_name span=5m
+| timechart span=5m avg(cpu_usage) by vm_name
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">CPU %</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>VM Memory Usage Trend</title>
+      <chart>
+        <search>
+          <query>
+| mstats avg(_value) as memory_gb 
+    WHERE index=demo_vmware_metrics metric_name=vmware.vm.memory.usage.gb location=$location_token$
+    BY vm_name span=5m
+| timechart span=5m avg(memory_gb) by vm_name
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Memory (GB)</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>ESXi Host Performance</title>
+      <chart>
+        <search>
+          <query>| mstats avg(_value) as value 
+    WHERE index=demo_vmware_metrics metric_type=esxi_host location=$location_token$
+    AND (metric_name=vmware.esxi.cpu.usage.pct OR metric_name=vmware.esxi.memory.usage.pct)
+   BY metric_name host span=5m
+| eval metric_label=case(
+    metric_name="vmware.esxi.cpu.usage.pct", "CPU %",
+    metric_name="vmware.esxi.memory.usage.pct", "Memory %")
+| eval metric_label=host + ":" + metric_label 
+| timechart span=5m avg(value) by metric_label</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Percentage</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>ESXi Network Performance</title>
+      <chart>
+        <search>
+          <query>| mstats avg(_value) as value 
+    WHERE index=demo_vmware_metrics metric_type=esxi_host location=$location_token$
+    AND (metric_name=vmware.esxi.network.rx.mbps OR metric_name=vmware.esxi.network.tx.mbps)
+    BY metric_name host span=5m
+| eval metric_label=case(
+    metric_name="vmware.esxi.network.rx.mbps", "RX (Mbps)",
+    metric_name="vmware.esxi.network.tx.mbps", "TX (Mbps)")
+| eval metric_label=host + ":" + metric_label     
+| timechart span=5m avg(value) by metric_label</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Throughput (Mbps)</option>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Windows Server CPU Usage</title>
+      <chart>
+        <search>
+          <query>| mstats avg(_value) as cpu_usage 
+    WHERE index=demo_windows_metrics metric_name=windows.cpu.usage.pct location=$location_token$
+    BY server span=5m
+| timechart span=5m avg(cpu_usage) by server</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">CPU %</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Windows Server Memory Usage</title>
+      <chart>
+        <search>
+          <query>| mstats avg(_value) as memory_usage 
+    WHERE index=demo_windows_metrics metric_name=windows.memory.usage.pct location=$location_token$
+    BY server span=5m
+| timechart span=5m avg(memory_usage) by server</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Memory %</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Virtual Machine Performance Overview</title>
+      <table>
+        <search>
+          <query>
+| mstats latest(_value) as value 
+    WHERE index=demo_vmware_metrics 
+    AND (metric_name=vmware.vm.cpu.usage.pct OR metric_name=vmware.vm.memory.usage.gb OR metric_name=vmware.vm.disk.usage.pct)
+    AND location=$location_token$
+    BY vm_name location metric_name
+| eval metric_type=case(
+    metric_name="vmware.vm.cpu.usage.pct", "CPU",
+    metric_name="vmware.vm.memory.usage.gb", "Memory",
+    metric_name="vmware.vm.disk.usage.pct", "Disk")
+| eval value=round(value, 1)
+| chart first(value) over vm_name by metric_type
+| rename 
+    vm_name as "VM Name",
+    CPU as "CPU %",
+    Memory as "Memory (GB)",
+    Disk as "Disk %"
+| sort "VM Name"
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">15</option>
+        <format type="color" field="CPU %">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" minColor="#53a051" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="0" midValue="70" maxValue="100"></scale>
+        </format>
+        <format type="color" field="Disk %">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" minColor="#53a051" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="0" midValue="70" maxValue="100"></scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>ESXi Host Performance Overview</title>
+      <table>
+        <search>
+          <query>| mstats latest(_value) as value 
+    WHERE index=demo_vmware_metrics metric_type=esxi_host location=$location_token$
+    AND (metric_name=vmware.esxi.cpu.usage.pct 
+         OR metric_name=vmware.esxi.memory.usage.pct 
+         OR metric_name=vmware.esxi.network.rx.mbps 
+         OR metric_name=vmware.esxi.network.tx.mbps)
+    BY host location metric_name
+| eval metric_type=case(
+    metric_name="vmware.esxi.cpu.usage.pct", "CPU",
+    metric_name="vmware.esxi.memory.usage.pct", "Memory",
+    metric_name="vmware.esxi.network.rx.mbps", "Net RX",
+    metric_name="vmware.esxi.network.tx.mbps", "Net TX")
+| eval value=round(value, 1)
+| chart first(value) over host by metric_type
+| rename 
+    host as "ESXi Host",
+    CPU as "CPU %",
+    Memory as "Memory %",
+    "Net RX" as "RX (Mbps)",
+    "Net TX" as "TX (Mbps)"
+| sort "ESXi Host"</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="CPU %">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" midColor="#f58f39" minColor="#53a051"></colorPalette>
+          <scale type="minMidMax" maxValue="100" midValue="70" minValue="0"></scale>
+        </format>
+        <format type="color" field="Memory %">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" midColor="#f58f39" minColor="#53a051"></colorPalette>
+          <scale type="minMidMax" maxValue="100" midValue="70" minValue="0"></scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Windows Server Performance Overview</title>
+      <table>
+        <search>
+          <query>| mstats latest(_value) as value 
+    WHERE index=demo_windows_metrics location=$location_token$
+    AND (metric_name=windows.cpu.usage.pct 
+         OR metric_name=windows.memory.usage.pct 
+         OR metric_name=windows.disk.usage.pct
+         OR metric_name=windows.disk.queue.length)
+    BY server location metric_name
+| eval metric_type=case(
+    metric_name="windows.cpu.usage.pct", "CPU",
+    metric_name="windows.memory.usage.pct", "Memory",
+    metric_name="windows.disk.usage.pct", "Disk",
+    metric_name="windows.disk.queue.length", "Disk Queue")
+| eval value=round(value, 1)
+| chart first(value) over server by metric_type
+| rename 
+    server as "Windows Server",
+    CPU as "CPU %",
+    Memory as "Memory %",
+    Disk as "Disk %",
+    "Disk Queue" as "Disk Queue Len"
+| sort "Windows Server"</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="count">15</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="CPU %">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" midColor="#f58f39" minColor="#53a051"></colorPalette>
+          <scale type="minMidMax" maxValue="100" midValue="70" minValue="0"></scale>
+        </format>
+        <format type="color" field="Memory %">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" midColor="#f58f39" minColor="#53a051"></colorPalette>
+          <scale type="minMidMax" maxValue="100" midValue="70" minValue="0"></scale>
+        </format>
+        <format type="color" field="Disk %">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" midColor="#f58f39" minColor="#53a051"></colorPalette>
+          <scale type="minMidMax" maxValue="100" midValue="70" minValue="0"></scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Windows Critical Events</title>
+      <table>
+        <search>
+          <query>index=demo_windows_events location=$location_token$ EventType=Error OR EventType=Warning
+| eval event_time=strftime(_time, "%H:%M:%S")
+| stats values(*) as * by event_time,EventCode
+| sort - event_time
+| head 20
+| table event_time ComputerName location EventCode EventType SourceName Message 
+| rename 
+    event_time as "Time",
+    location as "Location",
+    ComputerName as "Host",
+    EventCode as "Event Code",
+    EventType as "Type",
+    SourceName as "Source",
+    Message as "Message"</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="Type">
+          <colorPalette type="map">{"Error":"#dc4e41","Warning":"#f58f39","Information":"#53a051"}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+</form>

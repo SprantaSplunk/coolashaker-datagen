@@ -1,0 +1,1223 @@
+<form version="1.1" theme="dark">
+  <label>CoolaShaker - Executive Overview</label>
+  <description>High-level operational metrics across all systems</description>
+  <!-- BASE SEARCH 1: Manufacturing KPIs -->
+  <search id="base_manufacturing_kpis">
+    <query>
+index=demo_mes production_rate_per_hour=*
+| search location=$loc_tok$
+| fields location production_rate_per_hour oee_pct defect_rate_pct machine_status
+    </query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+  <!-- BASE SEARCH 2: Infrastructure KPIs -->
+  <search id="base_infra_kpis">
+    <query>
+index=demo_infra
+| search location=$loc_tok$
+| fields sensor_id location sensor_type value_celsius value_kw utilization_pct status
+    </query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+  <!-- BASE SEARCH 3: Database KPIs -->
+  <search id="base_db_kpis">
+    <query>
+index=demo_mssql event_type=performance
+| search location=$loc_tok$
+| eval db_host=mvindex(host, 0)
+| fields location db_host cpu_pct buffer_cache_hit_ratio deadlocks_per_sec
+    </query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+  <!-- BASE SEARCH 4: Server KPIs -->
+  <search id="base_server_kpis">
+    <query>
+| mstats avg(_value) as value
+    WHERE index=demo_vmware_metrics
+    AND (metric_name=vmware.vm.cpu.usage.pct OR metric_name=vmware.esxi.cpu.usage.pct)
+    BY location metric_name span=5m
+| search location=$loc_tok$
+    </query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+  <!-- BASE SEARCH 5: ThousandEyes Web + API Monitoring (new: http-server, page-load, web-tx, api tests) -->
+  <search id="base_web_monitoring">
+    <query>
+index=demo_thousendeyes
+| rename thousandeyes.agent.location AS location
+| search location=$loc_tok$
+| fields thousandeyes.test.type location thousandeyes.test.name
+    metric_name:http.server.request.availability
+    metric_name:web.page_load.duration metric_name:web.page_load.completion
+    metric_name:api.duration metric_name:api.completion
+    server.address
+    </query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+  <!-- BASE SEARCH 6: Tomcat Access Logs (web01/web02 all locations) -->
+  <search id="base_tomcat_logs">
+    <query>
+index=demo_tomcat_logs
+| eval location=case(
+    host="atlweb01" OR host="atlweb02", "atlanta",
+    host="berweb01" OR host="berweb02", "berlin",
+    host="vieweb01" OR host="vieweb02", "vienna",
+    1=1, "unknown")
+| search location=$loc_tok$
+| fields location host status bytes clientip useragent
+    </query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+  <!-- ROW: Manufacturing KPIs -->
+  <!-- ROW: Infrastructure KPIs -->
+  <!-- ROW: Web & Application KPIs (new) -->
+  <!-- ROW: Manufacturing Trend Charts -->
+  <!-- ROW: Infrastructure Trend Charts -->
+  <!-- ROW: Web & API Trend Charts (new) -->
+  <!-- ROW: Tomcat Web Traffic Trends (new) -->
+  <!-- ROW: Location Health Summary (extended with web + API columns) -->
+  <!-- ROW: Recent Critical Events (extended with ThousandEyes API + Tomcat DOS) -->
+  <!-- ROW: System Availability Summary (extended with web + API entries) -->
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="time_token" searchWhenChanged="true">
+      <label>Time Range</label>
+      <default>
+        <earliest>-4h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="loc_tok" searchWhenChanged="true">
+      <label>Standort</label>
+      <choice value="*">Alle Standorte</choice>
+      <choice value="atlanta">Atlanta</choice>
+      <choice value="berlin">Berlin</choice>
+      <choice value="vienna">Vienna</choice>
+      <default>*</default>
+      <initialValue>*</initialValue>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <html>
+        <h1 style="text-align:center; color:#53a051; font-size:28px; margin:20px 0;">
+          CoolaShaker Global Operations Dashboard
+        </h1>
+        <p style="text-align:center; color:#999; font-size:14px;">
+          Real-time monitoring across Vienna, Berlin, and Atlanta facilities and the DC Frankfurt
+        </p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Manufacturing OEE</title>
+      <single>
+        <search base="base_manufacturing_kpis">
+          <query>
+| stats avg(oee_pct) as avg_oee
+| eval avg_oee=round(avg_oee, 1)
+| eval range=case(
+    avg_oee &gt;= 85, "low",
+    avg_oee &gt;= 70, "elevated",
+    1=1, "severe")
+| rangemap field=avg_oee low=85-100 elevated=70-85 severe=0-70
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0xdc4e41","0xf58f39","0x53a051"]</option>
+        <option name="rangeValues">[70,85]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Overall Equipment Effectiveness</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Production Rate</title>
+      <single>
+        <search base="base_manufacturing_kpis">
+          <query>
+| stats avg(production_rate_per_hour) as avg_rate
+| eval avg_rate=round(avg_rate, 0)
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0</option>
+        <option name="unit">units/hr</option>
+        <option name="underLabel">Global Average</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Defect Rate</title>
+      <single>
+        <search base="base_manufacturing_kpis">
+          <query>
+| stats avg(defect_rate_pct) as avg_defect
+| eval avg_defect=round(avg_defect, 2)
+| eval range=case(
+    avg_defect &lt;= 2, "low",
+    avg_defect &lt;= 5, "guarded",
+    1=1, "severe")
+| rangemap field=avg_defect low=0-2 guarded=2-5 severe=5-100
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.00</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[2,5]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Quality Metric</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Lines Operational</title>
+      <single>
+        <search base="base_manufacturing_kpis">
+          <query>
+| stats
+    dc(eval(machine_status="running")) as running,
+    dc(eval(machine_status!="running")) as not_running
+| eval total=running+not_running
+| eval pct=round(100*running/total, 0)
+| eval display=running." / ".total
+| fields display pct
+| eval range=case(
+    pct &gt;= 90, "low",
+    pct &gt;= 70, "elevated",
+    1=1, "severe")
+| rangemap field=pct low=90-100 elevated=70-90 severe=0-70
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["0xdc4e41","0xf58f39","0x53a051"]</option>
+        <option name="rangeValues">[70,90]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Production Lines</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Datacenter Temp</title>
+      <single>
+        <search base="base_infra_kpis">
+          <query>
+| search sensor_type=temperature
+| stats avg(value_celsius) as avg_temp
+| eval avg_temp=round(avg_temp, 1)
+| eval range=case(
+    avg_temp &lt;= 22, "low",
+    avg_temp &lt;= 25, "elevated",
+    1=1, "severe")
+| rangemap field=avg_temp low=0-22 elevated=22-25 severe=25-50
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[22,25]</option>
+        <option name="unit">deg C</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Average Temperature</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Power Draw</title>
+      <single>
+        <search base="base_infra_kpis">
+          <query>
+| search sensor_type=power sensor_id=*-power-total
+| stats sum(value_kw) as total_power
+| eval total_power=round(total_power, 0)
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0</option>
+        <option name="unit">kW</option>
+        <option name="underLabel">Total Power Consumption</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Database Performance</title>
+      <single>
+        <search base="base_db_kpis">
+          <query>
+| stats avg(buffer_cache_hit_ratio) as avg_cache
+| eval avg_cache=round(avg_cache, 1)
+| eval range=case(
+    avg_cache &gt;= 95, "low",
+    avg_cache &gt;= 90, "elevated",
+    1=1, "severe")
+| rangemap field=avg_cache low=95-100 elevated=90-95 severe=0-90
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0xdc4e41","0xf58f39","0x53a051"]</option>
+        <option name="rangeValues">[90,95]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Cache Hit Ratio</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Server CPU</title>
+      <single>
+        <search base="base_server_kpis">
+          <query>
+| stats avg(value) as avg_cpu
+| eval avg_cpu=round(avg_cpu, 1)
+| eval range=case(
+    avg_cpu &lt;= 70, "low",
+    avg_cpu &lt;= 85, "elevated",
+    1=1, "severe")
+| rangemap field=avg_cpu low=0-70 elevated=70-85 severe=85-100
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[70,85]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Average CPU Usage</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Website Availability</title>
+      <single>
+        <search base="base_web_monitoring">
+          <query>
+| search thousandeyes.test.type=http-server
+| stats avg(metric_name:http.server.request.availability) as avail
+| eval avail=round(avail, 1)
+| eval range=case(avail &gt;= 99, "low", avail &gt;= 95, "elevated", 1=1, "severe")
+| rangemap field=avail low=99-100 elevated=95-99 severe=0-95
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0xdc4e41","0xf58f39","0x53a051"]</option>
+        <option name="rangeValues">[95,99]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">HTTP Availability (TE)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Page Load Time</title>
+      <single>
+        <search base="base_web_monitoring">
+          <query>
+| search thousandeyes.test.type=page-load
+| stats avg(metric_name:web.page_load.duration) as plt
+| eval plt=round(plt * 1000, 0)
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[2000,5000]</option>
+        <option name="unit">ms</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Avg Page Load (TE)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>API Completion Rate</title>
+      <single>
+        <search base="base_web_monitoring">
+          <query>
+| search thousandeyes.test.type=api
+| stats avg(metric_name:api.completion) as completion
+| eval completion=round(completion, 1)
+| eval range=case(completion &gt;= 99, "low", completion &gt;= 90, "elevated", 1=1, "severe")
+| rangemap field=completion low=99-100 elevated=90-99 severe=0-90
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0xdc4e41","0xf58f39","0x53a051"]</option>
+        <option name="rangeValues">[90,99]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Internal API Endpoints (TE)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Web Error Rate</title>
+      <single>
+        <search>
+          <query>index=demo_tomcat_logs 
+| eval location=case(host="atlweb01" OR host="atlweb02","atlanta",host="berweb01" OR host="berweb02","berlin",host="vieweb01" OR host="vieweb02","vienna",1=1,"unknown") 
+| search location=$loc_tok$ 
+| stats count as total, count(eval(tonumber(status)&gt;=400)) as errors 
+| eval error_rate=round(if(total&gt;0, 100.0*errors/total, 0), 1) 
+| eval range=case(error_rate&lt;=10,"low",error_rate&lt;=15,"elevated",1=1,"severe") 
+| rangemap field=error_rate low=0-1 elevated=1-5 severe=5-100 
+| table error_rate</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.00</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[10,15]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="underLabel">Tomcat HTTP Errors</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Campus Network Health</title>
+      <single>
+        <search>
+          <query>index=demo_cisco_catalyst sourcetype="cisco:dnac:devicehealth"
+| rex field=Location "(?i)(?&lt;location&gt;vienna|berlin|atlanta)"
+| eval location=lower(location)
+| search location=$loc_tok$
+| stats avg(HealthScore) as health
+| eval health=round(health, 1)</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0xdc4e41","0xf58f39","0x53a051"]</option>
+        <option name="rangeValues">[5,8]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Catalyst Center health (1-10)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Wi-Fi Packet Loss</title>
+      <single>
+        <search>
+          <query>index=demo_cisco_meraki sourcetype="meraki:wirelessdevicespacketlossbydevice"
+| rex field=network.name "(?i)^(?&lt;location&gt;vienna|berlin|atlanta)"
+| eval location=lower(location)
+| search location=$loc_tok$
+| stats avg(downstream.lossPercentage) as loss
+| eval loss=round(loss, 1)</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[2,5]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Meraki access points (downstream)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>DC Path Loss</title>
+      <single>
+        <search>
+          <query>index=demo_thousendeyes thousandeyes.test.type=agent-to-agent
+| rename thousandeyes.agent.location AS location
+| search location=$loc_tok$
+| stats avg(metric_name:network.loss) as loss
+| eval loss=round(loss, 2)</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.00</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[0.5,2]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">ThousandEyes agent-to-agent</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Teams Call Success</title>
+      <single>
+        <search>
+          <query>index=demo_msteams event_type IN (call_ended, call_failed)
+| search location=$loc_tok$
+| stats count(eval(event_type="call_ended")) as ok count as total
+| eval success=if(total &gt; 0, round(100 * ok / total, 1), 100)
+| fields success</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0xdc4e41","0xf58f39","0x53a051"]</option>
+        <option name="rangeValues">[90,98]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Microsoft Teams calls</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>AI Support Bot Response Time</title>
+      <single>
+        <search>
+          <query>index=demo_thousendeyes "thousandeyes.test.name"="AI Support Assistant API"
+| stats avg(metric_name:api.duration) as duration
+| eval duration=round(duration, 1)</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[3,6]</option>
+        <option name="unit">s</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">All plants (ThousandEyes)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>AI Defense: Prompts Without Answer</title>
+      <single>
+        <search>
+          <query>index=demo_ai_defense sourcetype="cisco:ai:defense"
+| stats count(eval(event_message_type="prompt" AND event_action="Allow")) as prompts
+        count(eval(event_message_type="response")) as responses
+| eval unanswered=if(prompts &gt; 0, round(100 * (prompts - responses) / prompts, 1), 0)
+| fields unanswered</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[5,15]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Cisco AI Defense</option>
+      </single>
+    </panel>
+    <panel>
+      <title>GPU Time to First Token</title>
+      <single>
+        <search>
+          <query>| mstats avg(_value) as ttft WHERE index=demo_vmware_metrics metric_name="vmware.vm.gpu.llm.ttft.ms" location="frankfurt"
+| eval ttft=round(ttft, 0)</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[800,1500]</option>
+        <option name="unit">ms</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">LLM GPUs DC Frankfurt</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Support Hotline Calls Waiting</title>
+      <single>
+        <search>
+          <query>index=demo_msteams event_type=call_queue_stats queue_name="Support Hotline"
+| stats max(calls_waiting) as waiting</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[5,12]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Peak in time range (Teams queue)</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>SAP Production Orders Delivered</title>
+      <single>
+        <search>
+          <query>index=demo_sap sourcetype="sap:idoc:status" target_location=$loc_tok$
+| stats sum(idocs_created) as created sum(idocs_delivered) as delivered
+| eval delivered_pct=if(created &gt; 0, min(100, round(100 * delivered / created, 1)), 100)
+| fields delivered_pct</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0xdc4e41","0xf58f39","0x53a051"]</option>
+        <option name="rangeValues">[90,99]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">SAP ERP → MII (IDoc LOIPRO05)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>SAP IDoc Errors</title>
+      <single>
+        <search>
+          <query>index=demo_sap sourcetype="sap:idoc" direction=outbound status="02" target_location=$loc_tok$
+| stats count</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[0,10]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">IDocs in status 02</option>
+      </single>
+    </panel>
+    <panel>
+      <title>SAP MII Order Buffer</title>
+      <single>
+        <search>
+          <query>index=demo_sap sourcetype="sap:mii:performance" location=$loc_tok$
+| stats latest(mii_order_buffer) as buffer by location
+| stats min(buffer) as buffer</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["0xdc4e41","0xf58f39","0x53a051"]</option>
+        <option name="rangeValues">[5,15]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">orders ready for MES (lowest plant)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>SAP ERP Dialog Response Time</title>
+      <single>
+        <search>
+          <query>index=demo_sap sourcetype="sap:erp:performance" dialog_response_time_ms=*
+| stats avg(dialog_response_time_ms) as response
+| eval response=round(response, 0)</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[1000,2000]</option>
+        <option name="unit">ms</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">ERP PRD, DC Vienna</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Production Rate by Location (4 Hour Trend)</title>
+      <chart>
+        <search base="base_manufacturing_kpis">
+          <query>
+| timechart span=15m avg(production_rate_per_hour) by location
+          </query>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Units per Hour</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>OEE Breakdown by Location</title>
+      <chart>
+        <search base="base_manufacturing_kpis">
+          <query>
+| stats avg(oee_pct) as OEE by location
+| eval OEE=round(OEE, 1)
+| sort -OEE
+          </query>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.axisTitleX.text">Location</option>
+        <option name="charting.axisTitleY.text">OEE %</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.axisY.maximumNumber">100</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Temperature Trends by Location</title>
+      <chart>
+        <search base="base_infra_kpis">
+          <query>
+| search sensor_type=temperature
+| timechart span=15m avg(value_celsius) by location
+          </query>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Temperature (deg C)</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Power Consumption by Location</title>
+      <chart>
+        <search base="base_infra_kpis">
+          <query>
+| search sensor_type=power sensor_id=*-power-total
+| timechart span=15m avg(value_kw) by location
+          </query>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Power (kW)</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Website Availability Trend by Location (ThousandEyes HTTP)</title>
+      <chart>
+        <search>
+          <query>
+index=demo_thousendeyes thousandeyes.test.type=http-server
+| rename thousandeyes.agent.location AS location
+| search location=$loc_tok$
+| timechart span=15m avg(metric_name:http.server.request.availability) by location
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Availability %</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.axisY.maximumNumber">100</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Internal API Completion by Location (ThousandEyes API)</title>
+      <chart>
+        <search>
+          <query>
+index=demo_thousendeyes thousandeyes.test.type=api
+| rename thousandeyes.agent.location AS location
+| search location=$loc_tok$
+| timechart span=5m avg(metric_name:api.completion) by location
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Completion %</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.axisY.maximumNumber">100</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Tomcat Web Traffic by Location</title>
+      <chart>
+        <search>
+          <query>
+            <![CDATA[
+index=demo_tomcat_logs
+| eval location=case(
+    host="atlweb01" OR host="atlweb02", "atlanta",
+    host="berweb01" OR host="berweb02", "berlin",
+    host="vieweb01" OR host="vieweb02", "vienna",
+    1=1, "unknown")
+| search location=$loc_tok$
+| timechart span=5m count by location
+          ]]>
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Requests</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Tomcat Error Rate by Location</title>
+      <chart>
+        <search>
+          <query>
+            <![CDATA[
+index=demo_tomcat_logs
+| eval location=case(
+    host="atlweb01" OR host="atlweb02", "atlanta",
+    host="berweb01" OR host="berweb02", "berlin",
+    host="vieweb01" OR host="vieweb02", "vienna",
+    1=1, "unknown")
+| eval error_pct=if(tonumber(status)>=400, 100.0, 0.0)
+| search location=$loc_tok$
+| timechart span=5m avg(error_pct) by location
+          ]]>
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Error Rate %</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Campus Network Health by Location (Catalyst Center)</title>
+      <chart>
+        <search>
+          <query>index=demo_cisco_catalyst sourcetype="cisco:dnac:devicehealth"
+| rex field=Location "(?i)(?&lt;location&gt;vienna|berlin|atlanta)"
+| eval location=lower(location)
+| search location=$loc_tok$
+| timechart span=5m avg(HealthScore) by location</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Health (1-10)</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.axisY.maximumNumber">10</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>DC Path Loss by Location (ThousandEyes)</title>
+      <chart>
+        <search>
+          <query>index=demo_thousendeyes thousandeyes.test.type=agent-to-agent
+| rename thousandeyes.agent.location AS location
+| search location=$loc_tok$
+| timechart span=5m avg(metric_name:network.loss) by location</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Loss %</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>AI Support Bot Response Time by Plant (ThousandEyes)</title>
+      <chart>
+        <search>
+          <query>index=demo_thousendeyes "thousandeyes.test.name"="AI Support Assistant API"
+| rename thousandeyes.agent.location AS location
+| search location=$loc_tok$
+| timechart span=5m avg(metric_name:api.duration) by location</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Response time (s)</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Support Hotline Queue (Teams)</title>
+      <chart>
+        <search>
+          <query>index=demo_msteams event_type=call_queue_stats queue_name="Support Hotline"
+| timechart span=5m max(calls_waiting) as "Calls waiting" max(agents_available) as "Agents available"</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Count</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>SAP Production Orders Received by MII per Plant</title>
+      <chart>
+        <search>
+          <query>index=demo_sap sourcetype="sap:mii:performance" location=$loc_tok$
+| timechart span=15m sum(orders_received) by location</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Orders</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>SAP Order Interface ERP → MII</title>
+      <chart>
+        <search>
+          <query>index=demo_sap sourcetype="sap:idoc:status" target_location=$loc_tok$
+| bin _time span=5m
+| stats sum(idoc_error_count) as errors max(idoc_outbound_backlog) as backlog by _time target_location
+| timechart span=5m sum(errors) as "IDoc errors" sum(backlog) as "IDoc backlog"</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">IDocs</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.fieldColors">{"IDoc errors":"#dc4e41","IDoc backlog":"#f58f39"}</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Location Health Summary</title>
+      <table>
+        <search>
+          <query>
+| union
+    [| search index=demo_mes production_rate_per_hour=*
+     | stats avg(oee_pct) as oee, avg(defect_rate_pct) as defect by location
+     | eval oee=round(oee, 1), defect=round(defect, 2)]
+    [| search index=demo_infra sensor_type=temperature
+     | stats avg(value_celsius) as temp by location
+     | eval temp=round(temp, 1)]
+    [| search index=demo_infra sensor_type=power sensor_id=*-power-total
+     | stats avg(value_kw) as power by location
+     | eval power=round(power, 0)]
+    [| search index=demo_mssql event_type=performance
+     | eval db_host=mvindex(host, 0)
+     | stats avg(buffer_cache_hit_ratio) as db_cache by location
+     | eval db_cache=round(db_cache, 1)]
+    [| mstats avg(_value) as cpu_avg
+         WHERE index=demo_vmware_metrics metric_name=vmware.vm.cpu.usage.pct
+         BY location
+     | eval cpu_avg=round(cpu_avg, 1)]
+    [| search index=demo_thousendeyes thousandeyes.test.type=http-server
+     | stats avg(metric_name:http.server.request.availability) as web_avail by thousandeyes.agent.location
+     | rename thousandeyes.agent.location as location
+     | eval web_avail=round(web_avail, 1)]
+    [| search index=demo_thousendeyes thousandeyes.test.type=api
+     | stats avg(metric_name:api.completion) as api_compl by thousandeyes.agent.location
+     | rename thousandeyes.agent.location as location
+     | eval api_compl=round(api_compl, 1)]
+    [| search index=demo_tomcat_logs
+     | eval location=case(host="atlweb01" OR host="atlweb02","atlanta",host="berweb01" OR host="berweb02","berlin",host="vieweb01" OR host="vieweb02","vienna",1=1,"unknown")
+     | stats count as total, count(eval(tonumber(status)&gt;=400)) as errors by location
+     | eval tomcat_err=round(if(total&gt;0,100.0*errors/total,0), 1)]
+    [| search index=demo_cisco_catalyst sourcetype="cisco:dnac:devicehealth"
+     | rex field=Location "(?i)(?&lt;location&gt;vienna|berlin|atlanta)"
+     | eval location=lower(location)
+     | stats avg(HealthScore) as campus by location
+     | eval campus=round(campus, 1)]
+    [| search index=demo_cisco_meraki sourcetype="meraki:wirelessdevicespacketlossbydevice"
+     | rex field=network.name "(?i)^(?&lt;location&gt;vienna|berlin|atlanta)"
+     | eval location=lower(location)
+     | stats avg(downstream.lossPercentage) as wifi_loss by location
+     | eval wifi_loss=round(wifi_loss, 1)]
+    [| search index=demo_thousendeyes thousandeyes.test.type=agent-to-agent
+     | stats avg(metric_name:network.loss) as dc_loss by thousandeyes.agent.location
+     | rename thousandeyes.agent.location as location
+     | eval dc_loss=round(dc_loss, 2)]
+    [| search index=demo_msteams event_type IN (call_ended, call_failed)
+     | stats count(eval(event_type="call_ended")) as ok count as total by location
+     | eval teams_ok=round(100 * ok / total, 1)]
+    [| search index=demo_sap sourcetype="sap:mii:performance"
+     | stats sum(orders_received) as sap_orders latest(mii_order_buffer) as mii_buffer by location]
+| search location=$loc_tok$
+| stats
+    first(campus) as "Campus Health",
+    first(wifi_loss) as "Wi-Fi Loss %",
+    first(dc_loss) as "DC Loss %",
+    first(teams_ok) as "Teams Calls OK %",
+    first(oee) as "OEE %",
+    first(defect) as "Defect %",
+    first(sap_orders) as "SAP Orders",
+    first(mii_buffer) as "MII Buffer",
+    first(temp) as "Temp (degC)",
+    first(power) as "Power (kW)",
+    first(db_cache) as "DB Cache %",
+    first(cpu_avg) as "CPU %",
+    first(web_avail) as "Web Avail %",
+    first(api_compl) as "API Compl %",
+    first(tomcat_err) as "Web Err %"
+    by location
+| rename location as Location
+| sort Location
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">10</option>
+        <format type="color" field="Campus Health">
+          <colorPalette type="list">[#dc4e41,#f58f39,#53a051]</colorPalette>
+          <scale type="threshold">5,8</scale>
+        </format>
+        <format type="color" field="Wi-Fi Loss %">
+          <colorPalette type="list">[#53a051,#f58f39,#dc4e41]</colorPalette>
+          <scale type="threshold">2,5</scale>
+        </format>
+        <format type="color" field="DC Loss %">
+          <colorPalette type="list">[#53a051,#f58f39,#dc4e41]</colorPalette>
+          <scale type="threshold">0.5,2</scale>
+        </format>
+        <format type="color" field="Teams Calls OK %">
+          <colorPalette type="list">[#dc4e41,#f58f39,#53a051]</colorPalette>
+          <scale type="threshold">90,98</scale>
+        </format>
+        <format type="color" field="OEE %">
+          <colorPalette type="minMidMax" maxColor="#53a051" minColor="#dc4e41" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="50" midValue="80" maxValue="100"></scale>
+        </format>
+        <format type="color" field="Defect %">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" minColor="#53a051" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="0" midValue="3" maxValue="10"></scale>
+        </format>
+        <format type="color" field="MII Buffer">
+          <colorPalette type="list">[#dc4e41,#f58f39,#53a051]</colorPalette>
+          <scale type="threshold">5,15</scale>
+        </format>
+        <format type="color" field="Temp (degC)">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" minColor="#53a051" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="15" midValue="22" maxValue="30"></scale>
+        </format>
+        <format type="color" field="DB Cache %">
+          <colorPalette type="minMidMax" maxColor="#53a051" minColor="#dc4e41" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="70" midValue="90" maxValue="100"></scale>
+        </format>
+        <format type="color" field="CPU %">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" minColor="#53a051" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="0" midValue="70" maxValue="100"></scale>
+        </format>
+        <format type="color" field="Web Avail %">
+          <colorPalette type="minMidMax" maxColor="#53a051" minColor="#dc4e41" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="80" midValue="95" maxValue="100"></scale>
+        </format>
+        <format type="color" field="API Compl %">
+          <colorPalette type="minMidMax" maxColor="#53a051" minColor="#dc4e41" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="50" midValue="90" maxValue="100"></scale>
+        </format>
+        <format type="color" field="Web Err %">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" minColor="#53a051" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="0" midValue="5" maxValue="30"></scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Recent Critical Events</title>
+      <table>
+        <search>
+          <query>
+            <![CDATA[| union
+    [| search index=demo_mes event_type=alarm severity=critical OR severity=error
+     | eval source="Manufacturing", event_time=strftime(_time, "%H:%M:%S")
+     | table event_time location line_id source alarm_description severity
+     | rename alarm_description as description]
+    [| search index=demo_mssql event_type=alert severity=critical
+     | eval source="Database", event_time=strftime(_time, "%H:%M:%S"), db_host=mvindex(host, 0)
+     | table event_time location db_host source message severity
+     | rename message as description, db_host as line_id]
+    [| search index=demo_windows_events EventType=Error
+     | eval source="Windows", event_time=strftime(_time, "%H:%M:%S"), severity="error", host=mvindex(host, 0)
+     | table event_time location host source Message severity
+     | rename Message as description, host as line_id]
+    [| search index=demo_msteams severity=high
+     | eval source="Teams", event_time=strftime(_time, "%H:%M:%S")
+     | table event_time location user_name source error_message severity
+     | rename error_message as description, user_name as line_id]
+    [| search index=demo_thousendeyes thousandeyes.test.type=api
+     | where 'metric_name:api.completion' < 50
+     | eval source="API Monitor", event_time=strftime(_time, "%H:%M:%S"), severity="critical"
+     | eval description="[!] API degraded: ".'thousandeyes.test.name'." completion=".'metric_name:api.completion'."%"
+     | eval location='thousandeyes.agent.location', line_id='server.address'
+     | table event_time location line_id source description severity]
+    [| search index=demo_tomcat_logs status>=400
+     | eval is_dos=if(match(useragent, "masscan|Go-http-client|libwww-perl"), 1, 0)
+     | where is_dos=1
+     | eval location=case(host="atlweb01" OR host="atlweb02","atlanta",host="berweb01" OR host="berweb02","berlin",host="vieweb01" OR host="vieweb02","vienna",1=1,"unknown")
+     | eval source="Webserver", event_time=strftime(_time, "%H:%M:%S"), severity="critical"
+     | eval description="[DOS] Scanner ".clientip." -> ".host." HTTP ".status
+     | table event_time location host source description severity
+     | rename host as line_id]
+    [| search index=demo_cisco_catalyst sourcetype="cisco:dnac:devicehealth" Reachability!="Reachable"
+     | dedup DeviceName
+     | rex field=Location "(?i)(?<location>vienna|berlin|atlanta)"
+     | eval location=lower(location), source="Catalyst Center", event_time=strftime(_time, "%H:%M:%S"), severity="critical"
+     | eval description="Device unreachable (health ".HealthScore.")", line_id=DeviceName
+     | table event_time location line_id source description severity]
+    [| search index=demo_thousendeyes thousandeyes.test.type=agent-to-agent metric_name:network.loss>=10
+     | dedup thousandeyes.test.name
+     | eval location='thousandeyes.agent.location', line_id='thousandeyes.test.name'
+     | eval source="ThousandEyes", event_time=strftime(_time, "%H:%M:%S"), severity="high"
+     | eval description="Path loss ".round('metric_name:network.loss', 1)."%"
+     | table event_time location line_id source description severity]
+    [| search index=demo_ai_defense sourcetype="cisco:ai:defense" event_action="Block"
+     | eval location="global", line_id="AI Support Bot", source="AI Defense", event_time=strftime(_time, "%H:%M:%S"), severity="warning"
+     | eval description="Prompt blocked by guardrail"
+     | table event_time location line_id source description severity]
+    [| search index=demo_msteams event_type=call_queue_stats queue_name="Support Hotline" calls_waiting>12
+     | eval location="global", line_id="Support Hotline", source="Teams", event_time=strftime(_time, "%H:%M:%S"), severity="high"
+     | eval description=calls_waiting." callers waiting, longest ".longest_wait_seconds." s"
+     | table event_time location line_id source description severity]
+    [| search index=demo_sap sourcetype="sap:idoc" direction=outbound status="02"
+     | stats count latest(_time) as last latest(message) as message by target_location rfc_destination
+     | eval location=target_location, line_id=rfc_destination, source="SAP ERP", event_time=strftime(last, "%H:%M:%S"), severity="critical"
+     | eval description=count." production order IDocs not delivered to MII - ".message
+     | table event_time location line_id source description severity]
+    [| search index=demo_mes event_type=system_alert alert_type=order_data_missing
+     | dedup location
+     | eval line_id="all lines", source="Manufacturing", event_time=strftime(_time, "%H:%M:%S")
+     | table event_time location line_id source message severity
+     | rename message as description]
+| search location=$loc_tok$ OR location="global"
+| sort -event_time
+| head 20
+| table event_time, severity, location, line_id, source, description
+| rename
+    event_time as "Time",
+    location as "Location",
+    line_id as "Asset",
+    source as "Source",
+    description as "Description",
+    severity as "Severity"]]>
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="Severity">
+          <colorPalette type="map">{"critical":"#dc4e41","error":"#f58f39","high":"#dc4e41","warning":"#f5d039"}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>System Availability Summary</title>
+      <table>
+        <search>
+          <query>
+| union
+    [| search index=demo_mes machine_status=*
+     | stats count as total, count(eval(machine_status="running")) as available by location
+     | eval system="Manufacturing", availability=round(100*available/total, 1)]
+    [| search index=demo_infra sensor_type=ups status=*
+     | stats count as total, count(eval(status="online")) as available by location
+     | eval system="Power (UPS)", availability=round(100*available/total, 1)]
+    [| search index=demo_infra sensor_type=cooling status=*
+     | stats count as total, count(eval(status="operational")) as available by location
+     | eval system="Cooling", availability=round(100*available/total, 1)]
+    [| mstats count as total WHERE index=demo_vmware_metrics metric_name=vmware.vm.cpu.usage.pct BY location
+     | eval system="Servers (VMs)", availability=100]
+    [| search index=demo_mssql event_type=performance
+     | stats count as total by location
+     | eval system="Database", availability=100]
+    [| search index=demo_thousendeyes thousandeyes.test.type=http-server
+     | stats avg(metric_name:http.server.request.availability) as availability by thousandeyes.agent.location
+     | rename thousandeyes.agent.location as location
+     | eval system="Websites (ThousandEyes)", availability=round(availability, 1)]
+    [| search index=demo_thousendeyes thousandeyes.test.type=api
+     | stats avg(metric_name:api.completion) as availability by thousandeyes.agent.location
+     | rename thousandeyes.agent.location as location
+     | eval system="API Endpoints (ThousandEyes)", availability=round(availability, 1)]
+    [| search index=demo_tomcat_logs
+     | eval location=case(host="atlweb01" OR host="atlweb02","atlanta",host="berweb01" OR host="berweb02","berlin",host="vieweb01" OR host="vieweb02","vienna",1=1,"unknown")
+     | stats count as total, count(eval(tonumber(status)&lt;400)) as ok_count by location
+     | eval system="Web Servers (Tomcat)", availability=round(if(total&gt;0,100.0*ok_count/total,0), 1)]
+    [| search index=demo_cisco_catalyst sourcetype="cisco:dnac:devicehealth"
+     | rex field=Location "(?i)(?&lt;location&gt;vienna|berlin|atlanta)"
+     | eval location=lower(location)
+     | stats count as total, count(eval(Reachability="Reachable")) as available by location
+     | eval system="Network Devices (Catalyst)", availability=round(100*available/total, 1)]
+    [| search index=demo_cisco_meraki sourcetype="meraki:wirelessdevicespacketlossbydevice"
+     | rex field=network.name "(?i)^(?&lt;location&gt;vienna|berlin|atlanta)"
+     | eval location=lower(location)
+     | stats avg(downstream.lossPercentage) as loss by location
+     | eval system="Wi-Fi (Meraki)", availability=round(100 - loss, 1)]
+    [| search index=demo_thousendeyes "thousandeyes.test.name"="AI Support Assistant API"
+     | stats avg(metric_name:api.completion) as availability by thousandeyes.agent.location
+     | rename thousandeyes.agent.location as location
+     | eval system="AI Support Bot (ThousandEyes)", availability=round(availability, 1)]
+    [| search index=demo_msteams event_type IN (call_ended, call_failed)
+     | stats count as total, count(eval(event_type="call_ended")) as available by location
+     | eval system="Teams Calls", availability=round(100*available/total, 1)]
+    [| search index=demo_sap sourcetype="sap:idoc:status"
+     | stats sum(idocs_created) as created sum(idocs_delivered) as delivered by target_location
+     | rename target_location as location
+     | eval system="SAP Orders ERP → MII", availability=if(created &gt; 0, min(100, round(100*delivered/created, 1)), 100)]
+    [| makeresults
+     | eval location=split("atlanta,berlin,vienna", ","), system=split("Servers (VMs),Database", ",")
+     | mvexpand location | mvexpand system
+     | eval availability=0
+     | fields location system availability]
+| search location=$loc_tok$
+| stats max(availability) as "Availability %" by location system
+| eval "Availability %"=round('Availability %', 1)
+| sort location system
+| rename location as Location, system as System
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">20</option>
+        <format type="color" field="Availability %">
+          <colorPalette type="minMidMax" maxColor="#53a051" minColor="#dc4e41" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="80" midValue="95" maxValue="100"></scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+</form>

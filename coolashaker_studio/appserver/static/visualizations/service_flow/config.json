@@ -1,0 +1,119 @@
+{
+  "showTitleAndDescription": true,
+  "includeInToolbar": true,
+  "includeInVizSwitcher": true,
+  "showDrilldown": true,
+  "canSetTokens": [
+    "dynamic"
+  ],
+  "hasEventHandlers": true,
+  "config": {
+    "name": "Service Flow",
+    "description": "Follow a service chain stage by stage and see where the flow is throttled or blocked",
+    "category": "CoolaShaker",
+    "icon": null,
+    "dataContract": {
+      "requiredDataSources": [
+        "primary"
+      ],
+      "optionalDataSources": []
+    },
+    "size": {
+      "initialWidth": 1100,
+      "initialHeight": 220
+    },
+    "optionsSchema": {
+      "warn": {
+        "type": "number",
+        "default": 80
+      },
+      "crit": {
+        "type": "number",
+        "default": 50
+      },
+      "orientation": {
+        "type": "string",
+        "enum": [
+          "auto",
+          "horizontal",
+          "vertical"
+        ],
+        "default": "auto"
+      },
+      "animate": {
+        "type": "boolean",
+        "default": true
+      },
+      "drilldownToken": {
+        "type": "string",
+        "default": "stage"
+      }
+    },
+    "editorConfig": [
+      {
+        "label": "Health thresholds (0–100)",
+        "layout": [
+          [
+            {
+              "editor": "editor.number",
+              "label": "Degraded at or below",
+              "option": "warn"
+            },
+            {
+              "editor": "editor.number",
+              "label": "Critical at or below",
+              "option": "crit"
+            }
+          ]
+        ]
+      },
+      {
+        "label": "Layout",
+        "layout": [
+          [
+            {
+              "editor": "editor.select",
+              "label": "Orientation",
+              "option": "orientation",
+              "editorProps": {
+                "values": [
+                  {
+                    "label": "Automatic",
+                    "value": "auto"
+                  },
+                  {
+                    "label": "Horizontal",
+                    "value": "horizontal"
+                  },
+                  {
+                    "label": "Vertical",
+                    "value": "vertical"
+                  }
+                ]
+              }
+            }
+          ],
+          [
+            {
+              "editor": "editor.checkbox",
+              "label": "Animate flow",
+              "option": "animate"
+            }
+          ]
+        ]
+      },
+      {
+        "label": "Interaction",
+        "layout": [
+          [
+            {
+              "editor": "editor.text",
+              "label": "Drilldown field name",
+              "option": "drilldownToken"
+            }
+          ]
+        ]
+      }
+    ]
+  }
+}

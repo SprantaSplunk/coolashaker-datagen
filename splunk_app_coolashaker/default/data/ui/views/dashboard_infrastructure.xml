@@ -1,0 +1,405 @@
+<form version="1.1" theme="dark">
+  <label>CoolaShaker - Datacenter Infrastructure</label>
+  <description>Real-time monitoring of datacenter environmental and power systems</description>
+  
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="time_token" searchWhenChanged="true">
+      <label>Time Range</label>
+      <default>
+        <earliest>-60m@m</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="location_token" searchWhenChanged="true">
+      <label>Location</label>
+      <choice value="*">All Locations</choice>
+      <choice value="vienna">Vienna</choice>
+      <choice value="berlin">Berlin</choice>
+      <choice value="atlanta">Atlanta</choice>
+      <default>*</default>
+    </input>
+  </fieldset>
+
+  <!-- BASE SEARCH 1: Temperature Data -->
+  <search id="base_temperature">
+    <query>
+index=demo_infra location=$location_token$ sensor_type=temperature
+| fields _time location zone sensor_id value_celsius threshold_warning threshold_critical status
+    </query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+
+  <!-- BASE SEARCH 2: Power Data -->
+  <search id="base_power">
+    <query>
+index=demo_infra location=$location_token$ sensor_type=power
+| fields _time location circuit sensor_id value_kw capacity_kw utilization_pct pue voltage_v
+    </query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+
+  <!-- BASE SEARCH 3: Cooling Data -->
+  <search id="base_cooling">
+    <query>
+index=demo_infra location=$location_token$ sensor_type=cooling
+| fields _time location device_id supply_temp_celsius return_temp_celsius fan_speed_pct cooling_capacity_kw airflow_cfm status
+    </query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+
+  <!-- BASE SEARCH 4: UPS Data -->
+  <search id="base_ups">
+    <query>
+index=demo_infra location=$location_token$ sensor_type=ups
+| fields _time location device_id battery_charge_pct load_pct runtime_minutes input_voltage output_voltage status
+    </query>
+    <earliest>$time_token.earliest$</earliest>
+    <latest>$time_token.latest$</latest>
+  </search>
+
+  <row>
+    <panel>
+      <title>Average Temperature</title>
+      <single>
+        <search base="base_temperature">
+          <query>
+| stats avg(value_celsius) as avg_temp
+| eval avg_temp=round(avg_temp, 1)
+| eval range=case(
+    avg_temp &lt;= 22, "low",
+    avg_temp &lt;= 25, "elevated",
+    1=1, "severe")
+| rangemap field=avg_temp low=0-22 elevated=22-25 severe=25-50
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[22,25]</option>
+        <option name="unit">°C</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Data Center Average</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Power Consumption</title>
+      <single>
+        <search base="base_power">
+          <query>
+| search sensor_id=*-power-total
+| stats latest(value_kw) as current_power
+| eval current_power=round(current_power, 1)
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="unit">kW</option>
+        <option name="underLabel">Total Power Draw</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Power Usage Effectiveness (PUE)</title>
+      <single>
+        <search base="base_power">
+          <query>
+| search sensor_id=*-power-total
+| stats avg(pue) as avg_pue
+| eval avg_pue=round(avg_pue, 2)
+| eval range=case(
+    avg_pue &lt;= 1.5, "low",
+    avg_pue &lt;= 1.8, "elevated",
+    1=1, "severe")
+| rangemap field=avg_pue low=0-1.5 elevated=1.5-1.8 severe=1.8-3.0
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.00</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[1.5,1.8]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Average PUE (Target: &lt;1.5)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>UPS Battery Status</title>
+      <single>
+        <search base="base_ups">
+          <query>
+| stats avg(battery_charge_pct) as avg_charge
+| eval avg_charge=round(avg_charge, 1)
+| eval range=case(
+    avg_charge >= 95, "low",
+    avg_charge >= 80, "elevated",
+    1=1, "severe")
+| rangemap field=avg_charge low=95-100 elevated=80-95 severe=0-80
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0xdc4e41","0xf58f39","0x53a051"]</option>
+        <option name="rangeValues">[80,95]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Average Charge Level</option>
+      </single>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>Temperature by Zone (Last Hour)</title>
+      <chart>
+        <search base="base_temperature">
+          <query>
+| timechart span=5m avg(value_celsius) by zone
+          </query>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Temperature (°C)</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Power Consumption by Circuit</title>
+      <chart>
+        <search base="base_power">
+          <query>
+| search circuit!=datacenter_total
+| timechart span=5m avg(value_kw) by circuit
+          </query>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Power (kW)</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>Cooling System Performance</title>
+      <chart>
+        <search base="base_cooling">
+          <query>
+| timechart span=5m 
+    avg(supply_temp_celsius) as "Supply Temp (°C)",
+    avg(return_temp_celsius) as "Return Temp (°C)",
+    avg(fan_speed_pct) as "Fan Speed (%)"
+    by device_id
+          </query>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Value</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>UPS Load and Battery Status</title>
+      <chart>
+        <search base="base_ups">
+          <query>
+| timechart span=5m 
+    avg(battery_charge_pct) as "Battery Charge %",
+    avg(load_pct) as "Load %"
+    by device_id
+          </query>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Percentage</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>Temperature Sensor Status</title>
+      <table>
+        <search base="base_temperature">
+          <query>
+| stats 
+    latest(value_celsius) as "Current Temp",
+    avg(value_celsius) as "Avg Temp",
+    max(value_celsius) as "Max Temp",
+    latest(threshold_warning) as "Warning",
+    latest(threshold_critical) as "Critical",
+    latest(status) as "Status"
+    by location zone sensor_id
+| eval 
+    "Current Temp"=round('Current Temp', 1),
+    "Avg Temp"=round('Avg Temp', 1),
+    "Max Temp"=round('Max Temp', 1)
+| sort location zone
+| rename 
+    location as Location,
+    zone as Zone,
+    sensor_id as "Sensor ID"
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">10</option>
+        <format type="color" field="Status">
+          <colorPalette type="map">{"normal":"#53a051","warning":"#f58f39","critical":"#dc4e41"}</colorPalette>
+        </format>
+        <format type="color" field="Current Temp">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" minColor="#53a051" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="15" midValue="22" maxValue="30"></scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>Power Distribution Status</title>
+      <table>
+        <search base="base_power">
+          <query>
+| stats 
+    latest(value_kw) as "Current (kW)",
+    avg(value_kw) as "Avg (kW)",
+    latest(utilization_pct) as "Utilization %",
+    latest(voltage_v) as "Voltage (V)"
+    by location circuit sensor_id
+| eval 
+    "Current (kW)"=round('Current (kW)', 1),
+    "Avg (kW)"=round('Avg (kW)', 1),
+    "Utilization %"=round('Utilization %', 1),
+    "Voltage (V)"=round('Voltage (V)', 0)
+| sort location circuit
+| rename 
+    location as Location,
+    circuit as Circuit,
+    sensor_id as "Sensor ID"
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">15</option>
+        <format type="color" field="Utilization %">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" minColor="#53a051" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="0" midValue="70" maxValue="100"></scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>UPS Systems Overview</title>
+      <table>
+        <search base="base_ups">
+          <query>
+| stats 
+    latest(battery_charge_pct) as "Battery %",
+    latest(load_pct) as "Load %",
+    latest(runtime_minutes) as "Runtime (min)",
+    latest(input_voltage) as "Input (V)",
+    latest(output_voltage) as "Output (V)",
+    latest(status) as "Status"
+    by location device_id
+| eval 
+    "Battery %"=round('Battery %', 1),
+    "Load %"=round('Load %', 1),
+    "Runtime (min)"=round('Runtime (min)', 0),
+    "Input (V)"=round('Input (V)', 0),
+    "Output (V)"=round('Output (V)', 0)
+| sort location device_id
+| rename 
+    location as Location,
+    device_id as "Device ID"
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">10</option>
+        <format type="color" field="Status">
+          <colorPalette type="map">{"online":"#53a051","on_battery":"#f58f39","offline":"#dc4e41"}</colorPalette>
+        </format>
+        <format type="color" field="Battery %">
+          <colorPalette type="minMidMax" maxColor="#53a051" minColor="#dc4e41" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="0" midValue="90" maxValue="100"></scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>Humidity Monitoring</title>
+      <table>
+        <search>
+          <query>
+index=demo_infra location=$location_token$ sensor_type=humidity
+| stats 
+    latest(value_pct) as "Current %",
+    avg(value_pct) as "Avg %",
+    latest(threshold_min) as "Min Threshold",
+    latest(threshold_max) as "Max Threshold",
+    latest(status) as "Status"
+    by location zone sensor_id
+| eval 
+    "Current %"=round('Current %', 1),
+    "Avg %"=round('Avg %', 1)
+| sort location zone
+| rename 
+    location as Location,
+    zone as Zone,
+    sensor_id as "Sensor ID"
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">10</option>
+        <format type="color" field="Status">
+          <colorPalette type="map">{"normal":"#53a051","warning":"#f58f39"}</colorPalette>
+        </format>
+      </table>
+    </panel>
+    <panel>
+      <title>Cooling Systems Status</title>
+      <table>
+        <search base="base_cooling">
+          <query>
+| stats 
+    latest(supply_temp_celsius) as "Supply Temp",
+    latest(return_temp_celsius) as "Return Temp",
+    latest(fan_speed_pct) as "Fan Speed %",
+    latest(cooling_capacity_kw) as "Capacity (kW)",
+    latest(status) as "Status"
+    by location device_id
+| eval 
+    "Supply Temp"=round('Supply Temp', 1),
+    "Return Temp"=round('Return Temp', 1),
+    "Fan Speed %"=round('Fan Speed %', 1),
+    "Capacity (kW)"=round('Capacity (kW)', 1)
+| sort location device_id
+| rename 
+    location as Location,
+    device_id as "Device ID"
+          </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">10</option>
+        <format type="color" field="Status">
+          <colorPalette type="map">{"operational":"#53a051","degraded":"#f58f39","offline":"#dc4e41"}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+
+</form>

@@ -1,0 +1,939 @@
+<form version="1.1" theme="dark">
+  <label>CoolaShaker - Operations Hub</label>
+  <description>Welcome to CoolaShaker Multi-Site Operations Monitoring</description>
+  <!-- Quick Stats -->
+  <!-- Live System Status -->
+  <!-- Navigation Tiles -->
+  <!-- Location Status Overview -->
+  <!-- Recent Activity Summary -->
+  <!-- Footer -->
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="time_token" searchWhenChanged="true">
+      <label>Time Range</label>
+      <default>
+        <earliest>-1h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <html>
+        <style>
+          .dashboard-header {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #1a472a 0%, #2d5a3d 100%);
+            border-radius: 8px;
+            margin-bottom: 20px;
+          }
+          .dashboard-header h1 {
+            color: #53a051;
+            font-size: 42px;
+            font-weight: bold;
+            margin: 0 0 10px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+          }
+          .dashboard-header p {
+            color: #b3d9ad;
+            font-size: 16px;
+            margin: 5px 0;
+          }
+          .dashboard-header .locations {
+            color: #7ab574;
+            font-size: 14px;
+            margin-top: 10px;
+          }
+          .dashboard-header .author {
+            color: #ffffff;
+            font-size: 15px;
+            margin-top: 18px;
+          }
+          .dashboard-header .author a {
+            color: #9fd89b;
+            font-weight: bold;
+          }
+        </style>
+        <div class="dashboard-header">
+          <h1>CoolaShaker Operations Center</h1>
+          <p>Real-time Monitoring and Analytics Platform</p>
+          <p class="locations">Vienna | Berlin | Atlanta | DC Frankfurt</p>
+          <p class="author"><b>Demo developed by Alexander Sötz</b> · Questions or feedback? Contact me at <a href="mailto:asotz@cisco.com">asotz@cisco.com</a></p>
+        </div>
+      </html>
+    </panel>
+  </row>
+  <!-- ROW: Top-level KPI Sparklines -->
+  <row>
+    <panel>
+      <title>Manufacturing Status</title>
+      <single>
+        <search>
+          <query>
+index=demo_mes production_rate_per_hour=*
+| stats avg(oee_pct) as oee
+| eval oee=round(oee, 1)
+| eval range=case(oee &gt;= 85, "low", oee &gt;= 70, "elevated", 1=1, "severe")
+| rangemap field=oee low=85-100 elevated=70-85 severe=0-70
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0xdc4e41","0xf58f39","0x53a051"]</option>
+        <option name="rangeValues">[70,85]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Average OEE</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Datacenter Temp</title>
+      <single>
+        <search>
+          <query>
+index=demo_infra sensor_type=temperature
+| stats avg(value_celsius) as temp
+| eval temp=round(temp, 1)
+| eval range=case(temp &lt;= 22, "low", temp &lt;= 25, "elevated", 1=1, "severe")
+| rangemap field=temp low=0-22 elevated=22-25 severe=25-50
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[22,25]</option>
+        <option name="unit">deg C</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Avg Temperature</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Database Cache</title>
+      <single>
+        <search>
+          <query>
+index=demo_mssql event_type=performance
+| stats avg(buffer_cache_hit_ratio) as cache
+| eval cache=round(cache, 1)
+| eval range=case(cache &gt;= 95, "low", cache &gt;= 90, "elevated", 1=1, "severe")
+| rangemap field=cache low=95-100 elevated=90-95 severe=0-90
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0xdc4e41","0xf58f39","0x53a051"]</option>
+        <option name="rangeValues">[90,95]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Hit Ratio</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Network Latency</title>
+      <single>
+        <search>
+          <query>index=demo_thousendeyes thousandeyes.test.type=agent-to-agent
+| stats avg(metric_name:network.latency) as latency
+| eval latency=round(latency * 1000, 0)</query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[120,180]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="underLabel">Inter-DC Latency (avg, ThousandEyes)</option>
+        <option name="unit">ms</option>
+        <option name="useColors">1</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Website Availability</title>
+      <single>
+        <search>
+          <query>
+index=demo_thousendeyes thousandeyes.test.type=http-server
+| stats avg(metric_name:http.server.request.availability) as avail
+| eval avail=round(avail, 1)
+| eval range=case(avail &gt;= 99, "low", avail &gt;= 95, "elevated", 1=1, "severe")
+| rangemap field=avail low=99-100 elevated=95-99 severe=0-95
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0xdc4e41","0xf58f39","0x53a051"]</option>
+        <option name="rangeValues">[95,99]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">HTTP Availability (TE)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>API Completion</title>
+      <single>
+        <search>
+          <query>
+index=demo_thousendeyes thousandeyes.test.type=api
+| stats avg(metric_name:api.completion) as compl
+| eval compl=round(compl, 1)
+| eval range=case(compl &gt;= 99, "low", compl &gt;= 90, "elevated", 1=1, "severe")
+| rangemap field=compl low=99-100 elevated=90-99 severe=0-90
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0xdc4e41","0xf58f39","0x53a051"]</option>
+        <option name="rangeValues">[90,99]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Internal API Endpoints</option>
+      </single>
+    </panel>
+  </row>
+  <!-- ROW: Network, AI Support Bot and customer service (current state, last 5 minutes) -->
+  <row>
+    <panel>
+      <title>Campus Health</title>
+      <single>
+        <search>
+          <query>index=demo_cisco_catalyst sourcetype="cisco:dnac:devicehealth"
+| stats avg(HealthScore) as health
+| eval health=round(health, 1)</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="drilldown">all</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0xdc4e41","0xf58f39","0x53a051"]</option>
+        <option name="rangeValues">[5,8]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Catalyst Center health (1-10)</option>
+        <drilldown>
+          <link>/app/splunk_app_coolashaker/dashboard_catalyst</link>
+        </drilldown>
+      </single>
+    </panel>
+    <panel>
+      <title>Network Devices Unreachable</title>
+      <single>
+        <search>
+          <query>index=demo_cisco_catalyst sourcetype="cisco:dnac:devicehealth"
+| stats latest(Reachability) as reachability by DeviceName
+| stats count(eval(reachability!="Reachable")) as unreachable</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="drilldown">all</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[0,5]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Catalyst Center</option>
+        <drilldown>
+          <link>/app/splunk_app_coolashaker/NetworkObservability</link>
+        </drilldown>
+      </single>
+    </panel>
+    <panel>
+      <title>DC Path Loss</title>
+      <single>
+        <search>
+          <query>index=demo_thousendeyes thousandeyes.test.type=agent-to-agent
+| stats avg(metric_name:network.loss) as loss
+| eval loss=round(loss, 2)</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="drilldown">all</option>
+        <option name="numberPrecision">0.00</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[0.5,2]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">ThousandEyes agent-to-agent</option>
+        <drilldown>
+          <link>/app/splunk_app_coolashaker/cs_thousendeyes</link>
+        </drilldown>
+      </single>
+    </panel>
+    <panel>
+      <title>AI Support Bot</title>
+      <single>
+        <search>
+          <query>index=demo_thousendeyes "thousandeyes.test.name"="AI Support Assistant API"
+| stats avg(metric_name:api.duration) as duration
+| eval duration=round(duration, 1)</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="drilldown">all</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[3,6]</option>
+        <option name="unit">s</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Response time (ThousandEyes)</option>
+        <drilldown>
+          <link>/app/splunk_app_coolashaker/ai_workload_infrastructure</link>
+        </drilldown>
+      </single>
+    </panel>
+    <panel>
+      <title>AI Defense</title>
+      <single>
+        <search>
+          <query>index=demo_ai_defense sourcetype="cisco:ai:defense"
+| stats count(eval(event_message_type="prompt" AND event_action="Allow")) as prompts count(eval(event_message_type="response")) as responses
+| eval unanswered=if(prompts &gt; 0, round(100 * (prompts - responses) / prompts, 1), 0)
+| fields unanswered</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="drilldown">all</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[5,15]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Prompts without answer</option>
+        <drilldown>
+          <link>/app/splunk_app_coolashaker/ai_workload_infrastructure</link>
+        </drilldown>
+      </single>
+    </panel>
+    <panel>
+      <title>Support Hotline</title>
+      <single>
+        <search>
+          <query>index=demo_msteams event_type=call_queue_stats queue_name="Support Hotline"
+| stats latest(calls_waiting) as waiting</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="drilldown">all</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[5,12]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">Calls waiting (Teams queue)</option>
+        <drilldown>
+          <link>/app/splunk_app_coolashaker/ai_workload_infrastructure</link>
+        </drilldown>
+      </single>
+    </panel>
+  </row>
+  <!-- ROW: SAP ERP and MII (current state, last 5 minutes) -->
+  <row>
+    <panel>
+      <title>SAP ERP Response</title>
+      <single>
+        <search>
+          <query>index=demo_sap sourcetype="sap:erp:performance" dialog_response_time_ms=*
+| stats avg(dialog_response_time_ms) as response
+| eval response=round(response, 0)</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="drilldown">all</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[1000,2000]</option>
+        <option name="unit">ms</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">ERP PRD dialog response time</option>
+        <drilldown>
+          <link>/app/splunk_app_coolashaker/dashboard_sap</link>
+        </drilldown>
+      </single>
+    </panel>
+    <panel>
+      <title>SAP HANA Memory</title>
+      <single>
+        <search>
+          <query>index=demo_sap sourcetype="sap:erp:performance" hana_memory_used_pct=*
+| stats latest(hana_memory_used_pct) as memory</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="drilldown">all</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[80,90]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">ERP PRD database viehdb01</option>
+        <drilldown>
+          <link>/app/splunk_app_coolashaker/dashboard_sap</link>
+        </drilldown>
+      </single>
+    </panel>
+    <panel>
+      <title>SAP Orders Delivered</title>
+      <single>
+        <search>
+          <query>index=demo_sap sourcetype="sap:idoc:status"
+| stats sum(idocs_created) as created sum(idocs_delivered) as delivered
+| eval delivered_pct=if(created &gt; 0, min(100, round(100 * delivered / created, 1)), 100)
+| fields delivered_pct</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="drilldown">all</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0xdc4e41","0xf58f39","0x53a051"]</option>
+        <option name="rangeValues">[90,99]</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">production orders ERP → MII</option>
+        <drilldown>
+          <link>/app/splunk_app_coolashaker/dashboard_sap</link>
+        </drilldown>
+      </single>
+    </panel>
+    <panel>
+      <title>SAP IDoc Errors</title>
+      <single>
+        <search>
+          <query>index=demo_sap sourcetype="sap:idoc" direction=outbound status="02"
+| stats count</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="drilldown">all</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[0,5]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">IDocs in status 02</option>
+        <drilldown>
+          <link>/app/splunk_app_coolashaker/dashboard_sap</link>
+        </drilldown>
+      </single>
+    </panel>
+    <panel>
+      <title>SAP IDoc Backlog</title>
+      <single>
+        <search>
+          <query>index=demo_sap sourcetype="sap:idoc:status"
+| stats latest(idoc_outbound_backlog) as backlog by partner
+| stats sum(backlog) as backlog</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="drilldown">all</option>
+        <option name="rangeColors">["0x53a051","0xf58f39","0xdc4e41"]</option>
+        <option name="rangeValues">[5,20]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">IDocs waiting for MII</option>
+        <drilldown>
+          <link>/app/splunk_app_coolashaker/dashboard_sap</link>
+        </drilldown>
+      </single>
+    </panel>
+    <panel>
+      <title>SAP MII Order Buffer</title>
+      <single>
+        <search>
+          <query>index=demo_sap sourcetype="sap:mii:performance"
+| stats latest(mii_order_buffer) as buffer by location
+| stats min(buffer) as buffer</query>
+          <earliest>-5m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+        </search>
+        <option name="drilldown">all</option>
+        <option name="rangeColors">["0xdc4e41","0xf58f39","0x53a051"]</option>
+        <option name="rangeValues">[5,15]</option>
+        <option name="useColors">1</option>
+        <option name="underLabel">orders ready for MES (lowest plant)</option>
+        <drilldown>
+          <link>/app/splunk_app_coolashaker/dashboard_sap</link>
+        </drilldown>
+      </single>
+    </panel>
+  </row>
+  <!-- ROW: Navigation Tiles -->
+  <row>
+    <panel>
+      <html>
+        <style>
+          .nav-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 10px;
+          }
+          .nav-card {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid #3a3a3a;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+          }
+          .nav-card:hover {
+            transform: translateY(-5px);
+            border-color: #53a051;
+            box-shadow: 0 8px 15px rgba(83, 160, 81, 0.3);
+          }
+          .nav-card .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+          }
+          .nav-card .title {
+            color: #53a051;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+          }
+          .nav-card .description {
+            color: #999;
+            font-size: 13px;
+            line-height: 1.4;
+          }
+          .nav-card.executive {
+            background: linear-gradient(135deg, #3a2a1a 0%, #2a1a0a 100%);
+            border-color: #f58f39;
+          }
+          .nav-card.executive:hover {
+            border-color: #f58f39;
+            box-shadow: 0 8px 15px rgba(245, 143, 57, 0.3);
+          }
+          .nav-card.executive .title {
+            color: #f58f39;
+          }
+          .nav-card.web {
+            background: linear-gradient(135deg, #1a2a3a 0%, #0a1a2a 100%);
+            border-color: #4e9dd4;
+          }
+          .nav-card.web:hover {
+            border-color: #4e9dd4;
+            box-shadow: 0 8px 15px rgba(78, 157, 212, 0.3);
+          }
+          .nav-card.web .title {
+            color: #4e9dd4;
+          }          .section-title {
+            color: #7ab574;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 30px 0 15px 0;
+            padding-left: 10px;
+            border-left: 4px solid #53a051;
+          }
+        </style>
+
+        <div class="nav-container">
+          <!-- Executive Overview Card -->
+          <a href="/app/splunk_app_coolashaker/dashboard_executive_overview" style="text-decoration: none;">
+            <div class="nav-card executive">
+              <div class="icon">&#128202;</div>
+              <div class="title">Executive Overview</div>
+              <div class="description">
+                High-level KPIs and system health across all locations
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="section-title">Manufacturing Operations</div>
+        <div class="nav-container">
+          <a href="/app/splunk_app_coolashaker/dashboard_manufacturing" style="text-decoration: none;">
+            <div class="nav-card">
+              <div class="icon">&#9881;</div>
+              <div class="title">Manufacturing</div>
+              <div class="description">
+                Production lines, OEE, quality metrics, and inventory tracking
+              </div>
+            </div>
+          </a>
+
+          <a href="/app/splunk_app_coolashaker/dashboard_sap" style="text-decoration: none;">
+            <div class="nav-card">
+              <div class="icon">&#128230;</div>
+              <div class="title">SAP ERP &amp; MII</div>
+              <div class="description">
+                ERP PRD, HANA, production order IDocs to the SAP MII of every plant
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="section-title">Infrastructure &amp; IT Systems</div>
+        <div class="nav-container">
+          <a href="/app/splunk_app_coolashaker/dashboard_infrastructure" style="text-decoration: none;">
+            <div class="nav-card">
+              <div class="icon">&#10052;</div>
+              <div class="title">Datacenter Infrastructure</div>
+              <div class="description">
+                Environmental monitoring, power, cooling, and UPS systems
+              </div>
+            </div>
+          </a>
+
+          <a href="/app/splunk_app_coolashaker/dashboard_server_infrastructure" style="text-decoration: none;">
+            <div class="nav-card">
+              <div class="icon">&#128187;</div>
+              <div class="title">Server Infrastructure</div>
+              <div class="description">
+                VMware VMs, ESXi hosts, and Windows Server monitoring
+              </div>
+            </div>
+          </a>
+
+          <a href="/app/splunk_app_coolashaker/dashboard_database" style="text-decoration: none;">
+            <div class="nav-card">
+              <div class="icon">&#128190;</div>
+              <div class="title">Database Performance</div>
+              <div class="description">
+                SQL Server metrics, query analysis, and transaction logs
+              </div>
+            </div>
+          </a>
+
+          <a href="/app/splunk_app_coolashaker/ai_workload_infrastructure" style="text-decoration: none;">
+            <div class="nav-card">
+              <div class="icon">&#129302;</div>
+              <div class="title">AI Workload Infrastructure</div>
+              <div class="description">
+                AI Support Bot end to end: DC Frankfurt path, Cisco AI Defense, GPUs, Support Hotline
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="section-title">Network &amp; Communication</div>
+        <div class="nav-container">
+          <a href="/app/splunk_app_coolashaker/dashboard_network_collaboration" style="text-decoration: none;">
+            <div class="nav-card">
+              <div class="icon">&#128279;</div>
+              <div class="title">Network &amp; Collaboration</div>
+              <div class="description">
+                ThousandEyes network monitoring and Microsoft Teams analytics
+              </div>
+            </div>
+          </a>
+
+          <a href="/app/splunk_app_coolashaker/dashboard_catalyst" style="text-decoration: none;">
+            <div class="nav-card">
+              <div class="icon">&#128225;</div>
+              <div class="title">Cisco Catalyst Center</div>
+              <div class="description">
+                Campus device health, reachability and security advisories
+              </div>
+            </div>
+          </a>
+
+          <a href="/app/splunk_app_coolashaker/switch_syslog_telemetry" style="text-decoration: none;">
+            <div class="nav-card">
+              <div class="icon">&#128376;</div>
+              <div class="title">Switch Syslog &amp; Telemetry</div>
+              <div class="description">
+                IOS XE syslog, CLI audit and gNMI interface telemetry of the campus switches
+              </div>
+            </div>
+          </a>
+
+          <a href="/app/splunk_app_coolashaker/dashboard_meraki" style="text-decoration: none;">
+            <div class="nav-card">
+              <div class="icon">&#128246;</div>
+              <div class="title">Cisco Meraki</div>
+              <div class="description">
+                Wi-Fi, SD-WAN, device availability and assurance alerts
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="section-title">Network Observability</div>
+        <div class="nav-container">
+          <a href="/app/splunk_app_coolashaker/NetworkObservability" style="text-decoration: none;">
+            <div class="nav-card">
+              <div class="icon">&#128301;</div>
+              <div class="title">Network Intelligence</div>
+              <div class="description">
+                Catalyst Center and Meraki across all sites in one view
+              </div>
+            </div>
+          </a>
+
+          <a href="/app/splunk_app_coolashaker/cs_thousendeyes" style="text-decoration: none;">
+            <div class="nav-card">
+              <div class="icon">&#127757;</div>
+              <div class="title">ThousandEyes</div>
+              <div class="description">
+                DC paths, BGP, SaaS, web transactions and internal APIs
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="section-title">Web &amp; Applications</div>
+        <div class="nav-container">
+          <a href="/app/splunk_app_coolashaker/dashboard_tomcat" style="text-decoration: none;">
+            <div class="nav-card web">
+              <div class="icon">&#127760;</div>
+              <div class="title">Tomcat Webserver</div>
+              <div class="description">
+                Web traffic, error rates, DOS detection for Atlanta, Berlin, and Vienna web servers
+              </div>
+            </div>
+          </a>
+        </div>
+      </html>
+    </panel>
+  </row>
+  <!-- ROW: Location Status Overview (extended with Web Avail) -->
+  <row>
+    <panel>
+      <title>Location Status Overview</title>
+      <table>
+        <search>
+          <query>
+| union
+    [| search index=demo_mes production_rate_per_hour=*
+     | stats avg(oee_pct) as oee by location
+     | eval oee=round(oee, 1)]
+    [| search index=demo_infra sensor_type=temperature
+     | stats avg(value_celsius) as temp by location
+     | eval temp=round(temp, 1)]
+    [| search index=demo_infra sensor_type=power sensor_id=*-power-total
+     | stats avg(value_kw) as power by location
+     | eval power=round(power, 0)]
+    [| search index=demo_mssql event_type=performance
+     | eval db_host=mvindex(host, 0)
+     | stats avg(buffer_cache_hit_ratio) as db_cache by location
+     | eval db_cache=round(db_cache, 1)]
+    [| search index=demo_thousendeyes thousandeyes.test.type=http-server
+     | stats avg(metric_name:http.server.request.availability) as web_avail by thousandeyes.agent.location
+     | rename thousandeyes.agent.location as location
+     | eval web_avail=round(web_avail, 1)]
+    [| search index=demo_thousendeyes thousandeyes.test.type=api
+     | stats avg(metric_name:api.completion) as api_compl by thousandeyes.agent.location
+     | rename thousandeyes.agent.location as location
+     | eval api_compl=round(api_compl, 1)]
+    [| search index=demo_cisco_catalyst sourcetype="cisco:dnac:devicehealth" earliest=-5m
+     | rex field=Location "(?i)(?&lt;location&gt;vienna|berlin|atlanta)"
+     | eval location=lower(location)
+     | stats avg(HealthScore) as campus by location
+     | eval campus=round(campus, 1)]
+    [| search index=demo_thousendeyes thousandeyes.test.type=agent-to-agent earliest=-5m
+     | stats avg(metric_name:network.loss) as dc_loss by thousandeyes.agent.location
+     | rename thousandeyes.agent.location as location
+     | eval dc_loss=round(dc_loss, 2)]
+    [| search index=demo_cisco_meraki sourcetype="meraki:wirelessdevicespacketlossbydevice" earliest=-5m
+     | rex field=network.name "(?i)^(?&lt;location&gt;vienna|berlin|atlanta)"
+     | eval location=lower(location)
+     | stats avg(downstream.lossPercentage) as wifi_loss by location
+     | eval wifi_loss=round(wifi_loss, 1)]
+    [| search index=demo_sap sourcetype="sap:mii:performance" earliest=-5m
+     | stats latest(mii_order_buffer) as mii_buffer by location]
+| stats
+    first(mii_buffer) as "MII Buffer",
+    first(oee) as "OEE %",
+    first(temp) as "Temp (degC)",
+    first(power) as "Power (kW)",
+    first(db_cache) as "DB Cache %",
+    first(web_avail) as "Web Avail %",
+    first(api_compl) as "API Compl %",
+    first(campus) as "Campus Health",
+    first(dc_loss) as "DC Loss %",
+    first(wifi_loss) as "Wi-Fi Loss %"
+    by location
+| eval mii_ok=coalesce('MII Buffer', 24)
+| eval Status=case(
+    'OEE %' &gt;= 85 AND 'Temp (degC)' &lt;= 25 AND 'DB Cache %' &gt;= 90 AND 'Web Avail %' &gt;= 99 AND 'API Compl %' &gt;= 99
+        AND 'Campus Health' &gt;= 8 AND 'DC Loss %' &lt;= 0.5 AND 'Wi-Fi Loss %' &lt;= 2 AND mii_ok &gt;= 15, "[OK] Optimal",
+    'OEE %' &gt;= 70 AND 'Temp (degC)' &lt;= 28 AND 'DB Cache %' &gt;= 80 AND 'Web Avail %' &gt;= 90 AND 'API Compl %' &gt;= 80
+        AND 'Campus Health' &gt;= 5 AND 'DC Loss %' &lt;= 2 AND 'Wi-Fi Loss %' &lt;= 5 AND mii_ok &gt;= 5, "[WARN] Warning",
+    1=1, "[ERR] Critical"
+    )
+| rename location as Location
+| table Location Status "MII Buffer" "Campus Health" "DC Loss %" "Wi-Fi Loss %" "OEE %" "Temp (degC)" "Power (kW)" "DB Cache %" "Web Avail %" "API Compl %"
+| sort Location
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">10</option>
+        <format type="color" field="Status">
+          <colorPalette type="map">{"[OK] Optimal":"#53a051","[WARN] Warning":"#f58f39","[ERR] Critical":"#dc4e41"}</colorPalette>
+        </format>
+        <format type="color" field="MII Buffer">
+          <colorPalette type="list">[#dc4e41,#f58f39,#53a051]</colorPalette>
+          <scale type="threshold">5,15</scale>
+        </format>
+        <format type="color" field="Campus Health">
+          <colorPalette type="list">[#dc4e41,#f58f39,#53a051]</colorPalette>
+          <scale type="threshold">5,8</scale>
+        </format>
+        <format type="color" field="DC Loss %">
+          <colorPalette type="list">[#53a051,#f58f39,#dc4e41]</colorPalette>
+          <scale type="threshold">0.5,2</scale>
+        </format>
+        <format type="color" field="Wi-Fi Loss %">
+          <colorPalette type="list">[#53a051,#f58f39,#dc4e41]</colorPalette>
+          <scale type="threshold">2,5</scale>
+        </format>
+        <format type="color" field="OEE %">
+          <colorPalette type="minMidMax" maxColor="#53a051" minColor="#dc4e41" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="50" midValue="80" maxValue="100"></scale>
+        </format>
+        <format type="color" field="Temp (degC)">
+          <colorPalette type="minMidMax" maxColor="#dc4e41" minColor="#53a051" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="15" midValue="22" maxValue="30"></scale>
+        </format>
+        <format type="color" field="DB Cache %">
+          <colorPalette type="minMidMax" maxColor="#53a051" minColor="#dc4e41" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="70" midValue="90" maxValue="100"></scale>
+        </format>
+        <format type="color" field="Web Avail %">
+          <colorPalette type="minMidMax" maxColor="#53a051" minColor="#dc4e41" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="80" midValue="95" maxValue="100"></scale>
+        </format>
+        <format type="color" field="API Compl %">
+          <colorPalette type="minMidMax" maxColor="#53a051" minColor="#dc4e41" midColor="#f58f39"></colorPalette>
+          <scale type="minMidMax" minValue="50" midValue="90" maxValue="100"></scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <!-- ROW: Activity Summary + Recent Issues (extended) -->
+  <row>
+    <panel>
+      <title>Activity Summary (Last Hour)</title>
+      <table>
+        <search>
+          <query>
+| union
+    [| search index=demo_mes | eval system="Manufacturing" | stats count as events by system]
+    [| search index=demo_infra | eval system="Infrastructure" | stats count as events by system]
+    [| search index=demo_mssql | eval system="Database" | stats count as events by system]
+    [| search index=demo_windows_events | eval system="Windows" | stats count as events by system]
+    [| search index=demo_msteams | eval system="Teams" | stats count as events by system]
+    [| search index=demo_thousendeyes | eval system="Network (ThousandEyes)" | stats count as events by system]
+    [| search index=demo_tomcat_logs | eval system="Web Servers (Tomcat)" | stats count as events by system]
+    [| search index=demo_cisco_catalyst sourcetype="cisco:dnac:*" | eval system="Cisco Catalyst Center" | stats count as events by system]
+    [| search index=demo_cisco_catalyst sourcetype IN ("cisco:ios", "cisco:gnmi") | eval system="Switch Syslog &amp; gNMI" | stats count as events by system]
+    [| search index=demo_cisco_meraki | eval system="Cisco Meraki" | stats count as events by system]
+    [| search index=demo_cisco_apps | eval system="Cisco Apps" | stats count as events by system]
+    [| search index=demo_ai_defense | eval system="Cisco AI Defense" | stats count as events by system]
+    [| search index=demo_sap | eval system="SAP ERP &amp; MII" | stats count as events by system]
+    [| mstats count(_value) as events WHERE index=demo_vmware_metrics metric_name=* | eval system="VMware &amp; GPU Metrics"]
+    [| mstats count(_value) as events WHERE index=demo_windows_metrics metric_name=* | eval system="Windows Metrics"]
+| eval events=tostring(events, "commas")
+| sort -events
+| rename system as "System", events as "Events"
+          </query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">15</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Recent Issues (Last Hour)</title>
+      <table>
+        <search>
+          <query><![CDATA[| union
+    [| search index=demo_mes event_type=alarm severity=critical OR severity=error
+     | eval issue_type="Manufacturing Alarm" | stats count by issue_type severity]
+    [| search index=demo_mssql event_type=alert severity=critical
+     | eval issue_type="Database Alert" | stats count by issue_type severity]
+    [| search index=demo_windows_events EventType=Error
+     | eval issue_type="Windows Error", severity="error" | stats count by issue_type severity]
+    [| search index=demo_msteams severity=high
+     | eval issue_type="Teams Issue" | stats count by issue_type severity]
+    [| search index=demo_thousendeyes thousandeyes.test.type=api metric_name:api.completion<50
+     | eval issue_type="API Endpoint Degraded", severity="critical"
+     | stats count by issue_type severity]
+    [| search index=demo_tomcat_logs status>=400
+     | eval is_dos=if(match(useragent, "masscan|Go-http-client|libwww-perl"), 1, 0)
+     | where is_dos=1
+     | eval issue_type="[DOS] Web Attack", severity="critical"
+     | stats count by issue_type severity]
+    [| search index=demo_cisco_catalyst sourcetype="cisco:dnac:devicehealth" Reachability!="Reachable"
+     | eval issue_type="Network Device Unreachable", severity="critical"
+     | stats dc(DeviceName) as count by issue_type severity]
+    [| search index=demo_thousendeyes thousandeyes.test.type=agent-to-agent metric_name:network.loss>=2
+     | eval issue_type="Network Path Loss (ThousandEyes)", severity="high"
+     | stats count by issue_type severity]
+    [| search index=demo_ai_defense sourcetype="cisco:ai:defense" event_action="Block"
+     | eval issue_type="AI Defense Blocked Prompt", severity="warning"
+     | stats count by issue_type severity]
+    [| search index=demo_msteams event_type=call_queue_stats queue_name="Support Hotline" calls_waiting>12
+     | eval issue_type="Support Hotline Overloaded", severity="high"
+     | stats count by issue_type severity]
+    [| search index=demo_sap sourcetype="sap:idoc" direction=outbound status="02"
+     | eval issue_type="SAP IDoc Error (ERP to MII)", severity="critical"
+     | stats count by issue_type severity]
+    [| search index=demo_mes event_type=system_alert alert_type=order_data_missing
+     | eval issue_type="Production Waiting for SAP Orders", severity="critical"
+     | stats dc(location) as count by issue_type severity]
+| sort -count
+| rename issue_type as "Issue Type", severity as "Severity", count as "Count"
+          ]]></query>
+          <earliest>$time_token.earliest$</earliest>
+          <latest>$time_token.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">10</option>
+        <format type="color" field="Severity">
+          <colorPalette type="map">{"critical":"#dc4e41","error":"#f58f39","high":"#dc4e41","warning":"#f5d039"}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <!-- ROW: Footer -->
+  <row>
+    <panel>
+      <html>
+        <style>
+          .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 12px;
+            border-top: 1px solid #3a3a3a;
+            margin-top: 30px;
+          }
+          .footer a {
+            color: #53a051;
+            text-decoration: none;
+          }
+          .footer a:hover {
+            text-decoration: underline;
+          }
+        </style>
+        <div class="footer">
+          <p>CoolaShaker Operations Monitoring Platform | Multi-Site Manufacturing Intelligence</p>
+          <p>
+            <a href="/app/search/search">Search &amp; Reporting</a> |
+            <a href="/manager/search/data/indexes">Manage Indexes</a> |
+            <a href="/manager/search/data/ui/views">Manage Dashboards</a>
+          </p>
+        </div>
+      </html>
+    </panel>
+  </row>
+</form>

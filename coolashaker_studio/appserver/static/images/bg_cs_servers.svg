@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="2590" viewBox="0 0 1920 2590">
+  <defs>
+    <radialGradient id="glowA" cx="0.12" cy="0.02" r="0.7">
+      <stop offset="0" stop-color="#2dd4bf" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#2dd4bf" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0.95" cy="0.85" r="0.75">
+      <stop offset="0" stop-color="#3b82f6" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#3b82f6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="base" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#071022"/>
+      <stop offset="1" stop-color="#040812"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#101d3a" stop-opacity="0.82"/>
+      <stop offset="1" stop-color="#0a1328" stop-opacity="0.74"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2dd4bf" stop-opacity="0.45"/>
+      <stop offset="0.5" stop-color="#9fb1c9" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#3b82f6" stop-opacity="0.35"/>
+    </linearGradient>
+    <linearGradient id="titleFill" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#9fb1c9" fill-opacity="0.10"/>
+    </pattern>
+    <style>
+      .pt { font: 700 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 1.6px; fill: #cfe0f7; }
+      .ph { font: 500 12px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #8ea3bf; }
+      .sec { font: 800 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 3px; fill: #2dd4bf; }
+    </style>
+  </defs>
+  <rect width="1920" height="2590" fill="url(#base)"/>
+  <rect width="1920" height="2590" fill="url(#dots)"/>
+  <rect width="1920" height="2590" fill="url(#glowA)"/>
+  <rect width="1920" height="2590" fill="url(#glowB)"/>
+  <g>
+    <path d="M1290.5 98.4 L1208.4 98.4 L1208.4 67.1 L1121.1 67.1" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1121.1" cy="67.1" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1775.8 74.8 L1657.5 74.8 L1657.5 52.1 L1483.1 52.1" fill="none" stroke="#2dd4bf" stroke-opacity="0.1" stroke-width="1.4"/>
+    <circle cx="1483.1" cy="52.1" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1348.8 117.2 L1289.5 117.2 L1289.5 79.4 L1221.9 79.4" fill="none" stroke="#2dd4bf" stroke-opacity="0.1" stroke-width="1.4"/>
+    <circle cx="1221.9" cy="79.4" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1303.2 120 L1178.4 120 L1178.4 165.7 L1132 165.7" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1132" cy="165.7" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1543.1 164 L1451.1 164 L1451.1 110.7 L1312.8 110.7" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1312.8" cy="110.7" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1859.2 63.1 L1747.5 63.1 L1747.5 28.1 L1610.8 28.1" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1610.8" cy="28.1" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1428.9 41.9 L1300.8 41.9 L1300.8 96.3 L1182.2 96.3" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1182.2" cy="96.3" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1485.9 80.6 L1432.6 80.6 L1432.6 111 L1369.6 111" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1369.6" cy="111" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1838.7 175.4 L1702.2 175.4 L1702.2 122.7 L1633.6 122.7" fill="none" stroke="#2dd4bf" stroke-opacity="0.1" stroke-width="1.4"/>
+    <circle cx="1633.6" cy="122.7" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1234.8 135 L1178.4 135 L1178.4 172.1 L1027.9 172.1" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1027.9" cy="172.1" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1478.5 34.3 L1403.3 34.3 L1403.3 4 L1239.8 4" fill="none" stroke="#2dd4bf" stroke-opacity="0.1" stroke-width="1.4"/>
+    <circle cx="1239.8" cy="4" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1586 31.5 L1435.9 31.5 L1435.9 4 L1270.7 4" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1270.7" cy="4" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1450.7 39.3 L1300.4 39.3 L1300.4 69.4 L1171.9 69.4" fill="none" stroke="#2dd4bf" stroke-opacity="0.3" stroke-width="1.4"/>
+    <circle cx="1171.9" cy="69.4" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1413.6 42 L1359.7 42 L1359.7 76.3 L1201 76.3" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1201" cy="76.3" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1192 53 L1069.2 53 L1069.2 15.5 L982.2 15.5" fill="none" stroke="#2dd4bf" stroke-opacity="0.3" stroke-width="1.4"/>
+    <circle cx="982.2" cy="15.5" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1854.1 113.8 L1792.7 113.8 L1792.7 92.1 L1739.1 92.1" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1739.1" cy="92.1" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1514.9 62.6 L1336.6 62.6 L1336.6 84.4 L1218.9 84.4" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1218.9" cy="84.4" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+    <path d="M1511.3 125.7 L1449.4 125.7 L1449.4 162.8 L1377.7 162.8" fill="none" stroke="#2dd4bf" stroke-opacity="0.2" stroke-width="1.4"/>
+    <circle cx="1377.7" cy="162.8" r="3" fill="#2dd4bf" fill-opacity="0.5"/>
+  </g>
+  <rect x="0" y="198" width="1920" height="1" fill="#2dd4bf" fill-opacity="0.18"/>
+  <text x="40" y="44" style="font: 800 13px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 4px; fill: #2dd4bf;">COOLASHAKER STUDIO · DATACENTER</text>
+  <text x="38" y="94" style="font: 800 44px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; letter-spacing: -0.5px; fill: url(#titleFill);">Server Infrastructure</text>
+  <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">VMware virtual machines, ESXi hosts and Windows servers across all sites</text>
+  <g>
+    <text x="40" y="284" class="sec">COMPUTE KPIS</text>
+    <line x1="170.8" y1="279" x2="1880" y2="279" stroke="#2dd4bf" stroke-opacity="0.18"/>
+    <text x="40" y="484" class="sec">VIRTUAL MACHINES</text>
+    <line x1="208.4" y1="479" x2="1880" y2="479" stroke="#2dd4bf" stroke-opacity="0.18"/>
+    <text x="40" y="954" class="sec">ESXI HOSTS</text>
+    <line x1="152" y1="949" x2="1880" y2="949" stroke="#2dd4bf" stroke-opacity="0.18"/>
+    <text x="40" y="1344" class="sec">WINDOWS SERVERS</text>
+    <line x1="199" y1="1339" x2="1880" y2="1339" stroke="#2dd4bf" stroke-opacity="0.18"/>
+    <text x="40" y="1734" class="sec">INVENTORY</text>
+    <line x1="142.60000000000002" y1="1729" x2="1880" y2="1729" stroke="#2dd4bf" stroke-opacity="0.18"/>
+  </g>
+  <g>
+    <rect x="40" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="300" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="60" y="316" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="72" y="329" class="pt">VM CPU</text>
+    <rect x="350" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="368" y="300" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="370" y="316" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="382" y="329" class="pt">VIRTUAL MACHINES</text>
+    <rect x="660" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="678" y="300" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="680" y="316" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="692" y="329" class="pt">ESXI CPU</text>
+    <rect x="970" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="988" y="300" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="990" y="316" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="1002" y="329" class="pt">ESXI HOSTS</text>
+    <rect x="1280" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1298" y="300" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="1300" y="316" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="1312" y="329" class="pt">WINDOWS CPU</text>
+    <rect x="1590" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1608" y="300" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="1610" y="316" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="1622" y="329" class="pt">WINDOWS MEMORY</text>
+    <rect x="40" y="500" width="1220" height="420" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="500" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="60" y="516" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="72" y="529" class="pt">VM CPU HEAT</text>
+    <rect x="1280" y="500" width="600" height="420" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1298" y="500" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="1300" y="516" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="1312" y="529" class="pt">VM MEMORY (GB)</text>
+    <rect x="40" y="970" width="755" height="340" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="970" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="60" y="986" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="72" y="999" class="pt">ESXI CPU PER HOST</text>
+    <rect x="815" y="970" width="1065" height="340" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="833" y="970" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="835" y="986" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="847" y="999" class="pt">ESXI NETWORK (MBIT/S)</text>
+    <rect x="40" y="1360" width="1065" height="340" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1360" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="60" y="1376" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="72" y="1389" class="pt">WINDOWS CPU HEAT</text>
+    <rect x="1125" y="1360" width="755" height="340" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="1143" y="1360" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="1145" y="1376" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="1157" y="1389" class="pt">WINDOWS SERVERS</text>
+    <rect x="40" y="1750" width="910" height="380" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="1750" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="60" y="1766" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="72" y="1779" class="pt">VIRTUAL MACHINES</text>
+    <rect x="970" y="1750" width="910" height="380" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="988" y="1750" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="990" y="1766" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="1002" y="1779" class="pt">ESXI HOSTS</text>
+    <rect x="40" y="2150" width="1840" height="400" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
+    <rect x="58" y="2150" width="120" height="2" rx="1" fill="#2dd4bf" fill-opacity="0.85"/>
+    <rect x="60" y="2166" width="4" height="16" rx="2" fill="#2dd4bf"/>
+    <text x="72" y="2179" class="pt">WINDOWS EVENTS</text>
+    <text x="1860" y="2179" class="ph" text-anchor="end">errors and warnings first</text>
+  </g>
+</svg>
