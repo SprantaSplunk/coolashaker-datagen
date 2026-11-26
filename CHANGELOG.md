@@ -8,6 +8,15 @@ Every release of the apps and of the ITSI content pack, newest first. Each relea
 
 Installable packages of the current versions are in `dist/`, the content pack is in `itsi/`.
 
+## 2026-11-26
+
+### TA-bar-datagen 1.9.1
+- Fixed: creating a new *CoolaShaker* input on a fresh Splunk instance failed with "The following
+  required arguments are missing: scenario_ai_fabric." The setting has not been used since 1.7.0
+  but was still listed in `inputs.conf.spec` without a default. Existing inputs were not affected.
+- Action: install `dist/TA-bar-datagen-1.9.1.tar.gz` as an upgrade and restart Splunk. Setup and
+  inputs are kept.
+
 ## 2026-11-20
 
 ### ITSI content pack (itsi-20261120a)

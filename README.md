@@ -5,7 +5,7 @@ Vienna, Berlin, Atlanta and a Frankfurt data center).
 
 | App | Version | Content |
 |---|---|---|
-| `TA-bar-datagen` | 1.9.0 | Demo data generators (Buttercup Bar, CoolaShaker, Network Intelligence). Start/stop from the Inputs page, sends via HEC or directly. |
+| `TA-bar-datagen` | 1.9.1 | Demo data generators (Buttercup Bar, CoolaShaker, Network Intelligence). Start/stop from the Inputs page, sends via HEC or directly. |
 | `splunk_app_coolashaker` | 1.4.0 | CoolaShaker dashboards (Classic Simple XML): manufacturing, SAP, infrastructure, network, web application, network assurance for AI workloads, plus alerts. |
 | `coolashaker_studio` | 1.1.0 | Dashboard Studio redesign of the CoolaShaker app with custom Canvas visualizations. |
 | `itsi/DA-ITSI-CP-CUST-6b0004cfb39a5c132421fbc5_1_0_0.tar.gz` | 1.0.0 | ITSI content pack with the complete CoolaShaker and Buttercup Bar service trees. |
