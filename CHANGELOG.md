@@ -10,6 +10,15 @@ Installable packages of the current versions are in `dist/`, the content pack is
 
 ## 2026-11-26
 
+### TA-bar-datagen 1.9.2
+- Fixed: creating a new *CoolaShaker* input still failed with "The following required arguments
+  are missing: scenario_ai_fabric." (the 1.9.1 fix did not help). Splunk requires every setting
+  listed in `inputs.conf.spec` when an input is created, but the input form has no field for this
+  setting, unused since 1.7.0. It is now removed completely.
+- Action: install `dist/TA-bar-datagen-1.9.2.tar.gz` as an upgrade and restart Splunk. Setup and
+  inputs are kept. Older inputs may still contain `scenario_ai_fabric` in `local/inputs.conf`;
+  the line is ignored and can be deleted.
+
 ### TA-bar-datagen 1.9.1
 - Fixed: creating a new *CoolaShaker* input on a fresh Splunk instance failed with "The following
   required arguments are missing: scenario_ai_fabric." The setting has not been used since 1.7.0

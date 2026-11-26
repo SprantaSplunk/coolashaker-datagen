@@ -916,7 +916,7 @@
     "meta": {
         "name": "TA-bar-datagen",
         "restRoot": "TA_bar_datagen",
-        "version": "1.9.1",
+        "version": "1.9.2",
         "displayName": "Demo Datagen (Buttercup Bar, CoolaShaker, Network Intelligence)",
         "schemaVersion": "0.0.10",
         "supportedThemes": [

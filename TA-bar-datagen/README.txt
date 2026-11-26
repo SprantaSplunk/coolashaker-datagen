@@ -9,7 +9,7 @@ Installs on Splunk Cloud (Victoria/Classic) or Splunk Enterprise.
 | **Network Intelligence** | 279 network devices / 40 sites (Meraki, Catalyst Center, ThousandEyes, SC4SNMP) + health history for the Splunk **Network Intelligence** app 26.10.x – from `network_intelligence_datagen` | `demo_cisco_meraki`, `demo_cisco_catalyst`, `demo_thousendeyes` (shared with CoolaShaker), `netops`, `ni_capability_summary` |
 | **CoolaShaker** | Coffee-cup manufacturer: Teams, ThousandEyes, Catalyst Center, Meraki, VMware, Windows, MSSQL, MES, Infra, Tomcat, AI Defense, SAP ERP/MII – from `cisco_netzwerkmonitoring/collashaker_fixed.py` | 13 × `demo_*` (below) |
 
-* Install file: `TA-bar-datagen-1.9.1.tar.gz` (upgrade over 1.x keeps setup + inputs)
+* Install file: `TA-bar-datagen-1.9.2.tar.gz` (upgrade over 1.x keeps setup + inputs)
 * AppInspect 4.4 (`cloud`, `private_victoria`, `private_classic`): **0 failures, 0 errors**
 * Tested end-to-end on Splunk Enterprise 9.3.2 (Python 3.9): setup, token check, HEC + direct
   mode for both generators incl. metric indexes, backfill, start/stop, gap fill.

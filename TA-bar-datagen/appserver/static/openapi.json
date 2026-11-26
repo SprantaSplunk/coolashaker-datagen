@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "TA-bar-datagen",
-        "version": "1.9.1",
+        "version": "1.9.2",
         "description": "Demo Datagen (Buttercup Bar, CoolaShaker, Network Intelligence)",
         "contact": {
             "name": "Alex"

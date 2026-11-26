@@ -100,14 +100,6 @@ fields = [
         default=0,
         validator=None
     ), 
-    # replaced by scenario_dc_frankfurt in 1.7.0; accepted so older stanzas can still be edited
-    field.RestField(
-        'scenario_ai_fabric',
-        required=False,
-        encrypted=False,
-        default=0,
-        validator=None
-    ), 
     field.RestField(
         'scenario_sdwan_brownout',
         required=False,
