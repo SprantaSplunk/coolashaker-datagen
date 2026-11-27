@@ -8,6 +8,16 @@ Every release of the apps and of the ITSI content pack, newest first. Each relea
 
 Installable packages of the current versions are in `dist/`, the content pack is in `itsi/`.
 
+## 2026-11-27
+
+### coolashaker_studio 1.1.1
+- Fixed: clicking a site no longer opened the target dashboard unfiltered (the link set
+  `form.form.site` instead of `form.site`). Affected: *Every site to every site* (Network
+  Intelligence → Catalyst Center), *Site mesh* (ThousandEyes), *Sites & DC paths* (Home → Executive),
+  *Campus health by site* (Executive → Catalyst Center) and *Web error rate by site* (Executive → Web).
+- Action: install `dist/coolashaker_studio-1.1.1.tar.gz` as an upgrade. No restart needed;
+  reload the dashboards in the browser.
+
 ## 2026-11-26
 
 ### TA-bar-datagen 1.9.2

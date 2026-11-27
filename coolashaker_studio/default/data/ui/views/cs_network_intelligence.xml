@@ -647,7 +647,7 @@
                         "dashboard": "cs_catalyst",
                         "tokens": [
                             {
-                                "token": "form.site",
+                                "token": "site",
                                 "value": "value"
                             }
                         ],

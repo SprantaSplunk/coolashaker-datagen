@@ -339,7 +339,7 @@
                         "dashboard": "cs_executive",
                         "tokens": [
                             {
-                                "token": "form.site",
+                                "token": "site",
                                 "value": "value"
                             }
                         ],

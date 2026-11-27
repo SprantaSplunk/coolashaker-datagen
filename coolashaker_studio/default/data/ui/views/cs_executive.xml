@@ -1219,7 +1219,7 @@
                         "dashboard": "cs_catalyst",
                         "tokens": [
                             {
-                                "token": "form.site",
+                                "token": "site",
                                 "value": "value"
                             }
                         ],
@@ -1319,7 +1319,7 @@
                         "dashboard": "cs_web",
                         "tokens": [
                             {
-                                "token": "form.site",
+                                "token": "site",
                                 "value": "value"
                             }
                         ],

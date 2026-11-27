@@ -608,7 +608,7 @@
                         "dashboard": "cs_thousandeyes",
                         "tokens": [
                             {
-                                "token": "form.site",
+                                "token": "site",
                                 "value": "value"
                             }
                         ],
