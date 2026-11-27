@@ -49,6 +49,7 @@ index=demo_mes location=$location_token$ event_type=alarm
     <panel>
       <title>Overall Equipment Effectiveness (OEE)</title>
       <single>
+        <description>OEE (Overall Equipment Effectiveness) = availability × performance × quality: how much of the planned production time turns into good units at target speed. Green from 85 %, red below 70 %.</description>
         <search base="base_production">
           <query>
 | stats avg(oee_pct) as avg_oee
@@ -147,6 +148,7 @@ index=demo_mes location=$location_token$ event_type=alarm
     <panel>
       <title>OEE Components by Line</title>
       <chart>
+        <description>Availability = share of planned time the line runs. Performance = actual speed vs. target speed. Quality = share of good units. Multiplied together they give the OEE.</description>
         <search base="base_production">
           <query>
 | stats 

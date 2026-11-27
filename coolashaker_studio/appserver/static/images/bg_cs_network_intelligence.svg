@@ -168,13 +168,13 @@
   <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">Catalyst Center and Meraki in one view – campus health, security advisories, wireless and alerts</text>
   <g>
     <text x="40" y="284" class="sec">NETWORK KPIS</text>
-    <line x1="170.8" y1="279" x2="1880" y2="279" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <line x1="208" y1="279" x2="1880" y2="279" stroke="#60a5fa" stroke-opacity="0.18"/>
     <text x="40" y="484" class="sec">SITE MESH</text>
-    <line x1="142.60000000000002" y1="479" x2="1880" y2="479" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <line x1="170.5" y1="479" x2="1880" y2="479" stroke="#60a5fa" stroke-opacity="0.18"/>
     <text x="40" y="1034" class="sec">CATALYST CENTER</text>
-    <line x1="199" y1="1029" x2="1880" y2="1029" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <line x1="245.5" y1="1029" x2="1880" y2="1029" stroke="#60a5fa" stroke-opacity="0.18"/>
     <text x="40" y="1764" class="sec">MERAKI</text>
-    <line x1="114.4" y1="1759" x2="1880" y2="1759" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <line x1="133" y1="1759" x2="1880" y2="1759" stroke="#60a5fa" stroke-opacity="0.18"/>
   </g>
   <g>
     <rect x="40" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>

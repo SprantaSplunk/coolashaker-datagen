@@ -118,6 +118,7 @@ index=demo_tomcat_logs
     <panel>
       <title>Manufacturing OEE</title>
       <single>
+        <description>OEE (Overall Equipment Effectiveness) = availability × performance × quality of the production lines. Green from 85 %, red below 70 %.</description>
         <search base="base_manufacturing_kpis">
           <query>
 | stats avg(oee_pct) as avg_oee
@@ -635,6 +636,7 @@ index=demo_tomcat_logs
     <panel>
       <title>OEE Breakdown by Location</title>
       <chart>
+        <description>OEE (Overall Equipment Effectiveness) = availability × performance × quality of the production lines. Green from 85 %, red below 70 %.</description>
         <search base="base_manufacturing_kpis">
           <query>
 | stats avg(oee_pct) as OEE by location

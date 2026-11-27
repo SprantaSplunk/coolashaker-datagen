@@ -139,13 +139,13 @@
   <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">Leading network indicators side by side with the business impact they cause</text>
   <g>
     <text x="40" y="284" class="sec">LEADING INDICATOR → IMPACT</text>
-    <line x1="302.4" y1="279" x2="1880" y2="279" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <line x1="383" y1="279" x2="1880" y2="279" stroke="#60a5fa" stroke-opacity="0.18"/>
     <text x="40" y="484" class="sec">SERVICE HEALTH MATRIX</text>
-    <line x1="255.4" y1="479" x2="1880" y2="479" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <line x1="320.5" y1="479" x2="1880" y2="479" stroke="#60a5fa" stroke-opacity="0.18"/>
     <text x="40" y="794" class="sec">CAUSE AND EFFECT</text>
-    <line x1="208.4" y1="789" x2="1880" y2="789" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <line x1="258" y1="789" x2="1880" y2="789" stroke="#60a5fa" stroke-opacity="0.18"/>
     <text x="40" y="1174" class="sec">PATHS</text>
-    <line x1="105" y1="1169" x2="1880" y2="1169" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <line x1="120.5" y1="1169" x2="1880" y2="1169" stroke="#60a5fa" stroke-opacity="0.18"/>
   </g>
   <g>
     <rect x="40" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>

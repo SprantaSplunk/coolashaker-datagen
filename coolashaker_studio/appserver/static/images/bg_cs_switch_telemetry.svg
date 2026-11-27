@@ -153,13 +153,13 @@
   <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">IOS XE syslog, gNMI streaming telemetry and the CLI command audit per switch</text>
   <g>
     <text x="40" y="284" class="sec">SWITCH KPIS</text>
-    <line x1="161.4" y1="279" x2="1880" y2="279" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <line x1="195.5" y1="279" x2="1880" y2="279" stroke="#60a5fa" stroke-opacity="0.18"/>
     <text x="40" y="484" class="sec">SYSLOG</text>
-    <line x1="114.4" y1="479" x2="1880" y2="479" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <line x1="133" y1="479" x2="1880" y2="479" stroke="#60a5fa" stroke-opacity="0.18"/>
     <text x="40" y="1274" class="sec">GNMI TELEMETRY</text>
-    <line x1="189.6" y1="1269" x2="1880" y2="1269" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <line x1="233" y1="1269" x2="1880" y2="1269" stroke="#60a5fa" stroke-opacity="0.18"/>
     <text x="40" y="2084" class="sec">CLI AUDIT</text>
-    <line x1="142.60000000000002" y1="2079" x2="1880" y2="2079" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <line x1="170.5" y1="2079" x2="1880" y2="2079" stroke="#60a5fa" stroke-opacity="0.18"/>
   </g>
   <g>
     <rect x="40" y="300" width="368" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>

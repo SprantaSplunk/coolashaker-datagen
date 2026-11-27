@@ -10,6 +10,18 @@ Installable packages of the current versions are in `dist/`, the content pack is
 
 ## 2026-11-27
 
+### splunk_app_coolashaker 1.4.1
+- New: the OEE panels explain the value. *Manufacturing* (*Overall Equipment Effectiveness (OEE)*,
+  *OEE Components by Line*), *Home* (*Manufacturing Status*) and *Executive Overview*
+  (*Manufacturing OEE*, *OEE Breakdown by Location*) show a short description: OEE = availability ×
+  performance × quality, green from 85 %, red below 70 %.
+- Action: install `dist/splunk_app_coolashaker-1.4.1.tar.gz` as an upgrade and reload the dashboards.
+
+### coolashaker_studio 1.1.2
+- New: *Manufacturing* and *Executive* explain OEE next to the section titles *Line KPIs* and
+  *Business KPIs*; *OEE heat per line* and *OEE components* got matching hints.
+- Action: install `dist/coolashaker_studio-1.1.2.tar.gz` as an upgrade and reload the dashboards.
+
 ### coolashaker_studio 1.1.1
 - Fixed: clicking a site no longer opened the target dashboard unfiltered (the link set
   `form.form.site` instead of `form.site`). Affected: *Every site to every site* (Network

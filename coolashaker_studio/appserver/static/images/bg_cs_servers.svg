@@ -82,15 +82,15 @@
   <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">VMware virtual machines, ESXi hosts and Windows servers across all sites</text>
   <g>
     <text x="40" y="284" class="sec">COMPUTE KPIS</text>
-    <line x1="170.8" y1="279" x2="1880" y2="279" stroke="#2dd4bf" stroke-opacity="0.18"/>
+    <line x1="208" y1="279" x2="1880" y2="279" stroke="#2dd4bf" stroke-opacity="0.18"/>
     <text x="40" y="484" class="sec">VIRTUAL MACHINES</text>
-    <line x1="208.4" y1="479" x2="1880" y2="479" stroke="#2dd4bf" stroke-opacity="0.18"/>
+    <line x1="258" y1="479" x2="1880" y2="479" stroke="#2dd4bf" stroke-opacity="0.18"/>
     <text x="40" y="954" class="sec">ESXI HOSTS</text>
-    <line x1="152" y1="949" x2="1880" y2="949" stroke="#2dd4bf" stroke-opacity="0.18"/>
+    <line x1="183" y1="949" x2="1880" y2="949" stroke="#2dd4bf" stroke-opacity="0.18"/>
     <text x="40" y="1344" class="sec">WINDOWS SERVERS</text>
-    <line x1="199" y1="1339" x2="1880" y2="1339" stroke="#2dd4bf" stroke-opacity="0.18"/>
+    <line x1="245.5" y1="1339" x2="1880" y2="1339" stroke="#2dd4bf" stroke-opacity="0.18"/>
     <text x="40" y="1734" class="sec">INVENTORY</text>
-    <line x1="142.60000000000002" y1="1729" x2="1880" y2="1729" stroke="#2dd4bf" stroke-opacity="0.18"/>
+    <line x1="170.5" y1="1729" x2="1880" y2="1729" stroke="#2dd4bf" stroke-opacity="0.18"/>
   </g>
   <g>
     <rect x="40" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>

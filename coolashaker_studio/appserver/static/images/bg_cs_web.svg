@@ -152,13 +152,13 @@
   <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">Requests, errors and attackers across all six Tomcat servers</text>
   <g>
     <text x="40" y="226" class="sec">TRAFFIC KPIS</text>
-    <line x1="170.8" y1="221" x2="1880" y2="221" stroke="#34e2a0" stroke-opacity="0.18"/>
+    <line x1="208" y1="221" x2="1880" y2="221" stroke="#34e2a0" stroke-opacity="0.18"/>
     <text x="40" y="426" class="sec">SERVERS</text>
-    <line x1="123.8" y1="421" x2="1880" y2="421" stroke="#34e2a0" stroke-opacity="0.18"/>
+    <line x1="145.5" y1="421" x2="1880" y2="421" stroke="#34e2a0" stroke-opacity="0.18"/>
     <text x="40" y="1176" class="sec">ATTACKERS</text>
-    <line x1="142.60000000000002" y1="1171" x2="1880" y2="1171" stroke="#34e2a0" stroke-opacity="0.18"/>
+    <line x1="170.5" y1="1171" x2="1880" y2="1171" stroke="#34e2a0" stroke-opacity="0.18"/>
     <text x="40" y="1566" class="sec">REQUESTS</text>
-    <line x1="133.2" y1="1561" x2="1880" y2="1561" stroke="#34e2a0" stroke-opacity="0.18"/>
+    <line x1="158" y1="1561" x2="1880" y2="1561" stroke="#34e2a0" stroke-opacity="0.18"/>
   </g>
   <g>
     <rect x="40" y="242" width="368" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>

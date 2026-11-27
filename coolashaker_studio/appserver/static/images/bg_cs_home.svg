@@ -78,13 +78,13 @@
   <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">Live state of every CoolaShaker site, the AI support chain and all operations domains</text>
   <g>
     <text x="40" y="310" class="sec">GLOBAL PULSE</text>
-    <line x1="170.8" y1="305" x2="1880" y2="305" stroke="#22d3ee" stroke-opacity="0.18"/>
+    <line x1="208" y1="305" x2="1880" y2="305" stroke="#22d3ee" stroke-opacity="0.18"/>
     <text x="40" y="1190" class="sec">DOMAINS</text>
-    <line x1="123.8" y1="1185" x2="1880" y2="1185" stroke="#22d3ee" stroke-opacity="0.18"/>
+    <line x1="145.5" y1="1185" x2="1880" y2="1185" stroke="#22d3ee" stroke-opacity="0.18"/>
     <text x="40" y="1470" class="sec">ISSUES</text>
-    <line x1="114.4" y1="1465" x2="1880" y2="1465" stroke="#22d3ee" stroke-opacity="0.18"/>
+    <line x1="133" y1="1465" x2="1880" y2="1465" stroke="#22d3ee" stroke-opacity="0.18"/>
     <text x="40" y="1900" class="sec">DATA PULSE</text>
-    <line x1="152" y1="1895" x2="1880" y2="1895" stroke="#22d3ee" stroke-opacity="0.18"/>
+    <line x1="183" y1="1895" x2="1880" y2="1895" stroke="#22d3ee" stroke-opacity="0.18"/>
   </g>
   <g>
     <rect x="40" y="212" width="1840" height="64" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>

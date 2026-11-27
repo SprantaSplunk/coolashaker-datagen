@@ -146,13 +146,13 @@
   <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">Assurance alerts, SD-WAN uplinks and device availability across every Meraki network</text>
   <g>
     <text x="40" y="284" class="sec">ALERT KPIS</text>
-    <line x1="152" y1="279" x2="1880" y2="279" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <line x1="183" y1="279" x2="1880" y2="279" stroke="#60a5fa" stroke-opacity="0.18"/>
     <text x="40" y="484" class="sec">ALERT LANDSCAPE</text>
-    <line x1="199" y1="479" x2="1880" y2="479" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <line x1="245.5" y1="479" x2="1880" y2="479" stroke="#60a5fa" stroke-opacity="0.18"/>
     <text x="40" y="2084" class="sec">SD-WAN</text>
-    <line x1="114.4" y1="2079" x2="1880" y2="2079" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <line x1="133" y1="2079" x2="1880" y2="2079" stroke="#60a5fa" stroke-opacity="0.18"/>
     <text x="40" y="2474" class="sec">INVENTORY</text>
-    <line x1="142.60000000000002" y1="2469" x2="1880" y2="2469" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <line x1="170.5" y1="2469" x2="1880" y2="2469" stroke="#60a5fa" stroke-opacity="0.18"/>
   </g>
   <g>
     <rect x="40" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>

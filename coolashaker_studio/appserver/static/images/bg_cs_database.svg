@@ -82,11 +82,11 @@
   <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">SQL Server load, cache efficiency, slow queries, waits, logs and backups</text>
   <g>
     <text x="40" y="284" class="sec">SQL SERVER KPIS</text>
-    <line x1="199" y1="279" x2="1880" y2="279" stroke="#2dd4bf" stroke-opacity="0.18"/>
+    <line x1="245.5" y1="279" x2="1880" y2="279" stroke="#2dd4bf" stroke-opacity="0.18"/>
     <text x="40" y="484" class="sec">SERVERS</text>
-    <line x1="123.8" y1="479" x2="1880" y2="479" stroke="#2dd4bf" stroke-opacity="0.18"/>
+    <line x1="145.5" y1="479" x2="1880" y2="479" stroke="#2dd4bf" stroke-opacity="0.18"/>
     <text x="40" y="1574" class="sec">QUERIES AND WAITS</text>
-    <line x1="217.8" y1="1569" x2="1880" y2="1569" stroke="#2dd4bf" stroke-opacity="0.18"/>
+    <line x1="270.5" y1="1569" x2="1880" y2="1569" stroke="#2dd4bf" stroke-opacity="0.18"/>
   </g>
   <g>
     <rect x="40" y="300" width="445" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>

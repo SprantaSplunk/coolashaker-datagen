@@ -53,13 +53,13 @@
   <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">Microsoft Teams experience per site – from ThousandEyes media paths to call quality and failures</text>
   <g>
     <text x="40" y="226" class="sec">EXPERIENCE KPIS</text>
-    <line x1="199" y1="221" x2="1880" y2="221" stroke="#f472b6" stroke-opacity="0.18"/>
+    <line x1="245.5" y1="221" x2="1880" y2="221" stroke="#f472b6" stroke-opacity="0.18"/>
     <text x="40" y="426" class="sec">SITES</text>
-    <line x1="105" y1="421" x2="1880" y2="421" stroke="#f472b6" stroke-opacity="0.18"/>
+    <line x1="120.5" y1="421" x2="1880" y2="421" stroke="#f472b6" stroke-opacity="0.18"/>
     <text x="40" y="816" class="sec">NETWORK PATH</text>
-    <line x1="170.8" y1="811" x2="1880" y2="811" stroke="#f472b6" stroke-opacity="0.18"/>
+    <line x1="208" y1="811" x2="1880" y2="811" stroke="#f472b6" stroke-opacity="0.18"/>
     <text x="40" y="1446" class="sec">TEAMS</text>
-    <line x1="105" y1="1441" x2="1880" y2="1441" stroke="#f472b6" stroke-opacity="0.18"/>
+    <line x1="120.5" y1="1441" x2="1880" y2="1441" stroke="#f472b6" stroke-opacity="0.18"/>
   </g>
   <g>
     <rect x="40" y="242" width="368" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>

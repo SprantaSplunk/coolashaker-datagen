@@ -156,13 +156,13 @@
   <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">DNS, HTTP, DC paths, BGP and the B2B order transaction from every ThousandEyes agent</text>
   <g>
     <text x="40" y="284" class="sec">EXPERIENCE KPIS</text>
-    <line x1="199" y1="279" x2="1880" y2="279" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <line x1="245.5" y1="279" x2="1880" y2="279" stroke="#60a5fa" stroke-opacity="0.18"/>
     <text x="40" y="484" class="sec">PATHS</text>
-    <line x1="105" y1="479" x2="1880" y2="479" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <line x1="120.5" y1="479" x2="1880" y2="479" stroke="#60a5fa" stroke-opacity="0.18"/>
     <text x="40" y="994" class="sec">APPLICATIONS</text>
-    <line x1="170.8" y1="989" x2="1880" y2="989" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <line x1="208" y1="989" x2="1880" y2="989" stroke="#60a5fa" stroke-opacity="0.18"/>
     <text x="40" y="1764" class="sec">BGP</text>
-    <line x1="86.2" y1="1759" x2="1880" y2="1759" stroke="#60a5fa" stroke-opacity="0.18"/>
+    <line x1="95.5" y1="1759" x2="1880" y2="1759" stroke="#60a5fa" stroke-opacity="0.18"/>
   </g>
   <g>
     <rect x="40" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>

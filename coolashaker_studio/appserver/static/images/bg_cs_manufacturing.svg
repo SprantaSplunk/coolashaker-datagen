@@ -97,13 +97,14 @@
   <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">Production lines in Atlanta, Berlin and Vienna – throughput, OEE, quality and AI vision inspection</text>
   <g>
     <text x="40" y="284" class="sec">LINE KPIS</text>
-    <line x1="142.60000000000002" y1="279" x2="1880" y2="279" stroke="#ffb020" stroke-opacity="0.18"/>
+    <text x="170.5" y="284" class="ph">OEE (Overall Equipment Effectiveness) = availability × performance × quality: how much of the planned production time turns into good units at target speed. Green from 85 %, red below 70 %.</text>
+    <line x1="1398.1000000000001" y1="279" x2="1880" y2="279" stroke="#ffb020" stroke-opacity="0.18"/>
     <text x="40" y="484" class="sec">FACTORY FLOOR</text>
-    <line x1="180.2" y1="479" x2="1880" y2="479" stroke="#ffb020" stroke-opacity="0.18"/>
+    <line x1="220.5" y1="479" x2="1880" y2="479" stroke="#ffb020" stroke-opacity="0.18"/>
     <text x="40" y="1094" class="sec">PERFORMANCE</text>
-    <line x1="161.4" y1="1089" x2="1880" y2="1089" stroke="#ffb020" stroke-opacity="0.18"/>
+    <line x1="195.5" y1="1089" x2="1880" y2="1089" stroke="#ffb020" stroke-opacity="0.18"/>
     <text x="40" y="1874" class="sec">QUALITY AND ALARMS</text>
-    <line x1="227.20000000000002" y1="1869" x2="1880" y2="1869" stroke="#ffb020" stroke-opacity="0.18"/>
+    <line x1="283" y1="1869" x2="1880" y2="1869" stroke="#ffb020" stroke-opacity="0.18"/>
   </g>
   <g>
     <rect x="40" y="300" width="290" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
@@ -143,12 +144,12 @@
     <rect x="58" y="1110" width="120" height="2" rx="1" fill="#ffb020" fill-opacity="0.85"/>
     <rect x="60" y="1126" width="4" height="16" rx="2" fill="#ffb020"/>
     <text x="72" y="1139" class="pt">OEE HEAT PER LINE</text>
-    <text x="1240" y="1139" class="ph" text-anchor="end">click a line to focus</text>
+    <text x="1240" y="1139" class="ph" text-anchor="end">OEE = availability × performance × quality · click a line to focus</text>
     <rect x="1280" y="1110" width="600" height="380" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
     <rect x="1298" y="1110" width="120" height="2" rx="1" fill="#ffb020" fill-opacity="0.85"/>
     <rect x="1300" y="1126" width="4" height="16" rx="2" fill="#ffb020"/>
     <text x="1312" y="1139" class="pt">OEE COMPONENTS</text>
-    <text x="1860" y="1139" class="ph" text-anchor="end">selected line or all</text>
+    <text x="1860" y="1139" class="ph" text-anchor="end">machine running · speed vs. target · good units</text>
     <rect x="40" y="1510" width="910" height="330" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
     <rect x="58" y="1510" width="120" height="2" rx="1" fill="#ffb020" fill-opacity="0.85"/>
     <rect x="60" y="1526" width="4" height="16" rx="2" fill="#ffb020"/>

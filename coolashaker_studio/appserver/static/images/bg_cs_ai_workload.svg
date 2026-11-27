@@ -82,9 +82,9 @@
   <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">From the plant network to the GPU cluster in DC Frankfurt – every hop of the AI support assistant</text>
   <g>
     <text x="40" y="284" class="sec">SERVICE CHAIN</text>
-    <line x1="180.2" y1="279" x2="1880" y2="279" stroke="#2dd4bf" stroke-opacity="0.18"/>
+    <line x1="220.5" y1="279" x2="1880" y2="279" stroke="#2dd4bf" stroke-opacity="0.18"/>
     <text x="40" y="834" class="sec">HOP BY HOP</text>
-    <line x1="152" y1="829" x2="1880" y2="829" stroke="#2dd4bf" stroke-opacity="0.18"/>
+    <line x1="183" y1="829" x2="1880" y2="829" stroke="#2dd4bf" stroke-opacity="0.18"/>
   </g>
   <g>
     <rect x="40" y="300" width="1840" height="330" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>

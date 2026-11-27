@@ -68,6 +68,7 @@
     <panel>
       <title>Manufacturing Status</title>
       <single>
+        <description>OEE (Overall Equipment Effectiveness) = availability × performance × quality of the production lines. Green from 85 %, red below 70 %.</description>
         <search>
           <query>
 index=demo_mes production_rate_per_hour=*

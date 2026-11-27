@@ -82,11 +82,11 @@
   <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">Temperature, power, cooling and UPS of the server rooms in every site</text>
   <g>
     <text x="40" y="284" class="sec">FACILITY KPIS</text>
-    <line x1="180.2" y1="279" x2="1880" y2="279" stroke="#2dd4bf" stroke-opacity="0.18"/>
+    <line x1="220.5" y1="279" x2="1880" y2="279" stroke="#2dd4bf" stroke-opacity="0.18"/>
     <text x="40" y="484" class="sec">THERMAL MAP</text>
-    <line x1="161.4" y1="479" x2="1880" y2="479" stroke="#2dd4bf" stroke-opacity="0.18"/>
+    <line x1="195.5" y1="479" x2="1880" y2="479" stroke="#2dd4bf" stroke-opacity="0.18"/>
     <text x="40" y="934" class="sec">POWER AND COOLING</text>
-    <line x1="217.8" y1="929" x2="1880" y2="929" stroke="#2dd4bf" stroke-opacity="0.18"/>
+    <line x1="270.5" y1="929" x2="1880" y2="929" stroke="#2dd4bf" stroke-opacity="0.18"/>
   </g>
   <g>
     <rect x="40" y="300" width="445" height="150" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>

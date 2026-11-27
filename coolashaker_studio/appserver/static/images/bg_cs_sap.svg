@@ -101,15 +101,15 @@
   <text x="40" y="124" style="font: 500 16px Inter, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #9fb1c9;">SAP ERP PRD in DC Vienna sends production orders as IDocs to the SAP MII of every plant – no orders, no production</text>
   <g>
     <text x="40" y="284" class="sec">ORDER CHAIN</text>
-    <line x1="161.4" y1="279" x2="1880" y2="279" stroke="#ffb020" stroke-opacity="0.18"/>
+    <line x1="195.5" y1="279" x2="1880" y2="279" stroke="#ffb020" stroke-opacity="0.18"/>
     <text x="40" y="634" class="sec">SAP ERP PRD</text>
-    <line x1="161.4" y1="629" x2="1880" y2="629" stroke="#ffb020" stroke-opacity="0.18"/>
+    <line x1="195.5" y1="629" x2="1880" y2="629" stroke="#ffb020" stroke-opacity="0.18"/>
     <text x="40" y="1004" class="sec">SAP MII</text>
-    <line x1="123.8" y1="999" x2="1880" y2="999" stroke="#ffb020" stroke-opacity="0.18"/>
+    <line x1="145.5" y1="999" x2="1880" y2="999" stroke="#ffb020" stroke-opacity="0.18"/>
     <text x="40" y="1244" class="sec">ORDER FLOW</text>
-    <line x1="152" y1="1239" x2="1880" y2="1239" stroke="#ffb020" stroke-opacity="0.18"/>
+    <line x1="183" y1="1239" x2="1880" y2="1239" stroke="#ffb020" stroke-opacity="0.18"/>
     <text x="40" y="2244" class="sec">ERP DETAILS</text>
-    <line x1="161.4" y1="2239" x2="1880" y2="2239" stroke="#ffb020" stroke-opacity="0.18"/>
+    <line x1="195.5" y1="2239" x2="1880" y2="2239" stroke="#ffb020" stroke-opacity="0.18"/>
   </g>
   <g>
     <rect x="40" y="300" width="1840" height="300" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.2"/>
